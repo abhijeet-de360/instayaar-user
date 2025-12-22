@@ -1,0 +1,228 @@
+
+{
+  "disputes": [
+    {
+      "id": "DSP-001",
+      "title": "Service Not Delivered",
+      "description": "The freelancer didn't show up for the cleaning service appointment",
+      "category": "service_issue",
+      "status": "pending",
+      "priority": "high",
+      "submittedBy": {
+        "id": "USR-001",
+        "name": "John Smith",
+        "email": "john.smith@email.com",
+        "role": "employer"
+      },
+      "relatedTo": {
+        "type": "booking",
+        "id": "BK-001",
+        "reference": "Cleaning Service Booking"
+      },
+      "submittedAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z",
+      "assignedTo": null,
+      "resolution": null,
+      "attachments": [
+        {
+          "id": "ATT-001",
+          "name": "screenshot.png",
+          "url": "/uploads/disputes/screenshot.png",
+          "type": "image"
+        }
+      ],
+      "messages": [
+        {
+          "id": "MSG-001",
+          "content": "The freelancer didn't show up for the scheduled appointment. I waited for 2 hours.",
+          "sender": "user",
+          "timestamp": "2024-01-15T10:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": "DSP-002",
+      "title": "Payment Issue",
+      "description": "Payment was deducted but service was not completed satisfactorily",
+      "category": "payment_issue",
+      "status": "in_progress",
+      "priority": "medium",
+      "submittedBy": {
+        "id": "USR-002",
+        "name": "Sarah Johnson",
+        "email": "sarah.j@email.com",
+        "role": "employer"
+      },
+      "relatedTo": {
+        "type": "payment",
+        "id": "PAY-002",
+        "reference": "Plumbing Service Payment"
+      },
+      "submittedAt": "2024-01-14T14:20:00Z",
+      "updatedAt": "2024-01-16T09:15:00Z",
+      "assignedTo": {
+        "id": "ADMIN-001",
+        "name": "Admin User",
+        "email": "admin@platform.com"
+      },
+      "resolution": null,
+      "attachments": [],
+      "messages": [
+        {
+          "id": "MSG-002",
+          "content": "The plumber completed only 50% of the work but full payment was charged.",
+          "sender": "user",
+          "timestamp": "2024-01-14T14:20:00Z"
+        },
+        {
+          "id": "MSG-003",
+          "content": "We're investigating this issue. Can you provide more details about what work was left incomplete?",
+          "sender": "admin",
+          "timestamp": "2024-01-16T09:15:00Z"
+        }
+      ]
+    },
+    {
+      "id": "DSP-003",
+      "title": "Quality of Work",
+      "description": "The painting work was not done according to specifications",
+      "category": "quality_issue",
+      "status": "resolved",
+      "priority": "low",
+      "submittedBy": {
+        "id": "USR-003",
+        "name": "Mike Wilson",
+        "email": "mike.w@email.com",
+        "role": "employer"
+      },
+      "relatedTo": {
+        "type": "service",
+        "id": "SRV-003",
+        "reference": "House Painting Service"
+      },
+      "submittedAt": "2024-01-10T16:45:00Z",
+      "updatedAt": "2024-01-18T11:30:00Z",
+      "assignedTo": {
+        "id": "ADMIN-002",
+        "name": "Support Admin",
+        "email": "support@platform.com"
+      },
+      "resolution": "Partial refund issued and freelancer re-trained",
+      "attachments": [
+        {
+          "id": "ATT-002",
+          "name": "before.jpg",
+          "url": "/uploads/disputes/before.jpg",
+          "type": "image"
+        },
+        {
+          "id": "ATT-003",
+          "name": "after.jpg",
+          "url": "/uploads/disputes/after.jpg",
+          "type": "image"
+        }
+      ],
+      "messages": [
+        {
+          "id": "MSG-004",
+          "content": "The painting was uneven and some areas were missed completely.",
+          "sender": "user",
+          "timestamp": "2024-01-10T16:45:00Z"
+        },
+        {
+          "id": "MSG-005",
+          "content": "Thank you for bringing this to our attention. We've reviewed the images and agree there are quality issues.",
+          "sender": "admin",
+          "timestamp": "2024-01-12T10:20:00Z"
+        },
+        {
+          "id": "MSG-006",
+          "content": "We've issued a partial refund and the freelancer will undergo additional training.",
+          "sender": "admin",
+          "timestamp": "2024-01-18T11:30:00Z"
+        }
+      ]
+    },
+    {
+      "id": "DSP-004",
+      "title": "Billing Discrepancy",
+      "description": "Charged for additional services that were not requested",
+      "category": "billing_issue",
+      "status": "pending",
+      "priority": "medium",
+      "submittedBy": {
+        "id": "USR-004",
+        "name": "Lisa Brown",
+        "email": "lisa.brown@email.com",
+        "role": "employer"
+      },
+      "relatedTo": {
+        "type": "booking",
+        "id": "BK-004",
+        "reference": "AC Repair Service"
+      },
+      "submittedAt": "2024-01-20T09:15:00Z",
+      "updatedAt": "2024-01-20T09:15:00Z",
+      "assignedTo": null,
+      "resolution": null,
+      "attachments": [
+        {
+          "id": "ATT-004",
+          "name": "invoice.pdf",
+          "url": "/uploads/disputes/invoice.pdf",
+          "type": "document"
+        }
+      ],
+      "messages": [
+        {
+          "id": "MSG-007",
+          "content": "I was charged ₹2000 extra for parts that I didn't approve.",
+          "sender": "user",
+          "timestamp": "2024-01-20T09:15:00Z"
+        }
+      ]
+    },
+    {
+      "id": "DSP-005",
+      "title": "Freelancer Communication Issue",
+      "description": "Freelancer was unprofessional and rude during service",
+      "category": "behavior_issue",
+      "status": "in_progress",
+      "priority": "high",
+      "submittedBy": {
+        "id": "USR-005",
+        "name": "David Lee",
+        "email": "david.lee@email.com",
+        "role": "employer"
+      },
+      "relatedTo": {
+        "type": "freelancer",
+        "id": "FL-005",
+        "reference": "Electrician Profile"
+      },
+      "submittedAt": "2024-01-19T13:30:00Z",
+      "updatedAt": "2024-01-20T08:45:00Z",
+      "assignedTo": {
+        "id": "ADMIN-001",
+        "name": "Admin User",
+        "email": "admin@platform.com"
+      },
+      "resolution": null,
+      "attachments": [],
+      "messages": [
+        {
+          "id": "MSG-008",
+          "content": "The electrician was very rude and used inappropriate language during the service.",
+          "sender": "user",
+          "timestamp": "2024-01-19T13:30:00Z"
+        },
+        {
+          "id": "MSG-009",
+          "content": "We take behavioral issues seriously. We're reviewing this case and will contact the freelancer.",
+          "sender": "admin",
+          "timestamp": "2024-01-20T08:45:00Z"
+        }
+      ]
+    }
+  ]
+}

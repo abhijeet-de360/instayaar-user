@@ -1,0 +1,216 @@
+{
+  "withdrawals": [
+    {
+      "id": "withdrawal_001",
+      "freelancerId": "freelancer_001",
+      "freelancerName": "Rajesh Kumar",
+      "freelancerEmail": "rajesh.kumar@email.com",
+      "freelancerPhone": "+91 9876543210",
+      "amount": 15000,
+      "availableBalance": 22500,
+      "requestDate": "2024-03-01T10:30:00Z",
+      "status": "paid",
+      "paymentMethod": "bank_transfer",
+      "bankDetails": {
+        "accountNumber": "123456789012",
+        "ifscCode": "HDFC0001234",
+        "bankName": "HDFC Bank",
+        "accountHolderName": "Rajesh Kumar"
+      },
+      "processedDate": "2024-03-03T14:20:00Z",
+      "processedBy": "admin_001",
+      "transactionId": "WD_TXN_001_2024",
+      "adminNotes": "Verified bank details and processed successfully",
+      "earnings": {
+        "totalEarned": 25000,
+        "platformFees": 2500,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 15000
+      }
+    },
+    {
+      "id": "withdrawal_002",
+      "freelancerId": "freelancer_006",
+      "freelancerName": "Anita Reddy",
+      "freelancerEmail": "anita.reddy@email.com",
+      "freelancerPhone": "+91 9876543211",
+      "amount": 8500,
+      "availableBalance": 10800,
+      "requestDate": "2024-03-05T09:15:00Z",
+      "status": "pending",
+      "paymentMethod": "upi",
+      "upiDetails": {
+        "upiId": "anita@paytm",
+        "upiName": "Anita Reddy"
+      },
+      "earnings": {
+        "totalEarned": 12000,
+        "platformFees": 1200,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 8500
+      }
+    },
+    {
+      "id": "withdrawal_003",
+      "freelancerId": "freelancer_011",
+      "freelancerName": "Sunil Yadav",
+      "freelancerEmail": "sunil.yadav@email.com",
+      "freelancerPhone": "+91 9876543212",
+      "amount": 12000,
+      "availableBalance": 16200,
+      "requestDate": "2024-03-08T16:45:00Z",
+      "status": "approved",
+      "paymentMethod": "bank_transfer",
+      "bankDetails": {
+        "accountNumber": "987654321098",
+        "ifscCode": "SBI0005678",
+        "bankName": "State Bank of India",
+        "accountHolderName": "Sunil Yadav"
+      },
+      "processedDate": "2024-03-09T11:30:00Z",
+      "processedBy": "admin_001",
+      "adminNotes": "Approved for payment processing",
+      "earnings": {
+        "totalEarned": 18000,
+        "platformFees": 1800,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 12000
+      }
+    },
+    {
+      "id": "withdrawal_004",
+      "freelancerId": "freelancer_021",
+      "freelancerName": "Vivek Pandey",
+      "freelancerEmail": "vivek.pandey@email.com",
+      "freelancerPhone": "+91 9876543213",
+      "amount": 2500,
+      "availableBalance": 3150,
+      "requestDate": "2024-03-10T12:20:00Z",
+      "status": "rejected",
+      "paymentMethod": "bank_transfer",
+      "bankDetails": {
+        "accountNumber": "456789123456",
+        "ifscCode": "ICICI0002345",
+        "bankName": "ICICI Bank",
+        "accountHolderName": "Vivek Pandey"
+      },
+      "processedDate": "2024-03-11T10:15:00Z",
+      "processedBy": "admin_002",
+      "rejectionReason": "Insufficient completed bookings. Minimum 3 completed bookings required for withdrawal.",
+      "adminNotes": "Policy violation - needs more completed jobs",
+      "earnings": {
+        "totalEarned": 3500,
+        "platformFees": 350,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 2500
+      }
+    },
+    {
+      "id": "withdrawal_005",
+      "freelancerId": "freelancer_033",
+      "freelancerName": "Sita Gupta",
+      "freelancerEmail": "sita.gupta@email.com",
+      "freelancerPhone": "+91 9876543214",
+      "amount": 4500,
+      "availableBalance": 5000,
+      "requestDate": "2024-03-12T14:10:00Z",
+      "status": "pending",
+      "paymentMethod": "upi",
+      "upiDetails": {
+        "upiId": "sita@gpay",
+        "upiName": "Sita Gupta"
+      },
+      "earnings": {
+        "totalEarned": 5000,
+        "platformFees": 500,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 4500
+      }
+    },
+    {
+      "id": "withdrawal_006",
+      "freelancerId": "freelancer_035",
+      "freelancerName": "Arjun Desai",
+      "freelancerEmail": "arjun.desai@email.com",
+      "freelancerPhone": "+91 9876543215",
+      "amount": 8000,
+      "availableBalance": 10800,
+      "requestDate": "2024-03-15T11:25:00Z",
+      "status": "pending",
+      "paymentMethod": "bank_transfer",
+      "bankDetails": {
+        "accountNumber": "789123456789",
+        "ifscCode": "AXIS0009876",
+        "bankName": "Axis Bank",
+        "accountHolderName": "Arjun Desai"
+      },
+      "earnings": {
+        "totalEarned": 12000,
+        "platformFees": 1200,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 8000
+      }
+    },
+    {
+      "id": "withdrawal_007",
+      "freelancerId": "freelancer_026",
+      "freelancerName": "Sunita Devi",
+      "freelancerEmail": "sunita.devi@email.com",
+      "freelancerPhone": "+91 9876543216",
+      "amount": 6000,
+      "availableBalance": 7200,
+      "requestDate": "2024-03-18T13:40:00Z",
+      "status": "paid",
+      "paymentMethod": "upi",
+      "upiDetails": {
+        "upiId": "sunita@phonepe",
+        "upiName": "Sunita Devi"
+      },
+      "processedDate": "2024-03-19T16:30:00Z",
+      "processedBy": "admin_001",
+      "transactionId": "WD_TXN_007_2024",
+      "adminNotes": "UPI transfer completed successfully",
+      "earnings": {
+        "totalEarned": 8000,
+        "platformFees": 800,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 6000
+      }
+    },
+    {
+      "id": "withdrawal_008",
+      "freelancerId": "freelancer_016",
+      "freelancerName": "Pooja Verma",
+      "freelancerEmail": "pooja.verma@email.com",
+      "freelancerPhone": "+91 9876543217",
+      "amount": 10000,
+      "availableBalance": 13500,
+      "requestDate": "2024-03-20T15:55:00Z",
+      "status": "approved",
+      "paymentMethod": "bank_transfer",
+      "bankDetails": {
+        "accountNumber": "321654987321",
+        "ifscCode": "PNB0001122",
+        "bankName": "Punjab National Bank",
+        "accountHolderName": "Pooja Verma"
+      },
+      "processedDate": "2024-03-21T09:45:00Z",
+      "processedBy": "admin_002",
+      "adminNotes": "Large withdrawal approved after verification",
+      "earnings": {
+        "totalEarned": 15000,
+        "platformFees": 1500,
+        "previousWithdrawals": 0,
+        "taxDeductions": 0,
+        "netAmount": 10000
+      }
+    }
+  ]
+}

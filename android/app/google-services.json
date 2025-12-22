@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "521245498217",
+    "project_id": "kaamdham-f4771",
+    "storage_bucket": "kaamdham-f4771.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521245498217:android:fd5bac0acb5ea9e860bbf8",
+        "android_client_info": {
+          "package_name": "com.kaamdham"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521245498217-j8i6ehkvlq41epncltid2b2h1p49ee46.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM9Tlpsb98zkRh9edeSykTOONKk7fEex8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521245498217-j8i6ehkvlq41epncltid2b2h1p49ee46.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

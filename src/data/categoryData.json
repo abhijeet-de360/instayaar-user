@@ -1,0 +1,122 @@
+[
+  {
+    "id": "cat_001",
+    "name": "Chef",
+    "description": "Professional cooking services for events and private dining",
+    "icon": "chef-hat",
+    "status": "active",
+    "createdAt": "2024-01-15T08:00:00Z",
+    "updatedAt": "2024-01-15T08:00:00Z",
+    "totalServices": 45,
+    "totalJobs": 128
+  },
+  {
+    "id": "cat_002",
+    "name": "Bartender",
+    "description": "Professional bartending services for events and parties",
+    "icon": "glass-water",
+    "status": "active",
+    "createdAt": "2024-01-15T08:00:00Z",
+    "updatedAt": "2024-01-15T08:00:00Z",
+    "totalServices": 38,
+    "totalJobs": 95
+  },
+  {
+    "id": "cat_003",
+    "name": "DJ",
+    "description": "Professional DJ services for weddings, parties, and events",
+    "icon": "disc-3",
+    "status": "active",
+    "createdAt": "2024-01-15T08:00:00Z",
+    "updatedAt": "2024-01-15T08:00:00Z",
+    "totalServices": 62,
+    "totalJobs": 210
+  },
+  {
+    "id": "cat_004",
+    "name": "Musician",
+    "description": "Live music performances for events and entertainment",
+    "icon": "music",
+    "status": "active",
+    "createdAt": "2024-01-15T08:00:00Z",
+    "updatedAt": "2024-01-15T08:00:00Z",
+    "totalServices": 25,
+    "totalJobs": 67
+  },
+  {
+    "id": "cat_005",
+    "name": "Magician",
+    "description": "Professional magic shows and entertainment for events",
+    "icon": "wand-sparkles",
+    "status": "active",
+    "createdAt": "2024-01-28T10:30:00Z",
+    "updatedAt": "2024-01-28T10:30:00Z",
+    "totalServices": 18,
+    "totalJobs": 42
+  },
+  {
+    "id": "cat_006",
+    "name": "Stand-up Comedian",
+    "description": "Comedy performances and entertainment for events",
+    "icon": "laugh",
+    "status": "active",
+    "createdAt": "2024-01-29T14:20:00Z",
+    "updatedAt": "2024-01-29T14:20:00Z",
+    "totalServices": 12,
+    "totalJobs": 28
+  },
+  {
+    "id": "cat_007",
+    "name": "Tattoo Artist",
+    "description": "Professional tattoo and body art services",
+    "icon": "paintbrush",
+    "status": "active",
+    "createdAt": "2024-01-20T09:15:00Z",
+    "updatedAt": "2024-01-20T09:15:00Z",
+    "totalServices": 35,
+    "totalJobs": 89
+  },
+  {
+    "id": "cat_008",
+    "name": "Mehendi Artist",
+    "description": "Traditional henna art and bridal mehendi services",
+    "icon": "palette",
+    "status": "active",
+    "createdAt": "2024-01-30T16:45:00Z",
+    "updatedAt": "2024-01-30T16:45:00Z",
+    "totalServices": 28,
+    "totalJobs": 156
+  },
+  {
+    "id": "cat_009",
+    "name": "Fashion Designer",
+    "description": "Custom clothing design and styling services",
+    "icon": "shirt",
+    "status": "pending",
+    "requestedBy": {
+      "id": "free_009",
+      "name": "Priya Sharma",
+      "type": "freelancer"
+    },
+    "createdAt": "2024-01-10T11:00:00Z",
+    "updatedAt": "2024-01-25T14:30:00Z",
+    "totalServices": 0,
+    "totalJobs": 0
+  },
+  {
+    "id": "cat_010",
+    "name": "Theme Decorator",
+    "description": "Event decoration and theme setup services",
+    "icon": "gift",
+    "status": "pending",
+    "requestedBy": {
+      "id": "emp_010",
+      "name": "Rahul Patel",
+      "type": "employer"
+    },
+    "createdAt": "2024-01-31T08:30:00Z",
+    "updatedAt": "2024-01-31T08:30:00Z",
+    "totalServices": 0,
+    "totalJobs": 0
+  }
+]

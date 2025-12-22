@@ -1,0 +1,313 @@
+
+{
+  "analytics": [
+    {
+      "id": "user-analytics-001",
+      "type": "user_analytics",
+      "title": "User Registration Trends",
+      "description": "Analysis of user registration patterns and growth metrics across different time periods",
+      "category": "User Growth",
+      "status": "active",
+      "priority": "high",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalUsers": 15847,
+        "newRegistrations": 2341,
+        "growthRate": 17.3,
+        "employerCount": 8924,
+        "freelancerCount": 6923,
+        "activeUsers": 12567,
+        "inactiveUsers": 3280
+      },
+      "chartData": [
+        { "month": "Jan", "employers": 156, "freelancers": 234, "total": 390 },
+        { "month": "Feb", "employers": 189, "freelancers": 267, "total": 456 },
+        { "month": "Mar", "employers": 234, "freelancers": 298, "total": 532 },
+        { "month": "Apr", "employers": 267, "freelancers": 321, "total": 588 }
+      ],
+      "createdAt": "2024-01-15T08:00:00Z",
+      "updatedAt": "2024-01-20T14:30:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "booking-analytics-001",
+      "type": "booking_analytics",
+      "title": "Booking Volume Analysis",
+      "description": "Comprehensive analysis of booking patterns, completion rates, and seasonal trends",
+      "category": "Business Operations",
+      "status": "active",
+      "priority": "high",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalBookings": 8456,
+        "completedBookings": 7234,
+        "canceledBookings": 891,
+        "pendingBookings": 331,
+        "completionRate": 85.5,
+        "averageBookingValue": 750.50,
+        "totalRevenue": 6342231.50
+      },
+      "chartData": [
+        { "month": "Jan", "bookings": 645, "completed": 567, "canceled": 78 },
+        { "month": "Feb", "bookings": 723, "completed": 634, "canceled": 89 },
+        { "month": "Mar", "bookings": 867, "completed": 745, "canceled": 122 },
+        { "month": "Apr", "bookings": 934, "completed": 812, "canceled": 122 }
+      ],
+      "createdAt": "2024-01-15T09:00:00Z",
+      "updatedAt": "2024-01-20T15:45:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "revenue-analytics-001",
+      "type": "revenue_analytics",
+      "title": "Platform Revenue Analysis",
+      "description": "Detailed revenue breakdown including platform fees, taxes, and growth projections",
+      "category": "Financial Performance",
+      "status": "active",
+      "priority": "critical",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalRevenue": 6342231.50,
+        "platformFees": 634223.15,
+        "taxes": 190266.95,
+        "netRevenue": 5517741.40,
+        "growthRate": 23.7,
+        "averageDailyRevenue": 17369.95,
+        "highestMonthlyRevenue": 678543.21
+      },
+      "chartData": [
+        { "month": "Jan", "revenue": 456789, "fees": 45679, "taxes": 13704 },
+        { "month": "Feb", "revenue": 523456, "fees": 52346, "taxes": 15704 },
+        { "month": "Mar", "revenue": 634567, "fees": 63457, "taxes": 19037 },
+        { "month": "Apr", "revenue": 678543, "fees": 67854, "taxes": 20356 }
+      ],
+      "createdAt": "2024-01-15T10:00:00Z",
+      "updatedAt": "2024-01-20T16:15:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "payment-analytics-001",
+      "type": "payment_analytics",
+      "title": "Payment Method Performance",
+      "description": "Analysis of payment success rates, preferred methods, and transaction patterns",
+      "category": "Payment Processing",
+      "status": "active",
+      "priority": "high",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalTransactions": 9567,
+        "successfulPayments": 9234,
+        "failedPayments": 333,
+        "successRate": 96.5,
+        "averageTransactionValue": 663.45,
+        "totalProcessingFees": 47823.67
+      },
+      "chartData": [
+        { "method": "Credit Card", "count": 4567, "success": 4423, "rate": 96.8 },
+        { "method": "PayPal", "count": 2345, "success": 2289, "rate": 97.6 },
+        { "method": "Bank Transfer", "count": 1654, "success": 1598, "rate": 96.6 },
+        { "method": "Digital Wallet", "count": 1001, "success": 924, "rate": 92.3 }
+      ],
+      "createdAt": "2024-01-15T11:00:00Z",
+      "updatedAt": "2024-01-20T17:30:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "service-category-analytics-001",
+      "type": "service_category_analytics",
+      "title": "Service Category Performance",
+      "description": "Analysis of popular service categories, booking volumes, and revenue by category",
+      "category": "Service Performance",
+      "status": "active",
+      "priority": "medium",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalCategories": 12,
+        "mostPopularCategory": "Chef Services",
+        "leastPopularCategory": "Tour Guide",
+        "averageBookingsPerCategory": 704,
+        "topCategoryRevenue": 1245678.90,
+        "categoryGrowthRate": 15.2
+      },
+      "chartData": [
+        { "category": "Chef", "bookings": 1456, "revenue": 1245678 },
+        { "category": "DJ", "bookings": 1234, "revenue": 987654 },
+        { "category": "Musician", "bookings": 1123, "revenue": 876543 },
+        { "category": "Bartender", "bookings": 1001, "revenue": 765432 },
+        { "category": "Magician", "bookings": 876, "revenue": 654321 },
+        { "category": "Cleaning", "bookings": 789, "revenue": 543210 }
+      ],
+      "createdAt": "2024-01-15T12:00:00Z",
+      "updatedAt": "2024-01-20T18:45:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "freelancer-analytics-001",
+      "type": "freelancer_analytics",
+      "title": "Freelancer Performance Metrics",
+      "description": "Analysis of top-performing freelancers, earnings distribution, and rating trends",
+      "category": "Freelancer Performance",
+      "status": "active",
+      "priority": "high",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalFreelancers": 6923,
+        "activeFreelancers": 5467,
+        "topEarner": 45678.90,
+        "averageEarnings": 3456.78,
+        "averageRating": 4.6,
+        "completionRate": 87.3
+      },
+      "chartData": [
+        { "range": "$0-500", "count": 2345 },
+        { "range": "$500-1000", "count": 1876 },
+        { "range": "$1000-2500", "count": 1456 },
+        { "range": "$2500-5000", "count": 876 },
+        { "range": "$5000+", "count": 370 }
+      ],
+      "createdAt": "2024-01-15T13:00:00Z",
+      "updatedAt": "2024-01-20T19:00:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "geographic-analytics-001",
+      "type": "geographic_analytics",
+      "title": "Geographic Distribution Analysis",
+      "description": "Analysis of user distribution and booking patterns across different locations",
+      "category": "Geographic Performance",
+      "status": "active",
+      "priority": "medium",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalCities": 45,
+        "topCity": "Mumbai",
+        "topCityBookings": 2345,
+        "averageBookingsPerCity": 187,
+        "geographicGrowthRate": 12.8,
+        "ruralUrbanRatio": 0.35
+      },
+      "chartData": [
+        { "city": "Mumbai", "bookings": 2345, "revenue": 1876543 },
+        { "city": "Delhi", "bookings": 2156, "revenue": 1654321 },
+        { "city": "Bangalore", "bookings": 1876, "revenue": 1432109 },
+        { "city": "Chennai", "bookings": 1654, "revenue": 1209876 },
+        { "city": "Hyderabad", "bookings": 1432, "revenue": 987654 }
+      ],
+      "createdAt": "2024-01-15T14:00:00Z",
+      "updatedAt": "2024-01-20T20:15:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "dispute-analytics-001",
+      "type": "dispute_analytics",
+      "title": "Dispute Resolution Analysis",
+      "description": "Analysis of dispute patterns, resolution times, and common issue categories",
+      "category": "Quality Assurance",
+      "status": "active",
+      "priority": "high",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalDisputes": 234,
+        "resolvedDisputes": 198,
+        "pendingDisputes": 36,
+        "resolutionRate": 84.6,
+        "averageResolutionTime": 48.5,
+        "mostCommonIssue": "Service Quality"
+      },
+      "chartData": [
+        { "category": "Service Quality", "count": 89 },
+        { "category": "Payment Issues", "count": 67 },
+        { "category": "Behavior Issues", "count": 45 },
+        { "category": "Billing Issues", "count": 33 }
+      ],
+      "createdAt": "2024-01-15T15:00:00Z",
+      "updatedAt": "2024-01-20T21:30:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "withdrawal-analytics-001",
+      "type": "withdrawal_analytics",
+      "title": "Freelancer Withdrawal Patterns",
+      "description": "Analysis of withdrawal requests, processing times, and preferred methods",
+      "category": "Financial Operations",
+      "status": "active",
+      "priority": "medium",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalWithdrawals": 1567,
+        "totalAmount": 3456789.50,
+        "averageWithdrawal": 2205.67,
+        "averageProcessingTime": 24.5,
+        "successRate": 97.8,
+        "pendingWithdrawals": 45
+      },
+      "chartData": [
+        { "method": "Bank Transfer", "count": 876, "amount": 2134567 },
+        { "method": "PayPal", "count": 456, "amount": 876543 },
+        { "method": "UPI", "count": 235, "amount": 445679 }
+      ],
+      "createdAt": "2024-01-15T16:00:00Z",
+      "updatedAt": "2024-01-20T22:45:00Z",
+      "createdBy": "admin-001"
+    },
+    {
+      "id": "message-analytics-001",
+      "type": "message_analytics",
+      "title": "Communication Patterns Analysis",
+      "description": "Analysis of message volumes, response times, and communication effectiveness",
+      "category": "Communication",
+      "status": "active",
+      "priority": "low",
+      "dateRange": {
+        "start": "2024-01-01",
+        "end": "2024-12-31"
+      },
+      "metrics": {
+        "totalMessages": 45678,
+        "averageResponseTime": 45.2,
+        "conversationRate": 78.5,
+        "activeConversations": 2345,
+        "messageGrowthRate": 34.7,
+        "peakHours": "14:00-18:00"
+      },
+      "chartData": [
+        { "hour": "06:00", "count": 123 },
+        { "hour": "09:00", "count": 456 },
+        { "hour": "12:00", "count": 789 },
+        { "hour": "15:00", "count": 1234 },
+        { "hour": "18:00", "count": 987 },
+        { "hour": "21:00", "count": 654 }
+      ],
+      "createdAt": "2024-01-15T17:00:00Z",
+      "updatedAt": "2024-01-20T23:00:00Z",
+      "createdBy": "admin-001"
+    }
+  ]
+}

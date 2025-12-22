@@ -1,0 +1,30 @@
+export interface PaymentData {
+  id: string;
+  bookingId: string;
+  transactionId: string;
+  employerId: string;
+  employerName: string;
+  freelancerId: string;
+  freelancerName: string;
+  serviceName: string;
+  serviceCategory: string;
+  amount: number;
+  totalBookingAmount: number;
+  paymentType: 'advance' | 'full' | 'remaining' | 'cash_on_delivery';
+  paymentMethod: 'UPI' | 'Credit Card' | 'Debit Card' | 'Net Banking' | 'Cash';
+  paymentStatus: 'completed' | 'pending' | 'failed' | 'refunded';
+  platformFee: number;
+  processingFee: number;
+  taxes: number;
+  netAmount: number;
+  paymentDate: string | null;
+  bookingDate: string;
+  location: string;
+  paymentGateway: string | null;
+  gatewayTransactionId: string | null;
+  refundStatus?: string | null;
+  refundDate?: string;
+  refundAmount?: number;
+  refundReason?: string;
+  description: string;
+}

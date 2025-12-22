@@ -1,0 +1,623 @@
+[
+  {
+    "id": "conv_001",
+    "participants": {
+      "employer": {
+        "id": "emp_001",
+        "name": "Priya Sharma",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_001",
+        "name": "Arjun Singh",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Wedding Chef Service",
+    "lastMessage": {
+      "id": "msg_015",
+      "senderId": "free_001",
+      "senderName": "Arjun Singh",
+      "senderType": "freelancer",
+      "content": "I've finalized the menu for your wedding. The catering will be exceptional!",
+      "timestamp": "2024-02-01T14:30:00Z",
+      "isRead": false
+    },
+    "totalMessages": 15,
+    "unreadCount": 3,
+    "status": "active",
+    "priority": "high",
+    "createdAt": "2024-01-28T09:00:00Z",
+    "updatedAt": "2024-02-01T14:30:00Z"
+  },
+  {
+    "id": "conv_002",
+    "participants": {
+      "employer": {
+        "id": "emp_002",
+        "name": "Rahul Patel",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_002",
+        "name": "Neha Gupta",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Birthday Party DJ",
+    "lastMessage": {
+      "id": "msg_028",
+      "senderId": "emp_002",
+      "senderName": "Rahul Patel",
+      "senderType": "employer",
+      "content": "Thank you for the amazing music! The party was a huge success.",
+      "timestamp": "2024-02-01T10:15:00Z",
+      "isRead": true
+    },
+    "totalMessages": 8,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "low",
+    "createdAt": "2024-01-30T11:30:00Z",
+    "updatedAt": "2024-02-01T10:15:00Z"
+  },
+  {
+    "id": "conv_003",
+    "participants": {
+      "employer": {
+        "id": "emp_003",
+        "name": "Kavya Reddy",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_003",
+        "name": "Ravi Kumar",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Mehendi Artist for Sangeet",
+    "lastMessage": {
+      "id": "msg_042",
+      "senderId": "emp_003",
+      "senderName": "Kavya Reddy",
+      "senderType": "employer",
+      "content": "Can you come early for the mehendi ceremony? We have 15 ladies.",
+      "timestamp": "2024-02-01T08:45:00Z",
+      "isRead": false
+    },
+    "totalMessages": 12,
+    "unreadCount": 5,
+    "status": "active",
+    "priority": "high",
+    "createdAt": "2024-02-01T08:30:00Z",
+    "updatedAt": "2024-02-01T08:45:00Z"
+  },
+  {
+    "id": "conv_004",
+    "participants": {
+      "employer": {
+        "id": "emp_004",
+        "name": "Amit Shah",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_004",
+        "name": "Vikram Joshi",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Stand-up Comedy Show",
+    "lastMessage": {
+      "id": "msg_055",
+      "senderId": "free_004",
+      "senderName": "Vikram Joshi",
+      "senderType": "freelancer",
+      "content": "I can perform at your corporate event. My show is family-friendly and hilarious!",
+      "timestamp": "2024-01-31T16:20:00Z",
+      "isRead": true
+    },
+    "totalMessages": 6,
+    "unreadCount": 0,
+    "status": "active",
+    "priority": "medium",
+    "createdAt": "2024-01-31T14:00:00Z",
+    "updatedAt": "2024-01-31T16:20:00Z"
+  },
+  {
+    "id": "conv_005",
+    "participants": {
+      "employer": {
+        "id": "emp_005",
+        "name": "Deepika Agarwal",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_005",
+        "name": "Rohan Malhotra",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Tattoo Design Session",
+    "lastMessage": {
+      "id": "msg_067",
+      "senderId": "emp_005",
+      "senderName": "Deepika Agarwal",
+      "senderType": "employer",
+      "content": "I love the design concept! When can we schedule the tattoo session?",
+      "timestamp": "2024-01-31T13:10:00Z",
+      "isRead": false
+    },
+    "totalMessages": 22,
+    "unreadCount": 2,
+    "status": "active",
+    "priority": "medium",
+    "createdAt": "2024-01-25T10:00:00Z",
+    "updatedAt": "2024-01-31T13:10:00Z",
+    "adminNotes": "Custom tattoo design in progress"
+  },
+  {
+    "id": "conv_006",
+    "participants": {
+      "employer": {
+        "id": "emp_006",
+        "name": "Sanjay Verma",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_006",
+        "name": "Anita Bhardwaj",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Wedding Bartender",
+    "lastMessage": {
+      "id": "msg_078",
+      "senderId": "free_006",
+      "senderName": "Anita Bhardwaj",
+      "senderType": "freelancer",
+      "content": "The bar setup is complete! I've prepared signature cocktails for your guests.",
+      "timestamp": "2024-01-30T17:45:00Z",
+      "isRead": true
+    },
+    "totalMessages": 4,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "low",
+    "createdAt": "2024-01-30T09:15:00Z",
+    "updatedAt": "2024-01-30T17:45:00Z"
+  },
+  {
+    "id": "conv_007",
+    "participants": {
+      "employer": {
+        "id": "emp_007",
+        "name": "Meera Kapoor",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_007",
+        "name": "Kartik Sharma",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Live Music Performance",
+    "lastMessage": {
+      "id": "msg_089",
+      "senderId": "emp_007",
+      "senderName": "Meera Kapoor",
+      "senderType": "employer",
+      "content": "Can you perform classical fusion music for our anniversary celebration?",
+      "timestamp": "2024-02-01T12:00:00Z",
+      "isRead": false
+    },
+    "totalMessages": 3,
+    "unreadCount": 1,
+    "status": "active",
+    "priority": "high",
+    "createdAt": "2024-02-01T11:45:00Z",
+    "updatedAt": "2024-02-01T12:00:00Z"
+  },
+  {
+    "id": "conv_008",
+    "participants": {
+      "employer": {
+        "id": "emp_008",
+        "name": "Suresh Iyer",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_008",
+        "name": "Rajesh Magician",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Kids Birthday Magic Show",
+    "lastMessage": {
+      "id": "msg_095",
+      "senderId": "free_008",
+      "senderName": "Rajesh Magician",
+      "senderType": "freelancer",
+      "content": "The magic show was fantastic! The kids absolutely loved the performance.",
+      "timestamp": "2024-01-29T15:30:00Z",
+      "isRead": true
+    },
+    "totalMessages": 7,
+    "unreadCount": 0,
+    "status": "archived",
+    "priority": "low",
+    "createdAt": "2024-01-29T10:00:00Z",
+    "updatedAt": "2024-01-29T15:30:00Z"
+  },
+  {
+    "id": "conv_009",
+    "participants": {
+      "employer": {
+        "id": "emp_009",
+        "name": "Aditi Jain",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_009",
+        "name": "Karan Singh",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Wedding Photographer",
+    "lastMessage": {
+      "id": "msg_101",
+      "senderId": "free_009",
+      "senderName": "Karan Singh",
+      "senderType": "freelancer",
+      "content": "Your wedding photos are ready! I've captured all the beautiful moments.",
+      "timestamp": "2024-01-28T18:45:00Z",
+      "isRead": true
+    },
+    "totalMessages": 18,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "medium",
+    "createdAt": "2024-01-20T11:00:00Z",
+    "updatedAt": "2024-01-28T18:45:00Z"
+  },
+  {
+    "id": "conv_010",
+    "participants": {
+      "employer": {
+        "id": "emp_010",
+        "name": "Rohit Sharma",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_010",
+        "name": "Sneha Patel",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Dance Choreographer",
+    "lastMessage": {
+      "id": "msg_112",
+      "senderId": "emp_010",
+      "senderName": "Rohit Sharma",
+      "senderType": "employer",
+      "content": "The sangeet rehearsal was amazing! Can we schedule one more practice session?",
+      "timestamp": "2024-01-27T14:30:00Z",
+      "isRead": false
+    },
+    "totalMessages": 9,
+    "unreadCount": 2,
+    "status": "active",
+    "priority": "high",
+    "createdAt": "2024-01-25T09:30:00Z",
+    "updatedAt": "2024-01-27T14:30:00Z"
+  },
+  {
+    "id": "conv_011",
+    "participants": {
+      "employer": {
+        "id": "emp_011",
+        "name": "Ankita Gupta",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_011",
+        "name": "Manish Kumar",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Event Decorator",
+    "lastMessage": {
+      "id": "msg_123",
+      "senderId": "free_011",
+      "senderName": "Manish Kumar",
+      "senderType": "freelancer",
+      "content": "The decoration setup is complete. Your venue looks stunning!",
+      "timestamp": "2024-01-26T16:20:00Z",
+      "isRead": true
+    },
+    "totalMessages": 11,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "low",
+    "createdAt": "2024-01-24T12:15:00Z",
+    "updatedAt": "2024-01-26T16:20:00Z"
+  },
+  {
+    "id": "conv_012",
+    "participants": {
+      "employer": {
+        "id": "emp_012",
+        "name": "Vikash Singh",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_012",
+        "name": "Pooja Agarwal",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Makeup Artist",
+    "lastMessage": {
+      "id": "msg_134",
+      "senderId": "emp_012",
+      "senderName": "Vikash Singh",
+      "senderType": "employer",
+      "content": "My sister loved her bridal makeup! You're incredibly talented.",
+      "timestamp": "2024-01-25T20:45:00Z",
+      "isRead": true
+    },
+    "totalMessages": 7,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "low",
+    "createdAt": "2024-01-23T14:00:00Z",
+    "updatedAt": "2024-01-25T20:45:00Z"
+  },
+  {
+    "id": "conv_013",
+    "participants": {
+      "employer": {
+        "id": "emp_013",
+        "name": "Nisha Verma",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_013",
+        "name": "Rajiv Bhatt",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Catering Service",
+    "lastMessage": {
+      "id": "msg_145",
+      "senderId": "free_013",
+      "senderName": "Rajiv Bhatt",
+      "senderType": "freelancer",
+      "content": "I can handle catering for 300 guests. Let's discuss the menu options.",
+      "timestamp": "2024-01-24T11:30:00Z",
+      "isRead": false
+    },
+    "totalMessages": 5,
+    "unreadCount": 3,
+    "status": "active",
+    "priority": "high",
+    "createdAt": "2024-01-24T10:00:00Z",
+    "updatedAt": "2024-01-24T11:30:00Z"
+  },
+  {
+    "id": "conv_014",
+    "participants": {
+      "employer": {
+        "id": "emp_014",
+        "name": "Arjun Patel",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_014",
+        "name": "Divya Sharma",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Floral Decorator",
+    "lastMessage": {
+      "id": "msg_156",
+      "senderId": "emp_014",
+      "senderName": "Arjun Patel",
+      "senderType": "employer",
+      "content": "The floral arrangements are gorgeous! Thank you for making our event special.",
+      "timestamp": "2024-01-23T17:15:00Z",
+      "isRead": true
+    },
+    "totalMessages": 8,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "medium",
+    "createdAt": "2024-01-21T13:45:00Z",
+    "updatedAt": "2024-01-23T17:15:00Z"
+  },
+  {
+    "id": "conv_015",
+    "participants": {
+      "employer": {
+        "id": "emp_015",
+        "name": "Shreya Joshi",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_015",
+        "name": "Anil Gupta",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Sound Engineer",
+    "lastMessage": {
+      "id": "msg_167",
+      "senderId": "free_015",
+      "senderName": "Anil Gupta",
+      "senderType": "freelancer",
+      "content": "Sound check complete! All audio equipment is working perfectly.",
+      "timestamp": "2024-01-22T19:30:00Z",
+      "isRead": true
+    },
+    "totalMessages": 6,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "low",
+    "createdAt": "2024-01-22T15:00:00Z",
+    "updatedAt": "2024-01-22T19:30:00Z"
+  },
+  {
+    "id": "conv_016",
+    "participants": {
+      "employer": {
+        "id": "emp_016",
+        "name": "Rakesh Kumar",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_016",
+        "name": "Priya Singh",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Event Planner",
+    "lastMessage": {
+      "id": "msg_178",
+      "senderId": "emp_016",
+      "senderName": "Rakesh Kumar",
+      "senderType": "employer",
+      "content": "Need help organizing a corporate retreat for 50 employees. Are you available?",
+      "timestamp": "2024-01-21T10:45:00Z",
+      "isRead": false
+    },
+    "totalMessages": 4,
+    "unreadCount": 2,
+    "status": "active",
+    "priority": "medium",
+    "createdAt": "2024-01-21T09:30:00Z",
+    "updatedAt": "2024-01-21T10:45:00Z"
+  },
+  {
+    "id": "conv_017",
+    "participants": {
+      "employer": {
+        "id": "emp_017",
+        "name": "Ritu Agarwal",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_017",
+        "name": "Sanjay Kapoor",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Video Editing",
+    "lastMessage": {
+      "id": "msg_189",
+      "senderId": "free_017",
+      "senderName": "Sanjay Kapoor",
+      "senderType": "freelancer",
+      "content": "Your wedding video is edited and ready! It captures all the beautiful moments.",
+      "timestamp": "2024-01-20T15:20:00Z",
+      "isRead": true
+    },
+    "totalMessages": 12,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "low",
+    "createdAt": "2024-01-18T11:00:00Z",
+    "updatedAt": "2024-01-20T15:20:00Z"
+  },
+  {
+    "id": "conv_018",
+    "participants": {
+      "employer": {
+        "id": "emp_018",
+        "name": "Gaurav Malhotra",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_018",
+        "name": "Kavita Sharma",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Fashion Stylist",
+    "lastMessage": {
+      "id": "msg_200",
+      "senderId": "emp_018",
+      "senderName": "Gaurav Malhotra",
+      "senderType": "employer",
+      "content": "Love the outfit suggestions! Can you help style the entire wedding party?",
+      "timestamp": "2024-01-19T13:40:00Z",
+      "isRead": false
+    },
+    "totalMessages": 9,
+    "unreadCount": 4,
+    "status": "active",
+    "priority": "high",
+    "createdAt": "2024-01-19T10:15:00Z",
+    "updatedAt": "2024-01-19T13:40:00Z"
+  },
+  {
+    "id": "conv_019",
+    "participants": {
+      "employer": {
+        "id": "emp_019",
+        "name": "Swati Jain",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_019",
+        "name": "Deepak Yadav",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "jobTitle": "Transportation Coordinator",
+    "lastMessage": {
+      "id": "msg_211",
+      "senderId": "free_019",
+      "senderName": "Deepak Yadav",
+      "senderType": "freelancer",
+      "content": "All vehicles are arranged for guest transportation. Everything is on schedule!",
+      "timestamp": "2024-01-18T16:50:00Z",
+      "isRead": true
+    },
+    "totalMessages": 7,
+    "unreadCount": 0,
+    "status": "resolved",
+    "priority": "medium",
+    "createdAt": "2024-01-17T14:30:00Z",
+    "updatedAt": "2024-01-18T16:50:00Z"
+  },
+  {
+    "id": "conv_020",
+    "participants": {
+      "employer": {
+        "id": "emp_020",
+        "name": "Mahesh Gupta",
+        "avatar": "/placeholder.svg"
+      },
+      "freelancer": {
+        "id": "free_020",
+        "name": "Sunita Verma",
+        "avatar": "/placeholder.svg"
+      }
+    },
+    "serviceTitle": "Security Service",
+    "lastMessage": {
+      "id": "msg_222",
+      "senderId": "emp_020",
+      "senderName": "Mahesh Gupta",
+      "senderType": "employer",
+      "content": "Need security personnel for a large corporate event. Can you provide 10 guards?",
+      "timestamp": "2024-01-17T11:25:00Z",
+      "isRead": false
+    },
+    "totalMessages": 3,
+    "unreadCount": 1,
+    "status": "active",
+    "priority": "high",
+    "createdAt": "2024-01-17T10:00:00Z",
+    "updatedAt": "2024-01-17T11:25:00Z"
+  }
+]

@@ -1,0 +1,88 @@
+{
+  "conv_001": [
+    {
+      "id": "msg_001",
+      "senderId": "emp_001",
+      "senderName": "Priya Sharma",
+      "senderType": "employer",
+      "content": "Hi Arjun, I'm planning my wedding and need a chef for the ceremony. Can we discuss the menu?",
+      "timestamp": "2024-01-28T09:00:00Z",
+      "isRead": true
+    },
+    {
+      "id": "msg_002",
+      "senderId": "free_001",
+      "senderName": "Arjun Singh",
+      "senderType": "freelancer",
+      "content": "Hello Priya! Congratulations on your wedding! I'd love to help create a memorable feast. What cuisine are you considering?",
+      "timestamp": "2024-01-28T09:15:00Z",
+      "isRead": true
+    },
+    {
+      "id": "msg_003",
+      "senderId": "emp_001",
+      "senderName": "Priya Sharma",
+      "senderType": "employer",
+      "content": "We want a mix of North Indian and South Indian dishes for about 200 guests. Can you handle that?",
+      "timestamp": "2024-01-28T09:30:00Z",
+      "isRead": true
+    },
+    {
+      "id": "msg_004",
+      "senderId": "free_001",
+      "senderName": "Arjun Singh",
+      "senderType": "freelancer",
+      "content": "Absolutely! I specialize in both cuisines. I can create a diverse menu with live counters too. When is the wedding date?",
+      "timestamp": "2024-01-28T10:00:00Z",
+      "isRead": true
+    },
+    {
+      "id": "msg_005",
+      "senderId": "emp_001",
+      "senderName": "Priya Sharma",
+      "senderType": "employer",
+      "content": "The wedding is in 6 weeks. We also need catering for the mehendi and sangeet ceremonies.",
+      "timestamp": "2024-01-28T10:30:00Z",
+      "isRead": true
+    },
+    {
+      "id": "msg_015",
+      "senderId": "free_001",
+      "senderName": "Arjun Singh",
+      "senderType": "freelancer",
+      "content": "I've finalized the menu for your wedding. The catering will be exceptional!",
+      "timestamp": "2024-02-01T14:30:00Z",
+      "isRead": false,
+      "attachments": ["wedding_menu.pdf", "pricing_details.pdf"]
+    }
+  ],
+  "conv_003": [
+    {
+      "id": "msg_035",
+      "senderId": "emp_003",
+      "senderName": "Kavya Reddy",
+      "senderType": "employer",
+      "content": "Hi Ravi, I need mehendi artist for my sangeet ceremony. Are you available next weekend?",
+      "timestamp": "2024-02-01T08:30:00Z",
+      "isRead": true
+    },
+    {
+      "id": "msg_036",
+      "senderId": "free_003",
+      "senderName": "Ravi Kumar",
+      "senderType": "freelancer",
+      "content": "Hello Kavya! Yes, I'm available. How many people need mehendi and what designs are you looking for?",
+      "timestamp": "2024-02-01T08:35:00Z",
+      "isRead": true
+    },
+    {
+      "id": "msg_042",
+      "senderId": "emp_003",
+      "senderName": "Kavya Reddy",
+      "senderType": "employer",
+      "content": "Can you come early for the mehendi ceremony? We have 15 ladies.",
+      "timestamp": "2024-02-01T08:45:00Z",
+      "isRead": false
+    }
+  ]
+}

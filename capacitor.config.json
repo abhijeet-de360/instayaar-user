@@ -1,0 +1,16 @@
+{
+  "appId": "com.kaamdham",
+  "appName": "KaamDham",
+  "webDir": "dist",
+  "plugins": {
+    "Keyboard": {
+      "resizeOnFullScreen": false
+    },
+    "EdgeToEdge": {
+      "backgroundColor": "#ffffff"
+    }
+  },
+  "android": {
+    "adjustMarginsForEdgeToEdge": "force"
+  }
+}
