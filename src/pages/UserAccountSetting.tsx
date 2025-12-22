@@ -11,11 +11,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { updateUser, updateUserProfile, userEmailSent, userEmailVerifyOtp } from "@/store/authSlice";
+import { aadharVerify, getUserProfile, updateUser, updateUserProfile, userAadharVerify, userEmailSent, userEmailVerifyOtp } from "@/store/authSlice";
 import { localService } from "@/shared/_session/local";
 import Dropzone from "react-dropzone";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
@@ -31,7 +31,12 @@ const UserAccountSetting = () => {
     const [emailModal, setEmailModal] = useState(false);
     const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState("");
+    const [searchParams, setSearchParams] = useSearchParams();
     const [isEditEmail, setIsEditEmail] = useState(true)
+    const navigate = useNavigate();
+    const [count, setCount] = useState(10);
+
+    const modal = searchParams.get('modal');
 
     const handleLogin = (role: string) => {
         authVar?.isAuthenticated
@@ -46,6 +51,8 @@ const UserAccountSetting = () => {
         image: {},
         city: "",
         state: "",
+        aadhaarNo: "",
+        panNo: ""
     });
 
 
@@ -94,10 +101,31 @@ const UserAccountSetting = () => {
                 image: authVar?.user?.profile || "",
                 city: authVar?.user?.city || "",
                 state: authVar?.user?.state || "",
-                gstNo: authVar?.user?.gstNo || ""
+                gstNo: authVar?.user?.gstNo || "",
+                aadhaarNo: authVar?.user?.aadhaarNo || "",
+                panNo: authVar?.user?.panNo || "",
             }));
         }
     }, [authVar?.user?.phoneNumber]);
+
+
+    useEffect(() => {
+        if (modal) {
+            const interval = setInterval(() => {
+                setCount((prev) => prev - 1);
+            }, 1000);
+
+            const timeout = setTimeout(() => {
+                dispatch(getUserProfile());
+                navigate("/user-account-settings", { replace: true });
+            }, 10000);
+
+            return () => {
+                clearInterval(interval);
+                clearTimeout(timeout);
+            };
+        }
+    }, [modal, dispatch, navigate]);
 
 
 
@@ -138,8 +166,18 @@ const UserAccountSetting = () => {
     }
 
     const handleEmailOtpverfy = () => {
-        dispatch(userEmailVerifyOtp({email: formData?.email, otp: otp}, setEmailModal))
+        dispatch(userEmailVerifyOtp({ email: formData?.email, otp: otp }, setEmailModal))
     }
+
+
+    const handleAadharVerify = () => {
+        dispatch(userAadharVerify({
+            firstName: formData?.firstName,
+            lastName: formData?.lastName,
+            aadhaarNo: formData?.aadhaarNo,
+            panNo: formData?.panNo
+        }, navigate));
+    };
 
 
     return (
@@ -161,8 +199,91 @@ const UserAccountSetting = () => {
             >
 
                 {/* Profile Information */}
+                {!authVar?.user?.isAadharVerified && (
+                    <Card className="max-w-md mx-auto border border-secondary-foreground rounded-xl shadow-sm p-4 sm:p-6">
+                        <CardHeader className="p-0 mb-4 text-center">
+                            <h2 className="text-lg font-semibold text-foreground">
+                                Aadhaar & PAN Verification
+                            </h2>
+                        </CardHeader>
 
-                <Card className="pt-2">
+                        <CardContent className="space-y-4 p-0">
+                            <div className="space-y-2">
+                                <Label htmlFor="firstName" className="text-sm font-medium">
+                                    First Name
+                                </Label>
+                                <Input
+                                    id="firstName"
+                                    placeholder="Enter your first name"
+                                    // inputMode="numeric"
+                                    onInput={(e: any) => e.target.value = e.target.value.replace(/[0-9.]/g, "").replace(" ", "").slice(0, 30)}
+                                    value={formData?.firstName}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({ ...prev, firstName: e.target.value }))
+                                    }
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="lastName" className="text-sm font-medium">
+                                    Last Name
+                                </Label>
+                                <Input
+                                    id="lastName"
+                                    placeholder="Enter your last name"
+                                    // inputMode="numeric"
+                                    onInput={(e: any) => e.target.value = e.target.value.replace(/[0-9.]/g, "").replace(" ", "").slice(0, 30)}
+                                    value={formData?.lastName}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({ ...prev, lastName: e.target.value }))
+                                    }
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="panNo" className="text-sm font-medium">
+                                    PAN Number
+                                </Label>
+                                <Input
+                                    id="panNo"
+                                    placeholder="Enter your 10-character PAN number uppercase"
+                                    value={formData?.panNo}
+                                    onInput={(e: any) => {
+                                        let value = e.target.value.toUpperCase().replace(/\s/g, "");
+                                        let filtered = "";
+
+                                        for (let i = 0; i < value.length && i < 10; i++) {
+                                            const ch = value[i];
+                                            if (i < 5 && /[A-Z]/.test(ch)) filtered += ch; // first 5 letters
+                                            else if (i >= 5 && i < 9 && /[0-9]/.test(ch)) filtered += ch; // next 4 digits
+                                            else if (i === 9 && /[A-Z]/.test(ch)) filtered += ch; // last letter
+                                            else break; // stop on invalid input
+                                        }
+
+                                        e.target.value = filtered;
+                                    }}
+                                    onChange={(e) =>
+                                        setFormData((prev) => ({ ...prev, panNo: e.target.value }))
+                                    }
+                                />
+
+
+                            </div>
+
+                            <Button
+                                className="w-full mt-2 bg-primary hover:bg-primary/90 transition-all"
+                                onClick={handleAadharVerify}
+                                disabled={!formData.firstName.trim() || !formData.lastName.trim() || !formData.panNo.trim()}
+                            >
+                                Verify with Aadhaar OTP
+                            </Button>
+
+                            <p className="text-[11px] text-center text-muted-foreground mt-2">
+                                We value your privacy — your information is securely encrypted.
+                            </p>
+                        </CardContent>
+                    </Card>
+                )}
+
+                {authVar?.user?.isAadharVerified && <Card className="pt-2">
                     <CardContent
                         className={`${isMobile ? "p-4 pt-0" : "p-4"} space-y-4`}
                     >
@@ -219,6 +340,7 @@ const UserAccountSetting = () => {
                                 </Label>
                                 <Input
                                     id="firstName"
+                                    disabled
                                     value={formData?.firstName}
                                     type="text"
                                     onInput={(e: any) => e.target.value = e.target.value.replace(/[0-9.]/g, "").replace(" ", "").slice(0, 30)}
@@ -237,6 +359,7 @@ const UserAccountSetting = () => {
                                 <Input
                                     id="lastName"
                                     value={formData?.lastName}
+                                    disabled
                                     type="text"
                                     onInput={(e: any) => e.target.value = e.target.value.replace(/[0-9.]/g, "").replace(" ", "").slice(0, 30)}
                                     onChange={(e) =>
@@ -314,6 +437,20 @@ const UserAccountSetting = () => {
                             <Input id="phone" value={formData?.phoneNumber} disabled />
                         </div>
 
+                        <div className="space-y-2">
+                            <Label htmlFor="phone" className="text-sm">
+                                Aadhar Number*
+                            </Label>
+                            <Input id="phone" value={formData?.aadhaarNo} disabled />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="phone" className="text-sm">
+                                PAN Number*
+                            </Label>
+                            <Input id="phone" value={formData?.panNo} disabled />
+                        </div>
+
                         <div
                             className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-2"
                                 } gap-4`}
@@ -376,55 +513,7 @@ const UserAccountSetting = () => {
                             Save Changes
                         </Button>
                     </CardContent>
-                </Card>
-
-                {/* Notification Preferences */}
-                {/* <Card>
-                    <CardContent className="p-4 space-y-4">
-                        <div className="flex items-center justify-between py-2">
-                            <div>
-                                <p className="font-medium">Email Notifications</p>
-                                <p className="text-sm text-muted-foreground">
-                                    Receive updates via email
-                                </p>
-                            </div>
-                            <Switch defaultChecked />
-                        </div>
-
-                        <div className="flex items-center justify-between py-2">
-                            <div>
-                                <p className="font-medium">SMS Notifications</p>
-                                <p className="text-sm text-muted-foreground">
-                                    Receive updates via SMS
-                                </p>
-                            </div>
-                            <Switch />
-                        </div>
-
-                        <div className="flex items-center justify-between py-2">
-                            <div>
-                                <p className="font-medium">Push Notifications</p>
-                                <p className="text-sm text-muted-foreground">
-                                    Receive browser notifications
-                                </p>
-                            </div>
-                            <Switch defaultChecked />
-                        </div>
-
-                        <div className="flex items-center justify-between py-2">
-                            <div>
-                                <p className="font-medium">Marketing Emails</p>
-                                <p className="text-sm text-muted-foreground">
-                                    Receive promotional content
-                                </p>
-                            </div>
-                            <Switch />
-                        </div>
-                    </CardContent>
-                </Card> */}
-
-
-
+                </Card>}
                 {/* Danger Zone */}
                 <div className="space-y-3">
                     <div className="space-y-3">
@@ -471,11 +560,13 @@ const UserAccountSetting = () => {
                         </Card>
                     </div>
                 </div>
-
-                {/* <Button variant="destructive" className="w-full">
-                    Delete Account
-                </Button> */}
             </div>
+
+            {modal && <div className="modal bg-white w-full h-screen fixed top-0 right-0 z-50 flex items-center justify-center">
+                <div>
+                    <p className="font-medium">Verifying...({count}s)</p>
+                </div>
+            </div>}
 
             <MobileBottomNav />
         </div>

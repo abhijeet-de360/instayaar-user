@@ -29,7 +29,6 @@ const widthrawalUrl = rootUrl + 'freelancer'
 const dashboardUrl = rootUrl + 'dashboard'
 const serviceReview = rootUrl + 'serviceReview'
 const jobReview = rootUrl + 'jobReview'
-// const instantUrl = rootUrl + 
 
 
 // ===================== User Auth ===========================
@@ -74,6 +73,12 @@ async function userEmailOtpVerify(data){
   return await axios.post(userAuthUrl + '/emailVerify', data, {
     headers: await authHeader('')
   });
+}
+
+async function userAadharVerify(data:any) {
+  return await axios.post(userAuthUrl + '/aadharVerify', data, {
+    headers: await authHeader('')
+  })
 }
 
 
@@ -134,6 +139,8 @@ async function aadharVerify(data) {
     headers: await authHeader('')
   })
 }
+
+
 
 async function emailSendOtp(email){
   return await axios.post(freelancerUrl + '/sendEmail', {email}, {
@@ -564,7 +571,7 @@ async function getBookingsForFreelancerInstant(limit, offset, lat, lng){
 
 
 export const service = {
-  userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, 
+  userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify, 
 
   freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp, 
 

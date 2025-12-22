@@ -327,7 +327,7 @@ const AccountSettings = () => {
         </div>
 
         {!authVar?.freelancer?.isAadharVerified && (
-          <Card className="max-w-md mx-auto border border-muted rounded-xl shadow-sm p-4 sm:p-6">
+          <Card className="max-w-md mx-auto border border-secondary-foreground rounded-xl shadow-sm p-4 sm:p-6">
             <CardHeader className="p-0 mb-4 text-center">
               <h2 className="text-lg font-semibold text-foreground">
                 Aadhaar & PAN Verification

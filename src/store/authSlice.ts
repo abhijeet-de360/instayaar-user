@@ -412,6 +412,61 @@ export function aadharVerify(data, navigate) {
     };
 }
 
+export function userAadharVerify(data, navigate) {
+    return async function aadharVerifyThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        dispatch(setStatus(STATUSES.LOADING));
+
+        try {
+            const response = await service.userAadharVerify(data);
+            const redirectUrl = response?.data?.result?.source_output?.redirect_url;
+
+            if (!redirectUrl) {
+                console.warn("⚠️ No redirect URL found in Aadhaar verification response");
+                dispatch(setStatus(STATUSES.ERROR));
+                return;
+            }
+            navigate("/employer-dashboard");
+            if (Capacitor.isNativePlatform()) {
+                console.log("📱 Running inside Capacitor app — opening in-app browser...");
+                const pageLoadedListener = (Browser as any).addListener(
+                    "browserPageLoaded",
+                    async (event: any) => {
+                        const currentUrl = event?.url || "";
+                        console.log("🌐 In-app browser navigated to:", currentUrl);
+                        if (currentUrl.startsWith("https://kaamdham.com/account-settings?modal=true")) {
+                            console.log("✅ Return URL detected — closing browser...");
+                            await Browser.close();
+                            pageLoadedListener.remove();
+                        }
+                    }
+                );
+                const finishedListener = (Browser as any).addListener(
+                    "browserFinished",
+                    () => {
+                        console.log("🧭 Aadhaar verification browser closed manually");
+                        finishedListener.remove();
+                    }
+                );
+                await Browser.open({
+                    url: redirectUrl,
+                    presentationStyle: "fullscreen",
+                    toolbarColor: "#ffffff",
+                });
+            } else {
+                console.log("💻 Running on web — redirecting via window.location");
+                window.location.href = redirectUrl;
+            }
+        } catch (error) {
+            console.error("❌ Aadhaar verification failed:", error);
+            errorHandler(error?.response);
+            dispatch(setStatus(STATUSES.ERROR));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
 
 
 
