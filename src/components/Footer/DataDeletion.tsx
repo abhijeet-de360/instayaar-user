@@ -31,7 +31,7 @@ const DataDeletion = () => {
         <div className="space-y-8 text-sm leading-relaxed text-foreground">
           <section>
             <p>
-              At <strong>KaamDham</strong>, we respect your right to control your personal data. This Data Deletion
+              At <strong>InstaYaar</strong>, we respect your right to control your personal data. This Data Deletion
               Policy explains how you can request the removal of your account and associated personal information from
               our systems. By submitting a deletion request, you acknowledge that certain data may still need to be
               retained as required by law.
@@ -94,8 +94,8 @@ const DataDeletion = () => {
             <p>
               If you have questions regarding this Data Deletion Policy or need help with your request, please contact
               our support team at{" "}
-              <a href="mailto:hello@kaamdham.com" className="text-primary underline">
-                hello@kaamdham.com
+              <a href="mailto:hello@instayaar.com" className="text-primary underline">
+                hello@instayaar.com
               </a>
               .
             </p>

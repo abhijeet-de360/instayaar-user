@@ -218,7 +218,7 @@ export const Header = ({ onLogin, className }: any) => {
             {/* Left */}
             <div className="flex items-center space-x-6">
               <button onClick={navigateToHome} className="text-xl font-bold text-primary">
-                KaamDham
+                InstaYaar
               </button>
               <div className="flex items-center space-x-2 w-32">
                 <MapPin className="h-4 w-4 text-muted-foreground" />

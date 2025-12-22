@@ -21,7 +21,7 @@ const TermsAndConditions = () => {
               1. Nature of Service
             </h2>
             <p>
-              KaamDham is a digital marketplace connecting customers (“Clients”) with
+              InstaYaar is a digital marketplace connecting customers (“Clients”) with
               independent service providers (“Freelancers”).
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
@@ -42,7 +42,7 @@ const TermsAndConditions = () => {
               <li>You agree to provide accurate, complete, and updated information during registration.</li>
               <li>You are responsible for maintaining the confidentiality of your account credentials.</li>
               <li>You must use the platform only for lawful purposes and avoid any fraudulent or abusive conduct.</li>
-              <li>KaamDham reserves the right to suspend or terminate accounts violating these Terms.</li>
+              <li>InstaYaar reserves the right to suspend or terminate accounts violating these Terms.</li>
             </ul>
           </section>
 
@@ -52,10 +52,10 @@ const TermsAndConditions = () => {
               3. Bookings and Payments
             </h2>
             <ul className="list-disc list-inside space-y-1">
-              <li>All bookings and payments must be made exclusively via KaamDham.</li>
+              <li>All bookings and payments must be made exclusively via InstaYaar.</li>
               <li>Freelancers may set their own service rates and cancellation policies.</li>
-              <li>KaamDham charges a commission from freelancers upon successful service completion.</li>
-              <li>Payments are processed securely through third-party gateways. KaamDham does not store sensitive payment information.</li>
+              <li>InstaYaar charges a commission from freelancers upon successful service completion.</li>
+              <li>Payments are processed securely through third-party gateways. InstaYaar does not store sensitive payment information.</li>
             </ul>
           </section>
 
@@ -116,7 +116,7 @@ const TermsAndConditions = () => {
               <li>Avoid discrimination, harassment, or unprofessional conduct.</li>
               <li>Comply with all applicable local laws and regulations.</li>
               <li>Service providers are solely responsible for their delivered services.</li>
-              <li>KaamDham does not guarantee service quality, timelines, or outcomes.</li>
+              <li>InstaYaar does not guarantee service quality, timelines, or outcomes.</li>
             </ul>
           </section>
 
@@ -135,12 +135,12 @@ const TermsAndConditions = () => {
 
           {/* Section 9–15 */}
           {[
-            ["9. Intellectual Property", "All platform content, including text, logos, and designs, is the property of KaamDham or its licensors. Unauthorized use is prohibited."],
+            ["9. Intellectual Property", "All platform content, including text, logos, and designs, is the property of InstaYaar or its licensors. Unauthorized use is prohibited."],
             ["10. Fraud, Misuse, and Account Termination", "Fraudulent or abusive activity may result in account suspension and legal action."],
-            ["11. Limitation of Liability", "KaamDham is not liable for disputes between clients and freelancers. Our maximum liability is limited to the commission earned from the disputed transaction."],
+            ["11. Limitation of Liability", "InstaYaar is not liable for disputes between clients and freelancers. Our maximum liability is limited to the commission earned from the disputed transaction."],
             ["12. Privacy and Data Protection", "We collect and process your data in accordance with our Privacy Policy. Refer to the app or website for full details."],
             ["13. Governing Law and Jurisdiction", "These Terms are governed by Indian law and subject to the courts of Kolkata, West Bengal."],
-            ["14. Changes to Terms", "KaamDham may modify these Terms periodically. Continued use after changes means acceptance."],
+            ["14. Changes to Terms", "InstaYaar may modify these Terms periodically. Continued use after changes means acceptance."],
           ].map(([title, text], index) => (
             <section key={index}>
               <h2 className="text-lg font-semibold text-gray-900 mb-2">{title}</h2>
@@ -152,7 +152,7 @@ const TermsAndConditions = () => {
           <section>
             <h2 className="text-lg font-semibold text-gray-900 mb-2">15. Contact Us</h2>
             <ul className="list-none space-y-1">
-              <li> Email: <a href="mailto:hello@kaamdham.com" className="text-blue-600 hover:underline">hello@kaamdham.com</a></li>
+              <li> Email: <a href="mailto:hello@instayaar.com" className="text-blue-600 hover:underline">hello@instayaar.com</a></li>
               <li> Phone: <a href="tel:+919073008080" className="text-blue-600 hover:underline">+91 9073008080</a></li>
               <li> Address: Kolkata, West Bengal, India</li>
             </ul>

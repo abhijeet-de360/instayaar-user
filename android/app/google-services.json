@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "521245498217",
-    "project_id": "kaamdham-f4771",
-    "storage_bucket": "kaamdham-f4771.firebasestorage.app"
+    "project_number": "1085645691962",
+    "project_id": "instayaar-9d0d1",
+    "storage_bucket": "instayaar-9d0d1.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:521245498217:android:fd5bac0acb5ea9e860bbf8",
+        "mobilesdk_app_id": "1:1085645691962:android:1b691c3537a3c80217a903",
         "android_client_info": {
-          "package_name": "com.kaamdham"
+          "package_name": "com.instayaar.app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "521245498217-j8i6ehkvlq41epncltid2b2h1p49ee46.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAM9Tlpsb98zkRh9edeSykTOONKk7fEex8"
+          "current_key": "AIzaSyAauf-xxYfIpfrcldZU-D41pfPDh9pd_-0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "521245498217-j8i6ehkvlq41epncltid2b2h1p49ee46.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

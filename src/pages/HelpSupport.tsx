@@ -151,10 +151,10 @@ const HelpSupport = () => {
                 <div className="flex-1">
                   <h3 className="font-medium text-sm">Email</h3>
                   <p className="text-xs text-muted-foreground">
-                    hello@kaamdham.com
+                    hello@instayaar.com
                   </p>
                 </div>
-                <a href={'mailto:hello@kaamdham.com'} target="_blank" className="border p-1 rounded-md font-medium px-2">
+                <a href={'mailto:hello@instayaar.com'} target="_blank" className="border p-1 rounded-md font-medium px-2">
                   Email
                 </a>
               </div>

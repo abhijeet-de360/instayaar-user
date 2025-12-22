@@ -92,7 +92,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
   const AuthContent = () => <div className="space-y-6">
     <div className="flex justify-between items-center">
       <h2 className="text-xl font-semibold text-foreground">
-        {step === 'phone' && 'Welcome to KaamDham'}
+        {step === 'phone' && 'Welcome to InstaYaar'}
         {step === 'otp' && 'Enter OTP'}
         {/* {step === 'role' && 'Select your Role'} */}
       </h2>

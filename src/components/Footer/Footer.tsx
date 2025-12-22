@@ -25,7 +25,7 @@ const Footer = () => {
         </div>
 
         <p className="text-xs text-center md:text-right">
-          © {new Date().getFullYear()} KaamDham. All rights reserved. Powered by Joshful Apps Private Limited.
+          © {new Date().getFullYear()} InstaYaar. All rights reserved. Powered by Joshful Apps Private Limited.
         </p>
       </div>
     </footer>

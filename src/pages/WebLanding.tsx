@@ -21,7 +21,7 @@ const WebLanding = () => {
     }, []);
     return (
         <>
-            <div className="min-h-screen bg-[#F96F29] flex flex-col md:flex-row items-center justify-between px-8 md:px-24 text-white">
+            <div className="min-h-screen bg-primary flex flex-col md:flex-row items-center justify-between px-8 md:px-24 text-white">
                 {/* Left side - mobile mockups */}
 
                 <div className="flex flex-col md:flex-row gap-10 mt-10 md:mt-0">
@@ -68,7 +68,7 @@ const WebLanding = () => {
                         transition={{ delay: 0.6 }}
                         className="text-3xl md:text-4xl font-bold mt-2 text-yellow-300"
                     >
-                        With <span className="text-white">KaamDham</span>
+                        With <span className="text-white">InstaYaar</span>
                     </motion.p>
 
                     <motion.p
@@ -88,7 +88,7 @@ const WebLanding = () => {
                         transition={{ delay: 1 }}
                         className="mt-8 flex flex-col items-center md:items-start"
                     >
-                        <p className="text-sm text-gray-200 mb-4">Download the KaamDham App</p>
+                        <p className="text-sm text-gray-200 mb-4">Download the InstaYaar App</p>
                         <div className="flex gap-4">
                             <a href="https://play.google.com/store/apps/details?id=com.kaamdham&pcampaignid=web_share" target='blank'>
                                 <Button className="bg-black flex items-center gap-2 hover:bg-gray-800 cursor-pointer">
@@ -136,7 +136,7 @@ const WebLanding = () => {
                     </div>
 
                     <p className="text-xs text-center md:text-right font-medium">
-                        © {new Date().getFullYear()} KaamDham. All rights reserved. Powered by Joshful Apps Private Limited.
+                        © {new Date().getFullYear()} InstaYaar. All rights reserved. Powered by Joshful Apps Private Limited.
                     </p>
                 </div>
             </footer>

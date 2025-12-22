@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">KaamDham</string>
-    <string name="title_activity_main">KaamDham</string>
-    <string name="package_name">com.kaamdham</string>
-    <string name="custom_url_scheme">com.kaamdham</string>
+    <string name="app_name">InstaYaar</string>
+    <string name="title_activity_main">InstaYaar</string>
+    <string name="package_name">com.instayaar.app</string>
+    <string name="custom_url_scheme">com.instayaar.app</string>
 </resources>

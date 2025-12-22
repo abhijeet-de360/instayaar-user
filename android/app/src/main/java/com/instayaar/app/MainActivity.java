@@ -1,4 +1,4 @@
-package com.kaamdham;
+package com.instayaar.app;
 
 import com.getcapacitor.BridgeActivity;
 

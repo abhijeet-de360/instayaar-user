@@ -15,10 +15,10 @@ const PrivacyPolicy = () => {
 
                 <div className="space-y-8 text-sm leading-relaxed text-foreground">
                     <p>
-                        At <strong>KaamDham</strong>, we value your privacy and are committed
+                        At <strong>InstaYaar</strong>, we value your privacy and are committed
                         to protecting your personal data. This Privacy Policy describes how
                         we collect, use, disclose, and safeguard your information when you
-                        use our website <strong>(www.kaamdham.com)</strong> or mobile
+                        use our website <strong>(www.instayaar.com)</strong> or mobile
                         application.
                     </p>
 
@@ -67,10 +67,10 @@ const PrivacyPolicy = () => {
                             active or required for legal and business purposes. You may
                             request account deletion anytime by contacting us at{" "}
                             <a
-                                href="mailto:hello@kaamdham.com"
+                                href="mailto:hello@instayaar.com"
                                 className="text-blue-600 underline"
                             >
-                                hello@kaamdham.com
+                                hello@instayaar.com
                             </a>. Once verified, your request will be processed within{" "}
                             <strong>7–10 business days</strong>.
                         </p>
@@ -139,10 +139,10 @@ const PrivacyPolicy = () => {
                         <p>
                             📧{" "}
                             <a
-                                href="mailto:hello@kaamdham.com"
+                                href="mailto:hello@instayaar.com"
                                 className="text-blue-600 underline"
                             >
-                                hello@kaamdham.com
+                                hello@instayaar.com
                             </a>
                         </p>
                         <p>📍 Kolkata, India</p>
