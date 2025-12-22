@@ -4,12 +4,12 @@ import { authHeader } from "../_helper/auth-header";
 
 
 
-//  export const rootUrl = 'https://server.kaamdham.com/api/v1/';
-export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
+ export const rootUrl = 'https://server.instayaar.com/api/v1/';
+// export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
 // export const rootUrl = 'http://localhost:3230/api/v1/';
 
 
-export const socketUrl = 'https://server.kaamdham.com';
+export const socketUrl = 'https://server.instayaar.com';
 // export const socketUrl = 'http://192.168.1.19:3130';
 // export const socketUrl = 'http://localhost:3130';
 
