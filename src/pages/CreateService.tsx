@@ -24,20 +24,20 @@ import { Geolocation } from "@capacitor/geolocation";
 
 
 const predefinedSlots = [
-  // { _id: crypto.randomUUID(), dayOfWeek: 0, startTime: "10:00", endTime: "18:00" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 0, startTime: "18:01", endTime: "23:59" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 1, startTime: "10:00", endTime: "18:00" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 1, startTime: "18:01", endTime: "23:59" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 2, startTime: "10:00", endTime: "18:00" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 2, startTime: "18:01", endTime: "23:59" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 3, startTime: "10:00", endTime: "18:00" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 3, startTime: "18:01", endTime: "23:59" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 4, startTime: "10:00", endTime: "18:00" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 4, startTime: "18:01", endTime: "23:59" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 5, startTime: "10:00", endTime: "18:00" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 5, startTime: "18:01", endTime: "23:59" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 6, startTime: "10:00", endTime: "18:00" },
-  // { _id: crypto.randomUUID(), dayOfWeek: 6, startTime: "18:01", endTime: "23:59" },
+  { _id: crypto.randomUUID(), dayOfWeek: 0, startTime: "10:00", endTime: "18:00" },
+  { _id: crypto.randomUUID(), dayOfWeek: 0, startTime: "18:01", endTime: "23:59" },
+  { _id: crypto.randomUUID(), dayOfWeek: 1, startTime: "10:00", endTime: "18:00" },
+  { _id: crypto.randomUUID(), dayOfWeek: 1, startTime: "18:01", endTime: "23:59" },
+  { _id: crypto.randomUUID(), dayOfWeek: 2, startTime: "10:00", endTime: "18:00" },
+  { _id: crypto.randomUUID(), dayOfWeek: 2, startTime: "18:01", endTime: "23:59" },
+  { _id: crypto.randomUUID(), dayOfWeek: 3, startTime: "10:00", endTime: "18:00" },
+  { _id: crypto.randomUUID(), dayOfWeek: 3, startTime: "18:01", endTime: "23:59" },
+  { _id: crypto.randomUUID(), dayOfWeek: 4, startTime: "10:00", endTime: "18:00" },
+  { _id: crypto.randomUUID(), dayOfWeek: 4, startTime: "18:01", endTime: "23:59" },
+  { _id: crypto.randomUUID(), dayOfWeek: 5, startTime: "10:00", endTime: "18:00" },
+  { _id: crypto.randomUUID(), dayOfWeek: 5, startTime: "18:01", endTime: "23:59" },
+  { _id: crypto.randomUUID(), dayOfWeek: 6, startTime: "10:00", endTime: "18:00" },
+  { _id: crypto.randomUUID(), dayOfWeek: 6, startTime: "18:01", endTime: "23:59" },
 ];
 
 
@@ -345,7 +345,7 @@ const CreateService = () => {
                   <Label htmlFor="price">Price *</Label>
                   <div className="relative flex items-center">
                     <span className="absolute left-3 text-muted-foreground">₹</span>
-                    <Input id="price" placeholder="500" onInput={(e) => {
+                    <Input id="price" placeholder="00" onInput={(e) => {
                       e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
                     }} className="pl-8" onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))} />
                   </div>

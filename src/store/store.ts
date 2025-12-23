@@ -15,6 +15,8 @@ import loaderReducer from './loader';
 import dashboardReducer from './dashboardSlice';
 import searchReducer from './searchSlice';
 import instantReducer from './instantBookingSlice'
+import locationReducer from './locationSlice';
+
 
 export const store = configureStore({
   reducer: {
@@ -34,9 +36,10 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     search:searchReducer, 
     instant: instantReducer,
+    location: locationReducer,
     
   },
-  devTools: true,
+  devTools: false,
 })
 
 

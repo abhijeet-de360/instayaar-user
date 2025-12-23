@@ -434,7 +434,7 @@ export function userAadharVerify(data, navigate) {
                     async (event: any) => {
                         const currentUrl = event?.url || "";
                         console.log("🌐 In-app browser navigated to:", currentUrl);
-                        if (currentUrl.startsWith("https://kaamdham.com/account-settings?modal=true")) {
+                        if (currentUrl.startsWith("https://instayaar.com/user-account-settings?modal=true")) {
                             console.log("✅ Return URL detected — closing browser...");
                             await Browser.close();
                             pageLoadedListener.remove();

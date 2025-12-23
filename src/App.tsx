@@ -1,5 +1,3 @@
-
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner, toast } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -62,10 +60,13 @@ import WebLanding from "./pages/WebLanding";
 import Dispute from "./pages/Dispute";
 import MobileOFFday from "./components/mobile/MobileOFFday";
 import InstantBooking from "./pages/InstantBooking";
-import { getFCMToken } from "./shared/_helper/fcm";
 import { PushNotifications } from "@capacitor/push-notifications";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { getBookingsForFreelancer, getInstantBookingData } from "./store/instantBookingSlice";
+import { requestAppPermissions } from "./shared/_services/permissions/useAppPermissions";
+import { setCoords, setLocationName, setPermissionDenied, } from "@/store/locationSlice";
+import { Geolocation } from "@capacitor/geolocation";
+
 
 
 declare global {
@@ -75,9 +76,7 @@ declare global {
 }
 const queryClient = new QueryClient();
 
-async function requestPermission() {
-  const permission = await Notification.requestPermission();
-}
+
 
 const App = () => {
   const lastBackPress = useRef<number>(0);
@@ -99,36 +98,57 @@ const App = () => {
     }
   }, [authvar?.isAuthenticated]);
 
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+
+    const reg = PushNotifications.addListener("registration", (token) => {
+      console.log("✅ FCM TOKEN:", token.value);
+      window.fcmToken = token.value;
+    });
+
+    const err = PushNotifications.addListener("registrationError", (e) => {
+      console.error("❌ FCM ERROR:", e);
+    });
+
+    const action = PushNotifications.addListener("pushNotificationActionPerformed", (event) => {
+      const data = event.notification.data || {};
+      if (data.navigateTo) navigate(data.navigateTo);
+    });
+
+    return () => {
+      reg.remove();
+      err.remove();
+      action.remove();
+    };
+  }, []);
+
+
   useEffect(() => {
     if (Capacitor.isNativePlatform()) {
       StatusBar.show();
       StatusBar.setBackgroundColor({ color: "#ffffff" });
       StatusBar.setStyle({ style: Style.Light });
       EdgeToEdge.enable();
-      LocalNotifications.requestPermissions();
-      const listener = CapApp.addListener(
-        "backButton",
-        async ({ canGoBack }) => {
-          const now = Date.now();
-          if (canGoBack) {
-            window.history.back();
-          } else {
-            if (now - lastBackPress.current < 2000) {
-              CapApp.exitApp();
-            } else {
-              lastBackPress.current = now;
-              await Toast.show({
-                text: "Press back again to exit",
-                duration: "short",
-              });
-            }
-          }
-        })
+      const listener = CapApp.addListener("backButton", async ({ canGoBack }) => {
+        const now = Date.now();
+        if (canGoBack) window.history.back();
+        else if (now - lastBackPress.current < 2000) CapApp.exitApp();
+        else {
+          lastBackPress.current = now;
+          await Toast.show({ text: "Press back again to exit", duration: "short", });
+        }
+      })
       return () => {
         listener.remove();
       };
     }
   }, []);
+
+  useEffect(() => {
+    requestAppPermissions()
+  }, []);
+
 
   const handleLogout = () => {
     localService.clearAll();
@@ -160,10 +180,10 @@ const App = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [window.location.pathname]);
 
-
   useEffect(() => {
-    chatSocket.on("newInstantJob", async (data) => {
-      dispatch(getBookingsForFreelancer(20, 0, authvar?.freelancer?.lat, authvar?.freelancer?.lng))
+    const handleNewInstantJob = async (data: any) => {
+      dispatch(getBookingsForFreelancer(20, 0, authvar?.freelancer?.lat, authvar?.freelancer?.lng));
+
       toast("New Instant Booking", {
         description: data?.title || "You received a new job request",
         duration: 5000,
@@ -173,124 +193,103 @@ const App = () => {
       audio.play().catch((e) => console.warn("🔇 Sound error:", e));
 
       if (Capacitor.isNativePlatform()) {
-
         await LocalNotifications.schedule({
           notifications: [
             {
               id: Date.now(),
               title: "New Instant Booking",
               body: data?.title || "You received a job request",
-              schedule: { at: new Date(Date.now() + 100) }, // fire immediately
-            }
-          ]
+              schedule: { at: new Date(Date.now() + 100) },
+            },
+          ],
         });
-
-      } else {
-        if (Notification.permission === "granted") {
-          new Notification("New Instant Booking", {
-            body: data?.title || "You received a new job request",
-          });
-        }
-
+      } else if (Notification.permission === "granted") {
+        new Notification("New Instant Booking", { body: data?.title || "You received a new job request" });
       }
-    });
-
-    return () => {
-      chatSocket.off("newInstantJob");
     };
-  }, []);
 
-  useEffect(() => {
-    chatSocket.on("instantCancelled", async (data) => {
-      dispatch(getBookingsForFreelancer(20, 0, authvar?.freelancer?.lat, authvar?.freelancer?.lng))
+    chatSocket.on("newInstantJob", handleNewInstantJob);
+    chatSocket.on("instantCancelled", () => dispatch(getBookingsForFreelancer(20, 0, authvar?.freelancer?.lat, authvar?.freelancer?.lng)));
+    chatSocket.on("newBid", () => dispatch(getInstantBookingData()));
+    chatSocket.on("instantStarted", () => dispatch(getInstantBookingData()));
+    chatSocket.on("instantEnded", () => dispatch(getInstantBookingData()));
+    chatSocket.on("instantAccepted", () => {
+      if (localService.get("role") === "user") dispatch(getInstantBookingData());
+      else dispatch(getBookingsForFreelancer(20, 0, authvar?.freelancer?.lat, authvar?.freelancer?.lng));
     });
 
     return () => {
+      chatSocket.off("newInstantJob", handleNewInstantJob);
       chatSocket.off("instantCancelled");
-    };
-  }, []);
-
-
-  useEffect(() => {
-    chatSocket.on("newBid", async (data) => {
-      dispatch(getInstantBookingData())
-    });
-
-    return () => {
       chatSocket.off("newBid");
-    };
-  }, []);
-
-  useEffect(() => {
-    chatSocket.on("instantStarted", async (data) => {
-      dispatch(getInstantBookingData())
-    });
-
-    return () => {
       chatSocket.off("instantStarted");
-    };
-  }, []);
-
-  useEffect(() => {
-    chatSocket.on("instantEnded", async (data) => {
-      dispatch(getInstantBookingData())
-    });
-
-    return () => {
       chatSocket.off("instantEnded");
-    };
-  }, []);
-
-  useEffect(() => {
-    chatSocket.on("instantAccepted", async (data) => {
-      if(localService.get('role') === 'user'){
-        dispatch(getInstantBookingData())
-      }else{
-        dispatch(getBookingsForFreelancer(20, 0, authvar?.freelancer?.lat, authvar?.freelancer?.lng))
-      }
-    });
-
-    return () => {
       chatSocket.off("instantAccepted");
     };
   }, []);
 
 
-
   useEffect(() => {
-    if (!Capacitor.isNativePlatform()) return;
+    const log = (msg: string, data?: any) => console.log(`📍 CapLocation: ${msg}`, data ?? "");
 
-    const listener = PushNotifications.addListener("pushNotificationActionPerformed", (event) => {
-      const data = event?.notification?.data || {};
+    const getAndSetLocation = async () => {
+      try {
+        if (Capacitor.isNativePlatform()) {
+          let perm = await Geolocation.checkPermissions();
+          log("Permission check", perm);
 
+          if (perm.location !== "granted") {
+            perm = await Geolocation.requestPermissions();
+            log("Permission request result", perm);
+            if (perm.location !== "granted") {
+              log("Permission denied by user");
+              dispatch(setPermissionDenied(true));
+              return;
+            }
+          }
 
-      const route = data.navigateTo ;
-      const jobId = data.jobId;
+          const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 15000 });
+          log("Location success", pos.coords);
 
+          dispatch(setCoords({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }));
 
-
-      navigate(route);
-    }
-    );
-
-    return () => listener.remove();
-  }, []);
-
-
-  useEffect(() => {
-    requestPermission();
-  }, []);
-
-  useEffect(() => {
-    const initFCM = async () => {
-      const token = await getFCMToken();
-      if (token) {
-        window.fcmToken = token;
+          // Reverse geocode
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`
+          );
+          const data = await res.json();
+          const city = data?.address?.city || data?.address?.town || data?.address?.village || data?.address?.county;
+          const state = data?.address?.state;
+          dispatch(setLocationName(`${city || "Unknown"}, ${state || ""}`));
+        } else {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              log("Web location success", pos.coords);
+              dispatch(setCoords({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }));
+            },
+            (err) => {
+              log("Web location error", err);
+              dispatch(setPermissionDenied(true));
+            },
+            { enableHighAccuracy: true, timeout: 15000 }
+          );
+        }
+      } catch (err) {
+        log("Failed to get location", err);
+        dispatch(setPermissionDenied(true));
       }
     };
 
-    initFCM();
+    // Initial fetch
+    getAndSetLocation();
+
+    // Retry on resume
+    const resumeListener = CapApp.addListener("resume", getAndSetLocation);
+    return () => resumeListener.remove();
   }, []);
+
+
+
 
   if (authvar?.freelancer?.status === 'suspended' && localService.get('role') === 'freelancer')
     return (
@@ -416,4 +415,3 @@ const App = () => {
   );
 };
 export default App;
-
