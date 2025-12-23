@@ -116,7 +116,9 @@ const UserAccountSetting = () => {
             }, 1000);
 
             const timeout = setTimeout(() => {
-                dispatch(getUserProfile());
+                if (localService.get('role') === 'user') {
+                    dispatch(getUserProfile());
+                }
                 navigate("/user-account-settings", { replace: true });
             }, 10000);
 

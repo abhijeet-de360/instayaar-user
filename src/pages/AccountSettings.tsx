@@ -117,7 +117,9 @@ const AccountSettings = () => {
       }, 1000);
 
       const timeout = setTimeout(() => {
-        dispatch(getFreelancerProfile());
+        if(localService.get('role') === 'freelancer'){
+          dispatch(getFreelancerProfile());
+        }
         navigate("/account-settings", { replace: true });
       }, 10000);
 
