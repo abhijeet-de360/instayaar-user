@@ -360,10 +360,9 @@ const MobileDiscover = () => {
               <Card className="w-full max-w-md mx-auto border-dashed shadow-none">
                 <CardContent className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
                   <Users className="h-10 w-10 mb-3 text-muted-foreground" />
-                  <h3 className="text-lg font-medium">No freelancers available</h3>
+                  <h3 className="text-lg font-medium">No service listed in this category / location</h3>
                   <p className="text-sm mt-1">
-                    We couldn&apos;t find any freelancers at the moment. Please check back later or
-                    adjust your filters.
+                    Please post your requirement for Yaars to apply.
                   </p>
                 </CardContent>
               </Card>

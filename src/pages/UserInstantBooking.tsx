@@ -199,7 +199,7 @@ const UserInstantBooking = () => {
                         <Label htmlFor="title">Job Details</Label>
                         <Textarea
                             id="title"
-                            placeholder="e.g., Need a Chef for Birthday Party"
+                            placeholder="e.g, Need Yoga Yaar for a couple"
                             value={formData.title}
                             onChange={(e) =>
                                 setFormData({ ...formData, title: e.target.value })

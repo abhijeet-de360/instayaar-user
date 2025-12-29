@@ -112,7 +112,7 @@ const PrivacyPolicy = () => {
                     <section>
                         <h2 className="text-xl font-semibold mb-2">8. Children's Privacy</h2>
                         <p>
-                            Our services are not directed to individuals under the age of 13.
+                            Our services are not directed to individuals under the age of 18.
                             We do not knowingly collect personal data from children. If you
                             believe a child has provided us with information, please contact
                             us for removal.

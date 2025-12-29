@@ -554,7 +554,7 @@ const MyJobs = () => {
               <div className="text-lg font-bold">
                 {bookingVar?.freelancerBookings?.cancelledBooking || 0}
               </div>
-              <div className="text-xs text-muted-foreground">Canceled</div>
+              <div className="text-xs text-muted-foreground">Cancelled</div>
             </CardContent>
           </Card>
         </div>

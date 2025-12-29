@@ -124,6 +124,7 @@ const MobileMyPosts = () => {
                 !authVar?.user?.profile
               ) {
                 warningHandler("Update your account settings to continue.");
+                navigate('/user-account-settings')
               } else {
                 navigate("/post-job");
               }

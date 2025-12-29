@@ -566,7 +566,7 @@ const MobileMyBookings = () => {
           <div className="space-y-4">
             <Calendar className="h-12 w-12 mx-auto text-muted-foreground" />
             <div>
-              <h3 className="text-lg font-semibold">No bookings yet</h3>
+              <h3 className="text-lg font-semibold">Book your Yaar now</h3>
               <p className="text-muted-foreground">
                 {localService.get('role') === 'user'
                   ? 'Start by browsing services'

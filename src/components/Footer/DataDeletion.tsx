@@ -7,6 +7,7 @@ import { Header } from "../layout/Header"
 
 const DataDeletion = () => {
   const [contact, setContact] = useState("")
+  const [error, setError] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false)
   const { toast } = useToast()
 
@@ -18,6 +19,34 @@ const DataDeletion = () => {
     })
     setContact("")
   }
+
+  const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+
+    // Allow email characters OR digits
+    if (!/^[0-9a-zA-Z@._-]*$/.test(value)) {
+      e.currentTarget.value = contact;
+    }
+  };
+
+
+  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setContact(value);
+
+    const phoneRegex = /^\d{10}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!value) {
+      setError("");
+    } else if (phoneRegex.test(value)) {
+      setError("");
+    } else if (emailRegex.test(value)) {
+      setError("");
+    } else {
+      setError("Enter a valid email or 10-digit phone number");
+    }
+  };
 
   return (
     <>
@@ -47,15 +76,23 @@ const DataDeletion = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mt-4">
-              <Input
-                placeholder="Enter email or phone number"
-                value={contact}
-                onChange={(e) => setContact(e.target.value)}
-                className="flex-1"
-              />
-              <Button disabled={!contact} onClick={() => setOpenConfirm(true)}>
+              <div className="w-full">
+                <Input
+                  placeholder="Enter email or phone number"
+                  value={contact}
+                  className="flex-1"
+                  onInput={handleInput}
+                  onChange={handleContactChange}
+                />
+                {error && <small className="text-red-500 text-xs mt-1">{error}</small>}
+              </div>
+              <Button
+                disabled={!contact || !!error}
+                onClick={() => setOpenConfirm(true)}
+              >
                 Request Deletion
               </Button>
+
             </div>
           </section>
 

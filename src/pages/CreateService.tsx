@@ -307,7 +307,7 @@ const CreateService = () => {
                   onInput={(e) => {
                     e.currentTarget.value = e.currentTarget.value.replace(/[0-9]/g, '');
                   }}
-                  placeholder="e.g., Professional Chef for Events & Parties"
+                  placeholder="e.g, Explore top 5 eatery with me, I have a car"
                   onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
 
                 />
@@ -337,6 +337,7 @@ const CreateService = () => {
                   className="min-h-[120px]"
                   onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
                 />
+                <small className="text-neutral-500">*Please mention your cancellation policy explicitly</small>
               </div>
 
               {/* Pricing */}
@@ -392,7 +393,7 @@ const CreateService = () => {
 
               {/* Skills & Specialties */}
               <div className="space-y-2">
-                <Label>Skills & Specialties</Label>
+                <Label>Skills & Specialities</Label>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {formData.skills.map((skill, index) => (
                     <Badge
@@ -410,7 +411,7 @@ const CreateService = () => {
                 </div>
                 <div className="tab flex items-center gap-2">
                   <Input
-                    placeholder="Add a skill or specialty"
+                    placeholder="Add a skill or specialities"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -451,7 +452,7 @@ const CreateService = () => {
                 <Label htmlFor="requirements">Special Requirements</Label>
                 <Textarea
                   id="requirements"
-                  placeholder="Any special requirements from clients (kitchen access, parking, etc.)..."
+                  placeholder="Any special requirement you need from client (Parking, any equipment/tool, etc).."
                   className="min-h-[80px]"
                   onChange={(e) => setFormData((prev) => ({ ...prev, requirements: e.target.value }))}
                 />

@@ -198,7 +198,7 @@ export const EmployerDashboard = () => {
               className="flex-1"
               onClick={handleBrowseFreelancers}
             >
-              Freelancers
+              Yaar
             </Button>
           </div>
 

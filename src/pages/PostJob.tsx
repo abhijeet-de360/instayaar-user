@@ -229,7 +229,7 @@ const PostJob = () => {
               <Label htmlFor="title">Job Title</Label>
               <Input
                 id="title"
-                placeholder="e.g., Need a Chef for Birthday Party"
+                placeholder="e.g, Looking for my Tour Yaar"
                 value={formData.title}
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
@@ -328,10 +328,10 @@ const PostJob = () => {
 
             {/* Job Description */}
             <div className="space-y-2">
-              <Label htmlFor="description">Job Description</Label>
+              <Label htmlFor="description">Job Requierment and Hosts’ Head count</Label>
               <Textarea
                 id="description"
-                placeholder="Describe what you need..."
+                placeholder="Describe your requirement and your Group Size..."
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
