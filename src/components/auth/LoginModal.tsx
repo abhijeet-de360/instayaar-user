@@ -143,13 +143,13 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
 
     {step === 'role' && <div className="space-y-4">
       <div className="grid gap-3">
-        <Button variant="outline" onClick={() => handleRoleSelection('user')} className="h-auto p-4 flex flex-col items-start space-y-1 hover:bg-accent">
+        <Button variant="outline" onClick={() => handleRoleSelection('user')} className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent">
           <span className="font-medium">Client Login</span>
           <span className="text-sm text-gray-500">
             I will hire Freelancers for my tasks
           </span>
         </Button>
-        <Button variant="outline" onClick={() => handleRoleSelection('freelancer')} className="h-auto p-4 flex flex-col items-start space-y-1 hover:bg-accent">
+        <Button variant="outline" onClick={() => handleRoleSelection('freelancer')} className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent">
           <span className="font-medium">Freelancer Login</span>
           <span className="text-sm text-gray-500">
             I will work on tasks and earn money

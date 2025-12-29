@@ -22,13 +22,13 @@ const TermsAndConditions = () => {
             </h2>
             <p>
               InstaYaar is a digital marketplace connecting customers (“Clients”) with
-              independent service providers (“Freelancers”).
+              independent service providers (“Yaars”).
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>We are a facilitator, not an employer of freelancers.</li>
-              <li>We are not responsible for the quality, safety, legality, or performance of services rendered by freelancers.</li>
+              <li>We are a facilitator, we hold no responsibility for Client or Freelancer/Yaar</li>
+              <li>We are not responsible for the quality, safety, legality, or performance of services rendered by yaars.</li>
               <li>We reserve the right to suspend or remove profiles receiving repeated negative feedback to maintain platform quality.</li>
-              <li>Clients are advised to perform their own due diligence before availing services.</li>
+              <li>Clients and Freelancer/Yaar are advised to perform their own due diligence before availing services.</li>
             </ul>
           </section>
 
@@ -53,8 +53,8 @@ const TermsAndConditions = () => {
             </h2>
             <ul className="list-disc list-inside space-y-1">
               <li>All bookings and payments must be made exclusively via InstaYaar.</li>
-              <li>Freelancers may set their own service rates and cancellation policies.</li>
-              <li>InstaYaar charges a commission from freelancers upon successful service completion.</li>
+              <li>Freelancers/Yaars may set their own service rates and cancellation policies.</li>
+              <li>InstaYaar charges a commission from yaars upon successful service completion.</li>
               <li>Payments are processed securely through third-party gateways. InstaYaar does not store sensitive payment information.</li>
             </ul>
           </section>
@@ -65,8 +65,8 @@ const TermsAndConditions = () => {
               4. Cancellations
             </h2>
             <ul className="list-disc list-inside space-y-1">
-              <li>Cancellations follow the freelancer’s individual cancellation policy.</li>
-              <li>If a freelancer cancels a confirmed booking, the client will receive a 100% refund.</li>
+              <li>All cancellations are subject to the freelancer’s individual cancellation policy, if declared explicitly.</li>
+              <li>If a freelancer/yaar cancels a confirmed booking, the client will receive a 100% refund.</li>
               <li>Client no-shows or late cancellations may incur charges as per the freelancer’s policy.</li>
             </ul>
           </section>
@@ -84,7 +84,7 @@ const TermsAndConditions = () => {
             <p className="mt-3">Refunds do not apply for:</p>
             <ul className="list-disc list-inside space-y-1">
               <li>Client no-shows.</li>
-              <li>Dissatisfaction with service quality (since freelancers are independent).</li>
+              <li>Dissatisfaction with service quality (since yaars are independent).</li>
               <li>Cancellations made outside the freelancer’s cancellation window.</li>
             </ul>
             <p className="mt-3">
@@ -126,9 +126,10 @@ const TermsAndConditions = () => {
               8. Safety and Security
             </h2>
             <ul className="list-disc list-inside space-y-1">
-              <li>Freelancers must provide government-issued ID before activation.</li>
-              <li>Clients should verify freelancer identity and report suspicious activity.</li>
+              <li>Freelancers/Yaars and Clients must do Digi locker (GOI) verification before activation.</li>
+              <li>Clients and Freelancers/Yaars should report suspicious activity</li>
               <li>Harassment, abuse, and unlawful acts are strictly forbidden.</li>
+              <li>Freelancer/Yaar and client must meet in public place.</li>
               <li>Report any incidents via app support or email; urgent issues to local authorities.</li>
             </ul>
           </section>
@@ -137,7 +138,7 @@ const TermsAndConditions = () => {
           {[
             ["9. Intellectual Property", "All platform content, including text, logos, and designs, is the property of InstaYaar or its licensors. Unauthorized use is prohibited."],
             ["10. Fraud, Misuse, and Account Termination", "Fraudulent or abusive activity may result in account suspension and legal action."],
-            ["11. Limitation of Liability", "InstaYaar is not liable for disputes between clients and freelancers. Our maximum liability is limited to the commission earned from the disputed transaction."],
+            ["11. Limitation of Liability", "InstaYaar is not liable for disputes between clients and yaars. Our maximum liability is limited to the commission earned from the disputed transaction."],
             ["12. Privacy and Data Protection", "We collect and process your data in accordance with our Privacy Policy. Refer to the app or website for full details."],
             ["13. Governing Law and Jurisdiction", "These Terms are governed by Indian law and subject to the courts of Kolkata, West Bengal."],
             ["14. Changes to Terms", "InstaYaar may modify these Terms periodically. Continued use after changes means acceptance."],
@@ -153,7 +154,7 @@ const TermsAndConditions = () => {
             <h2 className="text-lg font-semibold text-gray-900 mb-2">15. Contact Us</h2>
             <ul className="list-none space-y-1">
               <li> Email: <a href="mailto:hello@instayaar.com" className="text-blue-600 hover:underline">hello@instayaar.com</a></li>
-              <li> Phone: <a href="tel:+919073008080" className="text-blue-600 hover:underline">+91 9073008080</a></li>
+              <li> Phone: <a href="tel:+919073007070" className="text-blue-600 hover:underline">+91 9073007070</a></li>
               <li> Address: Kolkata, West Bengal, India</li>
             </ul>
           </section>

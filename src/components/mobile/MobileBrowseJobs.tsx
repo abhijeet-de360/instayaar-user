@@ -348,7 +348,7 @@ const MobileBrowseJobs = () => {
                 </div>
                 <h2 className="text-xl font-semibold text-foreground">No Job Post</h2>
                 <p className="text-sm text-muted-foreground mt-2 text-center">
-                  There are currently no job postings available. Please check back later!
+                  List your services to start getting direct bookings.
                 </p>
               </CardContent>
             </Card>

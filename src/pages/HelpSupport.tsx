@@ -56,11 +56,35 @@ const HelpSupport = () => {
         "You can cancel a booking from your 'My Bookings' page. Cancellation policies may vary depending on the timing and service type. Check our cancellation policy for more details.",
     },
     {
-      question: "How are freelancers verified?",
+      question: "How are yaars verified?",
       answer:
         "All freelancers go through our verification process which includes identity verification, skill assessment, and background checks where applicable. You can also check their ratings and reviews from previous customers.",
     },
   ];
+
+  const faqs2 = [
+  {
+    "question": "How do I list my service?",
+    "answer": "To list a service, click on the “Services” tab from the footer. Fill in the service details including title, category, budget, location, cancellation policy, up to five photos, available slots, and a detailed description. Once submitted, your service will be visible to freelancers in your area."
+  },
+  {
+    "question": "How do payments work?",
+    "answer": "Your payment is secured with us in an escrow account. Payments are processed securely through our platform. You can withdraw your earnings using UPI or bank transfer. Payments are released after the service is completed and the client is satisfied."
+  },
+  {
+    "question": "What if I have a concern with the client?",
+    "answer": "If you are not comfortable with a client, you can contact our support team within 24 hours. We offer dispute resolution and may release payment based on our policies."
+  },
+  {
+    "question": "How do I cancel a booking?",
+    "answer": "You are advised not to cancel any booking as it may adversely affect your profile. However, in case of an emergency, please inform the client and the Instayaar team immediately."
+  },
+  {
+    "question": "How are clients verified?",
+    "answer": "All clients go through a verification process which includes identity verification through DigiLocker (Government of India)."
+  }
+];
+
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -132,10 +156,10 @@ const HelpSupport = () => {
                 <div className="flex-1">
                   <h3 className="font-medium text-sm">Call Us</h3>
                   <p className="text-xs text-muted-foreground">
-                    +91 9073008080
+                    +91 9073007070
                   </p>
                 </div>
-                <a href={'tel:9073008080'} target="_blank" className="border p-1 rounded-md font-medium px-2">
+                <a href={'tel:9073007070'} target="_blank" className="border p-1 rounded-md font-medium px-2">
                   Call
                 </a>
               </div>
@@ -167,7 +191,21 @@ const HelpSupport = () => {
           <Card>
             <CardContent className="p-4">
               <Accordion type="single" collapsible className="w-full">
-                {faqs.map((faq, index) => (
+                {localService.get('role') === 'user' && faqs.map((faq, index) => (
+                  <AccordionItem
+                    key={index}
+                    value={`item-${index}`}
+                    className="border-b-0 last:border-b-0"
+                  >
+                    <AccordionTrigger className="text-sm text-left py-3 hover:no-underline">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground pb-3">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+                {localService.get('role') === 'freelancer' && faqs2.map((faq, index) => (
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
