@@ -25,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { getMyJobs, updateJobStatus } from "@/store/jobSlice";
-import { parseISO, format } from "date-fns";
+import { parseISO, format, set } from "date-fns";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Switch } from "../ui/switch";
 import { warningHandler } from "@/shared/_helper/responseHelper";
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from "../ui/drawer";
 
 const MobileMyPosts = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const MobileMyPosts = () => {
     setIsLoggedIn(true);
     setUserRole(role as "employer" | "freelancer");
   };
+  const [open, setOpen] = useState(false)
   const [deletepop, setDeletepop] = useState(false);
   const jobVar = useSelector((state: RootState) => state?.jobs);
   const authVar = useSelector((state: RootState) => state?.auth);
@@ -101,6 +103,8 @@ const MobileMyPosts = () => {
     return `${hour12}:${minutes.toString().padStart(2, "0")} ${suffix}`;
   }
 
+  
+
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Hide header when logged in on mobile */}
@@ -126,7 +130,8 @@ const MobileMyPosts = () => {
                 warningHandler("Update your account settings to continue.");
                 navigate('/user-account-settings')
               } else {
-                navigate("/post-job");
+                // navigate("/post-job");
+                setOpen(true)
               }
             }}
             className="px-2 pr-3 "
@@ -334,6 +339,34 @@ const MobileMyPosts = () => {
       </div>
 
       <MobileBottomNav />
+      <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerContent>
+        <div className="mx-auto w-full max-w-sm">
+          <DrawerHeader>
+            <DrawerTitle>Choose Booking Type</DrawerTitle>
+          </DrawerHeader>
+          <div className="flex flex-col gap-2 items-center">
+            <Button variant="outline" className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/instant-booking')}>
+              <p>Instant Booking</p>
+              <small className="text-sm text-gray-500">Get jobs immediately and start working right away.</small>
+            </Button>
+            <Button variant="outline" className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/post-job')}>
+              <p>Post Booking</p>
+              <small className="text-sm text-gray-500">Review posted requests and accept jobs that fit you.</small>
+            </Button>
+          </div>
+
+          <DrawerFooter>
+            {/* <div className="flex items-center gap-4 justify-center">
+              <Button>Submit</Button>
+              <DrawerClose asChild>
+                <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+              </DrawerClose>
+            </div> */}
+          </DrawerFooter>
+        </div>
+      </DrawerContent>
+    </Drawer>
     </div>
   );
 };

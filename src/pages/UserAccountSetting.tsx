@@ -52,7 +52,7 @@ const UserAccountSetting = () => {
         city: "",
         state: "",
         aadhaarNo: "",
-        panNo: ""
+        panNo: "AAAAA0000A"
     });
 
 
@@ -103,7 +103,7 @@ const UserAccountSetting = () => {
                 state: authVar?.user?.state || "",
                 gstNo: authVar?.user?.gstNo || "",
                 aadhaarNo: authVar?.user?.aadhaarNo || "",
-                panNo: authVar?.user?.panNo || "",
+                panNo: authVar?.user?.panNo || "AAAAA0000A",
             }));
         }
     }, [authVar?.user?.phoneNumber]);
@@ -177,7 +177,7 @@ const UserAccountSetting = () => {
             firstName: formData?.firstName,
             lastName: formData?.lastName,
             aadhaarNo: formData?.aadhaarNo,
-            panNo: formData?.panNo
+            panNo: formData?.panNo || "AAAAA0000A"
         }, navigate));
     };
 
@@ -240,7 +240,7 @@ const UserAccountSetting = () => {
                                     }
                                 />
                             </div>
-                            <div className="space-y-2">
+                            {/* <div className="space-y-2">
                                 <Label htmlFor="panNo" className="text-sm font-medium">
                                     PAN Number
                                 </Label>
@@ -268,12 +268,12 @@ const UserAccountSetting = () => {
                                 />
 
 
-                            </div>
+                            </div> */}
 
                             <Button
                                 className="w-full mt-2 bg-primary hover:bg-primary/90 transition-all"
                                 onClick={handleAadharVerify}
-                                disabled={!formData.firstName.trim() || !formData.lastName.trim() || !formData.panNo.trim()}
+                                disabled={!formData.firstName.trim() || !formData.lastName.trim()}
                             >
                                 Verify with Aadhaar OTP
                             </Button>
@@ -446,12 +446,12 @@ const UserAccountSetting = () => {
                             <Input id="phone" value={formData?.aadhaarNo} disabled />
                         </div>
 
-                        <div className="space-y-2">
+                        {/* <div className="space-y-2">
                             <Label htmlFor="phone" className="text-sm">
                                 PAN Number*
                             </Label>
                             <Input id="phone" value={formData?.panNo} disabled />
-                        </div>
+                        </div> */}
 
                         <div
                             className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-2"

@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Menu,
@@ -20,7 +26,7 @@ import {
   Shield,
   Calendar1,
   User2Icon,
-  Zap
+  Zap,
 } from "lucide-react";
 import { useUserRole } from "@/contexts/UserRoleContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -35,25 +41,29 @@ export const MobileDashboardSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-  const authVar = useSelector((state: RootState) => state.auth)
+  const authVar = useSelector((state: RootState) => state.auth);
   const handleLogout = () => {
     localService.clearAll();
     setIsOpen(false);
-    navigate('/');
-    dispatch(setAuth(false))
+    navigate("/");
+    dispatch(setAuth(false));
   };
 
   const getMenuItems = () => {
-    if (localService.get('role') === 'user') {
+    if (localService.get("role") === "user") {
       return [
         // { icon: Heart, label: 'My Shortlist', href: '/shortlist-freelancers' },
-        { icon: CreditCard, label: 'Payment History', href: '/payment-history' },
+        {
+          icon: CreditCard,
+          label: "Payment History",
+          href: "/payment-history",
+        },
         // { icon: Star, label: 'Reviews & Ratings', href: '/reviews-ratings' },
-        { icon: User2Icon, label: 'Profile', href: '/user-account-settings' },
-        { icon: Zap, label: 'Instant Booking', href: '/instant-booking' },
-        { icon: HelpCircle, label: 'Help & Support', href: '/help-support' },
+        { icon: User2Icon, label: "Profile", href: "/user-account-settings" },
+        { icon: Zap, label: "Instant Booking", href: "/instant-booking" },
+        { icon: HelpCircle, label: "Help & Support", href: "/help-support" },
       ];
-    } else if (localService.get('role') === 'freelancer') {
+    } else if (localService.get("role") === "freelancer") {
       return [
         // { icon: User, label: 'Dashboard', href: '/freelancer-dashboard' },
         // { icon: Target, label: 'My Services', href: '/my-services' },
@@ -61,13 +71,17 @@ export const MobileDashboardSidebar = () => {
         // { icon: FileText, label: 'Applied Jobs', href: '/applied-jobs' },
         // { icon: Briefcase, label: 'Active Jobs', href: '/my-jobs' },
         // { icon: Heart, label: 'My Shortlist', href: '/shortlist-jobs' },
-        { icon: Shield, label: 'My Earnings', href: '/earnings' },
-        { icon: CreditCard, label: 'Payouts', href: '/wallet' },
-        { icon: Star, label: 'Reviews & Ratings', href: `/freelancer-reviews/${authVar?.freelancer?._id}` },
-        { icon: User2Icon, label: 'Profile', href: '/account-settings' },
-        { icon: Calendar1, label: 'Blocked Dates', href: '/offday' },
-        { icon: Zap, label: 'Instant Booking', href: '/instant-booking' },
-        { icon: HelpCircle, label: 'Help & Support', href: '/help-support' },
+        { icon: Shield, label: "My Earnings", href: "/earnings" },
+        { icon: CreditCard, label: "Payouts", href: "/wallet" },
+        {
+          icon: Star,
+          label: "Reviews & Ratings",
+          href: `/freelancer-reviews/${authVar?.freelancer?._id}`,
+        },
+        { icon: User2Icon, label: "Profile", href: "/account-settings" },
+        { icon: Calendar1, label: "Blocked Dates", href: "/offday" },
+        { icon: Zap, label: "Instant Booking", href: "/instant-booking" },
+        { icon: HelpCircle, label: "Help & Support", href: "/help-support" },
       ];
     }
     return [];
@@ -79,6 +93,14 @@ export const MobileDashboardSidebar = () => {
     return null;
   }
 
+  const isProfileIncomplete = [
+    authVar?.user?.firstName,
+    authVar?.user?.lastName,
+    authVar?.user?.city,
+    authVar?.user?.state,
+    authVar?.user?.email,
+    authVar?.user?.profile,
+  ].some((value) => !value);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -89,21 +111,37 @@ export const MobileDashboardSidebar = () => {
       </SheetTrigger>
       <SheetContent side="right" className="w-80">
         <SheetHeader className="text-left">
-          <Link to={localService.get("role") === "user" ? "/user-account-settings" : "/account-settings"}
-  className="flex items-center gap-3 pb-4"
->
+          <Link
+            to={
+              localService.get("role") === "user"
+                ? "/user-account-settings"
+                : "/account-settings"
+            }
+            className="flex items-center gap-3 pb-4"
+          >
             <Avatar className="h-12 w-12">
-              <AvatarImage src={localService.get('role') === 'user' ? authVar?.user?.profile : authVar?.freelancer?.profile} alt="Profile" />
+              <AvatarImage
+                src={
+                  localService.get("role") === "user"
+                    ? authVar?.user?.profile
+                    : authVar?.freelancer?.profile
+                }
+                alt="Profile"
+              />
               <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                {localService.get('role') === 'user' ? 'U' : 'F'}
+                {localService.get("role") === "user" ? "U" : "F"}
               </AvatarFallback>
             </Avatar>
             <div>
               <SheetTitle className="text-lg">
-                {localService.get('role') === "user" ? authVar?.user?.firstName || "Guest" : authVar?.freelancer?.firstName || "Guest"}
+                {localService.get("role") === "user"
+                  ? authVar?.user?.firstName || "Guest"
+                  : authVar?.freelancer?.firstName || "Guest"}
               </SheetTitle>
               <p className="text-sm text-muted-foreground">
-                {localService.get('role') === "user" ? authVar?.user?.email || "No email" : authVar?.freelancer?.email || "No email"}
+                {localService.get("role") === "user"
+                  ? authVar?.user?.email || "No email"
+                  : authVar?.freelancer?.email || "No email"}
               </p>
             </div>
           </Link>
@@ -114,7 +152,18 @@ export const MobileDashboardSidebar = () => {
             <Link
               key={index}
               to={item.href}
-              onClick={() => setIsOpen(false)}
+              onClick={(e) => {
+                if (localService.get("role") === "user") {
+                  if (item.href === "/instant-booking" && isProfileIncomplete) {
+                    e.preventDefault();
+                    setIsOpen(false);
+                    navigate("/user-account-settings");
+                    return;
+                  }
+                }
+
+                setIsOpen(false);
+              }}
               className={cn(
                 "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors",
                 location.pathname === item.href
