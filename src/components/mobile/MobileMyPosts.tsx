@@ -346,13 +346,13 @@ const MobileMyPosts = () => {
             <DrawerTitle>Choose Booking Type</DrawerTitle>
           </DrawerHeader>
           <div className="flex flex-col gap-2 items-center">
-            <Button variant="outline" className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/instant-booking')}>
+            <Button variant="outline" className="h-28LO border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/instant-booking')}>
               <p>Instant Booking</p>
-              <small className="text-sm text-gray-500">Get jobs immediately and start working right away.</small>
+              <small className="text-sm text-gray-500">Book freelancers for an immediate requirement.</small>
             </Button>
             <Button variant="outline" className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/post-job')}>
-              <p>Post Booking</p>
-              <small className="text-sm text-gray-500">Review posted requests and accept jobs that fit you.</small>
+              <p>Post for Future</p>
+              <small className="text-sm text-gray-500 text-left">Post a requirement and let Freelancers see <br /> details and apply with their offer.</small>
             </Button>
           </div>
 
