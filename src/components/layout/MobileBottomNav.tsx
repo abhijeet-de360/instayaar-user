@@ -31,7 +31,7 @@ const freelancerNavItems = [
 // Default navigation for guests
 const guestNavItems = [
   { name: 'Home', href: '/', icon: Home },
-  { name: 'Freelancers', href: '/discover', icon: Search },
+  { name: 'Yaars', href: '/discover', icon: Search },
   { name: 'Post', href: '/browse-jobs', icon: FileText,requiresAuth: true }, 
   { name: 'Chat', href: '/messages', icon: MessageCircle, requiresAuth: true },
   { name: 'Login', href: '#', icon: User, requiresAuth: true, isLoginButton: true },
