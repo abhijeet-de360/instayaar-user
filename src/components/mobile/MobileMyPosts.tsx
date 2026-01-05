@@ -346,7 +346,7 @@ const MobileMyPosts = () => {
             <DrawerTitle>Choose Booking Type</DrawerTitle>
           </DrawerHeader>
           <div className="flex flex-col gap-2 items-center">
-            <Button variant="outline" className="h-28LO border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/instant-booking')}>
+            <Button variant="outline" className="h-28 border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/instant-booking')}>
               <p>Instant Booking</p>
               <small className="text-sm text-gray-500">Book freelancers for an immediate requirement.</small>
             </Button>
