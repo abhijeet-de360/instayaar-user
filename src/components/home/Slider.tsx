@@ -5,9 +5,12 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { LoginModal } from '../auth/LoginModal';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
 const Slider = () => {
     const [showMobileAuth, setShowMobileAuth] = useState(false);
+    const categoryVar = useSelector((state: RootState) => state.category)
     return (
         <section className=" pt-4 md:py-12">
             <div className="container mx-auto px-4 md:px-6">
@@ -26,10 +29,11 @@ const Slider = () => {
                     modules={[Autoplay, Pagination, Navigation]}
                     className="mySwiper"
                 >
-                    <SwiperSlide onClick={() => setShowMobileAuth(true)}><img src={`https://ik.imagekit.io/kaamdham/Banner/s3.png`} alt="slider_image" loading='lazy' className='h-44 w-full object-cover rounded-lg' /></SwiperSlide>
-                    <SwiperSlide onClick={() => setShowMobileAuth(true)}><img src={`https://ik.imagekit.io/kaamdham/Banner/s4.png`} alt="slider_image" loading='lazy' className='h-44 w-full object-cover rounded-lg' /></SwiperSlide>
-                    <SwiperSlide onClick={() => setShowMobileAuth(true)}><img src={`https://ik.imagekit.io/kaamdham/Banner/s2.jpg`} alt="slider_image" loading='lazy' className='h-44 w-full object-cover rounded-lg' /></SwiperSlide>
-                    <SwiperSlide onClick={() => setShowMobileAuth(true)}><img src={`https://ik.imagekit.io/kaamdham/Banner/s1.jpg`} alt="slider_image" loading='lazy' className='h-44 w-full object-cover rounded-lg' /></SwiperSlide>
+                    {
+                        categoryVar.categoryData.map((item, index) => (
+                            <SwiperSlide key={index} onClick={() => setShowMobileAuth(true)}><img src={item.image} alt="slider_image" loading='lazy' className='h-44 w-full object-cover rounded-lg' /></SwiperSlide>
+                        ))
+                    }
                 </Swiper>
             </div>
 
