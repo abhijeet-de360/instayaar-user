@@ -162,6 +162,15 @@ export const MobileDashboardSidebar = () => {
                   }
                 }
 
+                if(localService.get('role') === 'freelancer'){
+                  if (item.href === "/offday" && authVar.freelancer.status !== 'active') {
+                    e.preventDefault();
+                    setIsOpen(false);
+                    navigate("/account-settings");
+                    return;
+                  }
+                }
+
                 setIsOpen(false);
               }}
               className={cn(

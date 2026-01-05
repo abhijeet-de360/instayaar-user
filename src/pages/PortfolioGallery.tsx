@@ -15,7 +15,7 @@ import {
   Grid3X3,
   List
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -41,9 +41,11 @@ import imageCompression from "browser-image-compression";
 const PortfolioGallery = () => {
   const { setUserRole, setIsLoggedIn } = useUserRole();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const categoryVar = useSelector((state: RootState) => state.category);
   const portfolioVar = useSelector((state: RootState) => state.portfolio);
+  const authVar = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
   const [file, setFile] = useState(null);
   const [formVar, setFormVar] = useState({
@@ -80,7 +82,11 @@ const PortfolioGallery = () => {
   };
 
   const handleAddPhotos = () => {
-    setView(true);
+    if(authVar?.freelancer.status === 'active'){
+      setView(true);
+    }else{
+      navigate('/account-settings')
+    }
   };
 
   const handleSubmit = (e) => {

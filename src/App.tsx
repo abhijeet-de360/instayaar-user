@@ -210,6 +210,7 @@ const App = () => {
 
     chatSocket.on("newInstantJob", handleNewInstantJob);
     chatSocket.on("instantCancelled", () => dispatch(getBookingsForFreelancer(20, 0, authvar?.freelancer?.lat, authvar?.freelancer?.lng)));
+    chatSocket.on("instantCancelledUser", () => dispatch(getInstantBookingData()));
     chatSocket.on("newBid", () => dispatch(getInstantBookingData()));
     chatSocket.on("instantStarted", () => dispatch(getInstantBookingData()));
     chatSocket.on("instantEnded", () => dispatch(getInstantBookingData()));
@@ -221,6 +222,7 @@ const App = () => {
     return () => {
       chatSocket.off("newInstantJob", handleNewInstantJob);
       chatSocket.off("instantCancelled");
+      chatSocket.off("instantCancelledUser");
       chatSocket.off("newBid");
       chatSocket.off("instantStarted");
       chatSocket.off("instantEnded");

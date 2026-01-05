@@ -22,6 +22,9 @@ const MobileOFFday = () => {
 
   const handleMobileProfileClick = () => setShowMobileAuth(true);
 
+  // ----------------------------
+  // DATE HELPERS
+  // ----------------------------
   const toServerDate = (dateObj: Date | null) => {
     if (!dateObj) return null;
     const utcDate = new Date(
@@ -32,42 +35,63 @@ const MobileOFFday = () => {
 
   const fromServerDate = (isoString: string) => new Date(isoString);
 
+  const sortDatesAsc = (dates: string[]) =>
+    [...dates].sort(
+      (a, b) =>
+        new Date(a).getTime() - new Date(b).getTime()
+    );
+
+  // ----------------------------
+  // LOAD PROFILE
+  // ----------------------------
   useEffect(() => {
     dispatch(getFreelancerProfile());
   }, [dispatch]);
 
   useEffect(() => {
     if (authVar?.freelancer?.blackoutDates) {
-      setOffDays(authVar.freelancer.blackoutDates);
-      setInitialOffDays(authVar.freelancer.blackoutDates);
+      const sorted = sortDatesAsc(authVar.freelancer.blackoutDates);
+      setOffDays(sorted);
+      setInitialOffDays(sorted);
     }
   }, [authVar?.freelancer?.blackoutDates]);
 
+  // ----------------------------
+  // ACTIONS
+  // ----------------------------
   const handleAddOffDay = () => {
     if (!date) return;
     const serverDate = toServerDate(date);
-    if (serverDate && !offDays.includes(serverDate)) {
-      const updated = [...offDays, serverDate];
-      setOffDays(updated);
+    if (!serverDate) return;
+
+    if (!offDays.includes(serverDate)) {
+      setOffDays(prev =>
+        sortDatesAsc([...prev, serverDate])
+      );
     }
   };
 
   const handleRemoveOffDay = (removeDate: string) => {
-    const updated = offDays.filter((d) => d !== removeDate);
-    setOffDays(updated);
+    setOffDays(prev =>
+      sortDatesAsc(prev.filter(d => d !== removeDate))
+    );
   };
 
   const handleSaveOffDay = async (days: string[]) => {
-    await dispatch(setFreelancerOffDays(days));
-    setInitialOffDays(days); // reset baseline after save
+    const sortedDays = sortDatesAsc(days);
+    await dispatch(setFreelancerOffDays(sortedDays));
+    setInitialOffDays(sortedDays); // reset baseline after save
   };
 
   const blackoutDatesAsDate = offDays.map(fromServerDate);
 
-  // Determine if there are unsaved changes
+  // Detect unsaved changes
   const hasChanges =
     JSON.stringify(offDays) !== JSON.stringify(initialOffDays);
 
+  // ----------------------------
+  // UI
+  // ----------------------------
   return (
     <div className="md:hidden h-screen flex flex-col justify-between bg-white overflow-y-auto">
       {/* Header */}
@@ -80,7 +104,6 @@ const MobileOFFday = () => {
       <div className="p-4 flex flex-col gap-4 flex-1 overflow-y-auto pb-20">
         <Card className="border-none shadow-none">
           <CardContent className="p-0">
-            {/* Calendar */}
             <div className="border rounded-lg overflow-hidden">
               <Calendar
                 mode="single"
@@ -97,13 +120,11 @@ const MobileOFFday = () => {
                   },
                 }}
                 disabled={[
-                  {
-                    before: new Date(), // block past dates
-                  },
+                  { before: new Date() },
                   {
                     after: new Date(
                       new Date().setDate(new Date().getDate() + 90)
-                    ), // max 90 days ahead
+                    ),
                   },
                 ]}
                 className="rounded-md"
@@ -121,7 +142,7 @@ const MobileOFFday = () => {
           </CardContent>
         </Card>
 
-        {/* List of Off-Days */}
+        {/* List */}
         <Card className="p-0 border-none shadow-none">
           <CardContent className="p-0">
             <p className="text-sm mb-2 font-medium text-gray-700">
@@ -136,16 +157,11 @@ const MobileOFFday = () => {
               <div className="grid grid-cols-4 gap-3 overflow-y-auto py-2 px-2">
                 {offDays.map((serverDate, idx) => {
                   const d = fromServerDate(serverDate);
-                  const month = format(d, "MMM");
-                  const day = format(d, "dd");
-                  const year = format(d, "yyyy");
-
                   return (
                     <div
                       key={idx}
                       className="relative border border-primary rounded-lg flex flex-col items-center justify-center p-2 text-center"
                     >
-                      {/* Remove Button */}
                       <button
                         onClick={() => handleRemoveOffDay(serverDate)}
                         className="absolute -top-2 -right-2 bg-red-600 rounded-full p-1"
@@ -164,12 +180,15 @@ const MobileOFFday = () => {
                         </svg>
                       </button>
 
-                      {/* Date Display */}
                       <p className="text-xs font-semibold text-primary">
-                        {month}
+                        {format(d, "MMM")}
                       </p>
-                      <p className="text-lg font-bold leading-none">{day}</p>
-                      <p className="text-[10px] text-gray-600">{year}</p>
+                      <p className="text-lg font-bold leading-none">
+                        {format(d, "dd")}
+                      </p>
+                      <p className="text-[10px] text-gray-600">
+                        {format(d, "yyyy")}
+                      </p>
                     </div>
                   );
                 })}
@@ -178,7 +197,6 @@ const MobileOFFday = () => {
           </CardContent>
         </Card>
 
-        {/* Save Button - only shows when user adds/removes a date */}
         {hasChanges && (
           <Button
             className="w-full text-white mt-4"
@@ -189,7 +207,6 @@ const MobileOFFday = () => {
         )}
       </div>
 
-      {/* Bottom Navigation */}
       <MobileBottomNav onProfileClick={handleMobileProfileClick} />
     </div>
   );
