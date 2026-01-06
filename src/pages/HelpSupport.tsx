@@ -65,7 +65,7 @@ const HelpSupport = () => {
   const faqs2 = [
   {
     "question": "How do I list my service?",
-    "answer": "To list a service, click on the “Services” tab from the footer. Fill in the service details including title, category, budget, location, cancellation policy, up to five photos, available slots, and a detailed description. Once submitted, your service will be visible to freelancers in your area."
+    "answer": "To list a service, click on the “Services” tab from the footer. Fill in the service details including title, category, budget, location, cancellation policy, up to five photos, available slots, and a detailed description. Once submitted, your service will be visible to clients in your area."
   },
   {
     "question": "How do payments work?",
