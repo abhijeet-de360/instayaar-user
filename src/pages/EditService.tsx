@@ -479,19 +479,19 @@ const EditService = () => {
             images: compressedFiles,
         }));
     };
-  useEffect(() => {
-    // Wait until Google Maps script is ready
-    const initAutocomplete = () => {
-      if (window.google && window.google.maps && window.google.maps.places) {
-        autocompleteService.current =
-          new window.google.maps.places.AutocompleteService();
-      } else {
-        setTimeout(initAutocomplete, 500);
-      }
-    };
+    useEffect(() => {
+        // Wait until Google Maps script is ready
+        const initAutocomplete = () => {
+            if (window.google && window.google.maps && window.google.maps.places) {
+                autocompleteService.current =
+                    new window.google.maps.places.AutocompleteService();
+            } else {
+                setTimeout(initAutocomplete, 500);
+            }
+        };
 
-    initAutocomplete();
-  }, []);
+        initAutocomplete();
+    }, []);
     const fetchAddressSuggestions = (input: string) => {
         if (!input.trim() || !autocompleteService.current) {
             setSuggestions([]);
@@ -619,7 +619,7 @@ const EditService = () => {
                                     id="title"
                                     placeholder="e.g., Professional Chef for Events & Parties"
                                     onInput={(e) => {
-                                        e.currentTarget.value = e.currentTarget.value.replace(/[0-9]/g, '');
+                                        e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9 .]/g, "");
                                     }}
                                     onChange={(e) =>
                                         setFormData((prev) => ({ ...prev, title: e.target.value }))

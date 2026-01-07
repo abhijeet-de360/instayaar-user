@@ -90,7 +90,7 @@ const WebLanding = () => {
                     >
                         <p className="text-sm text-gray-200 mb-4">Download the InstaYaar App</p>
                         <div className="flex gap-4">
-                            <a href="https://play.google.com/store/apps/details?id=com.kaamdham&pcampaignid=web_share" target='blank'>
+                            <a href="https://play.google.com/store/apps/details?id=com.instayaar.app&hl=en_IN" target='blank'>
                                 <Button className="bg-black flex items-center gap-2 hover:bg-gray-800 cursor-pointer">
                                     <Play size={20} /> Google Play
                                 </Button>

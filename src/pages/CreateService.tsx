@@ -305,7 +305,7 @@ const CreateService = () => {
                 <Input
                   id="title"
                   onInput={(e) => {
-                    e.currentTarget.value = e.currentTarget.value.replace(/[0-9]/g, '');
+                    e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9 .]/g, "");
                   }}
                   placeholder="e.g, Explore top 5 eatery with me, I have a car"
                   onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
