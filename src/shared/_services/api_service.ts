@@ -5,7 +5,7 @@ import { authHeader } from "../_helper/auth-header";
 
 
  export const rootUrl = 'https://server.instayaar.com/api/v1/';
-// export const rootUrl = 'http://192.168.1.3:3230/api/v1/';
+// export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
 // export const rootUrl = 'http://localhost:3230/api/v1/';
 
 

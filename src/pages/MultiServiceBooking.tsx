@@ -201,6 +201,7 @@ const MultiServiceBooking: React.FC = () => {
   };
 
   useEffect(() => {
+     console.log(bookingVar?.bookingDetails)
     if (
       bookingVar?.bookingDetails?.razorpayKey &&
       bookingVar?.bookingDetails?.order?.id

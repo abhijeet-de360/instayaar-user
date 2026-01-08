@@ -115,6 +115,10 @@ const MobileFreelancerProfile = () => {
     }
   };
 
+  const handleBookService = (id) => {
+    navigate(`/multi-service-booking/${id}`)
+  }
+
   return (
     <>
       <div className="min-h-screen bg-background">
@@ -287,7 +291,8 @@ const MobileFreelancerProfile = () => {
                           {service?.description}
                         </p>
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center justify-end w-full">
+                          <div className="flex items-center justify-between w-full ">
+                            <Button onClick={() => handleBookService(service._id)}>Book Now</Button>
                             <div className="text-lg font-bold text-primary">
                               ₹{service?.price}
                             </div>
