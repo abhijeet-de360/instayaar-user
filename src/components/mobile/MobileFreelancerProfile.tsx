@@ -109,7 +109,7 @@ const MobileFreelancerProfile = () => {
     }
 
     if (authVar?.isAuthenticated) {
-      if (!authVar?.user?.firstName) {
+      if (authVar?.user?.status === 'pending') {
         navigate(`/user-account-settings`);
       }
     }
