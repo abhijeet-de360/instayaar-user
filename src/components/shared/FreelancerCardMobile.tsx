@@ -69,7 +69,7 @@ export const FreelancerCardMobile = ({
     }
 
     if (authVar?.isAuthenticated) {
-      if (authVar?.user?.status === 'pending') {
+      if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
         navigate('/user-account-settings')
       }
     }

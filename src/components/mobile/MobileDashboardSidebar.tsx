@@ -146,7 +146,7 @@ export const MobileDashboardSidebar = () => {
               to={item.href}
               onClick={(e) => {
                 if (localService.get("role") === "user") {
-                  if (item.href === "/instant-booking" && authVar.user.status !== 'active') {
+                  if (item.href === "/instant-booking" && (authVar.user.status !== 'active' || authVar.user.isEmailVerified === false)) {
                     e.preventDefault();
                     setIsOpen(false);
                     navigate("/user-account-settings");
