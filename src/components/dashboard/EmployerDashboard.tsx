@@ -34,22 +34,18 @@ export const EmployerDashboard = () => {
 
   useEffect(() => {
     dispatch(getAllActiveBooking());
-    dispatch(getUserDashboardData())
+    dispatch(getUserDashboardData());
   }, [dispatch]);
-
 
   const handlePostJob = () => {
     if (
-      !authVar?.user?.firstName ||
-      !authVar?.user?.lastName ||
-      !authVar?.user?.city ||
-      !authVar?.user?.state ||
-      !authVar?.user?.email ||
-      !authVar?.user?.profile
-    ){
-      navigate('/user-account-settings')
-    }else{
+      authVar?.user?.status === "active" &&
+      authVar?.user?.isAadharVerified === true &&
+      authVar?.user?.isEmailVerified === true
+    ) {
       navigate("/post-job");
+    }else{
+      navigate("/user-account-settings");
     }
   };
 
@@ -67,8 +63,9 @@ export const EmployerDashboard = () => {
 
   return (
     <div
-      className={`${isMobile ? "p-4" : "container mx-auto p-6"
-        } space-y-4 md:space-y-6`}
+      className={`${
+        isMobile ? "p-4" : "container mx-auto p-6"
+      } space-y-4 md:space-y-6`}
     >
       {/* Header Section */}
       <div className="flex flex-col gap-4">
@@ -95,13 +92,15 @@ export const EmployerDashboard = () => {
 
       {/* Quick Stats - Mobile optimized grid */}
       <div
-        className={`grid ${isMobile ? "grid-cols-2" : "grid-cols-1 md:grid-cols-4"
-          } gap-3 md:gap-4`}
+        className={`grid ${
+          isMobile ? "grid-cols-2" : "grid-cols-1 md:grid-cols-4"
+        } gap-3 md:gap-4`}
       >
         <Card className={`${isMobile ? "p-3" : ""}`}>
           <CardHeader
-            className={`flex flex-row items-center justify-between space-y-0 ${isMobile ? "p-0" : "pb-2"
-              }`}
+            className={`flex flex-row items-center justify-between space-y-0 ${
+              isMobile ? "p-0" : "pb-2"
+            }`}
           >
             <CardTitle
               className={`${isMobile ? "text-xs" : "text-sm"} font-medium`}
@@ -109,8 +108,9 @@ export const EmployerDashboard = () => {
               Active
             </CardTitle>
             <Calendar
-              className={`${isMobile ? "h-3 w-3" : "h-4 w-4"
-                } text-muted-foreground`}
+              className={`${
+                isMobile ? "h-3 w-3" : "h-4 w-4"
+              } text-muted-foreground`}
             />
           </CardHeader>
           <CardContent className={`${isMobile ? "p-0 pt-2" : ""}`}>
@@ -147,8 +147,9 @@ export const EmployerDashboard = () => {
 
         <Card className={`${isMobile ? "p-3" : ""}`}>
           <CardHeader
-            className={`flex flex-row items-center justify-between space-y-0 ${isMobile ? "p-0" : "pb-2"
-              }`}
+            className={`flex flex-row items-center justify-between space-y-0 ${
+              isMobile ? "p-0" : "pb-2"
+            }`}
           >
             <CardTitle
               className={`${isMobile ? "text-xs" : "text-sm"} font-medium`}
@@ -156,8 +157,9 @@ export const EmployerDashboard = () => {
               Completed
             </CardTitle>
             <Star
-              className={`${isMobile ? "h-3 w-3" : "h-4 w-4"
-                } text-muted-foreground`}
+              className={`${
+                isMobile ? "h-3 w-3" : "h-4 w-4"
+              } text-muted-foreground`}
             />
           </CardHeader>
           <CardContent className={`${isMobile ? "p-0 pt-2" : ""}`}>
@@ -194,28 +196,24 @@ export const EmployerDashboard = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button
-          className="flex-1"
-          onClick={handlePostJob}
-        >
+        <Button className="flex-1" onClick={handlePostJob}>
           Add Post
         </Button>
-        <Button
-          className="flex-1"
-          onClick={handleBrowseFreelancers}
-        >
+        <Button className="flex-1" onClick={handleBrowseFreelancers}>
           Yaar
         </Button>
       </div>
 
       {/* Main Content - Stack on mobile */}
       <div
-        className={`grid ${isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-3"
-          } gap-4 md:gap-6`}
+        className={`grid ${
+          isMobile ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-3"
+        } gap-4 md:gap-6`}
       >
         <div
-          className={`${isMobile ? "" : "lg:col-span-2"
-            } space-y-4 md:space-y-6`}
+          className={`${
+            isMobile ? "" : "lg:col-span-2"
+          } space-y-4 md:space-y-6`}
         >
           {/* Active Bookings */}
           <Card className="border-none shadow-none border p-0">
@@ -237,19 +235,22 @@ export const EmployerDashboard = () => {
                   <React.Fragment key={index}>
                     {item.type === "service" && (
                       <div
-                        className={`flex items-center justify-between ${isMobile ? "p-3" : "p-4"
-                          } border rounded-lg`}
+                        className={`flex items-center justify-between ${
+                          isMobile ? "p-3" : "p-4"
+                        } border rounded-lg`}
                       >
                         <div className="flex-1">
                           <h4
-                            className={`${isMobile ? "text-sm" : ""
-                              } font-medium`}
+                            className={`${
+                              isMobile ? "text-sm" : ""
+                            } font-medium`}
                           >
                             {item?.serviceId?.title}
                           </h4>
                           <p
-                            className={`${isMobile ? "text-xs" : "text-sm"
-                              } text-muted-foreground`}
+                            className={`${
+                              isMobile ? "text-xs" : "text-sm"
+                            } text-muted-foreground`}
                           >{`with ${item.freelancerId.firstName} ${item.freelancerId.lastName}`}</p>
                           <p className="text-xs text-muted-foreground">
                             {new Date(item.bookingDate).toLocaleDateString(
@@ -265,8 +266,9 @@ export const EmployerDashboard = () => {
                         </div>
                         <div className="text-right">
                           <p
-                            className={`${isMobile ? "text-sm" : ""
-                              } font-medium`}
+                            className={`${
+                              isMobile ? "text-sm" : ""
+                            } font-medium`}
                           >
                             {" "}
                             {new Intl.NumberFormat("en-IN", {
@@ -278,7 +280,7 @@ export const EmployerDashboard = () => {
                             {" "}
                             {item?.status
                               ? item.status.charAt(0).toUpperCase() +
-                              item.status.slice(1)
+                                item.status.slice(1)
                               : ""}
                           </span>
                         </div>
@@ -286,19 +288,22 @@ export const EmployerDashboard = () => {
                     )}
                     {item.type === "job" && (
                       <div
-                        className={`flex items-center justify-between ${isMobile ? "p-3" : "p-4"
-                          } border rounded-lg`}
+                        className={`flex items-center justify-between ${
+                          isMobile ? "p-3" : "p-4"
+                        } border rounded-lg`}
                       >
                         <div className="flex-1">
                           <h4
-                            className={`${isMobile ? "text-sm" : ""
-                              } font-medium`}
+                            className={`${
+                              isMobile ? "text-sm" : ""
+                            } font-medium`}
                           >
                             {item?.jobData?.title}
                           </h4>
                           <p
-                            className={`${isMobile ? "text-xs" : "text-sm"
-                              } text-muted-foreground`}
+                            className={`${
+                              isMobile ? "text-xs" : "text-sm"
+                            } text-muted-foreground`}
                           >{`with ${item.freelancerId.firstName} ${item.freelancerId.lastName}`}</p>
                           <p className="text-xs text-muted-foreground">
                             {new Date(
@@ -314,8 +319,9 @@ export const EmployerDashboard = () => {
                         </div>
                         <div className="text-right">
                           <p
-                            className={`${isMobile ? "text-sm" : ""
-                              } font-medium`}
+                            className={`${
+                              isMobile ? "text-sm" : ""
+                            } font-medium`}
                           >
                             {" "}
                             {new Intl.NumberFormat("en-IN", {
@@ -327,7 +333,7 @@ export const EmployerDashboard = () => {
                             {" "}
                             {item?.status
                               ? item.status.charAt(0).toUpperCase() +
-                              item.status.slice(1)
+                                item.status.slice(1)
                               : ""}
                           </span>
                         </div>
@@ -370,7 +376,6 @@ export const EmployerDashboard = () => {
               
             </CardContent>
           </Card> */}
-
         </div>
       </div>
     </div>

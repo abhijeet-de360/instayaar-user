@@ -316,6 +316,29 @@ const App = () => {
       </div>
     );
 
+    if (authvar?.user?.status === 'suspended' && localService.get('role') === 'user')
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-muted/10">
+        <Card className="max-w-sm w-full py-6 px-4 text-center shadow-md">
+          <CardContent>
+            <h2 className="text-lg font-semibold text-destructive">
+              Your account has been suspended
+            </h2>
+            <p className="text-sm text-muted-foreground mt-2">
+              Please contact support for further assistance.
+            </p>
+            <Button
+              className="mt-4 w-32"
+              variant="destructive"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+
   return (
     <>
       <QueryClientProvider client={queryClient}>

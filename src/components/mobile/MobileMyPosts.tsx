@@ -40,7 +40,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Switch } from "../ui/switch";
 import { warningHandler } from "@/shared/_helper/responseHelper";
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from "../ui/drawer";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
 
 const MobileMyPosts = () => {
   const navigate = useNavigate();
@@ -50,7 +57,7 @@ const MobileMyPosts = () => {
     setIsLoggedIn(true);
     setUserRole(role as "employer" | "freelancer");
   };
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [deletepop, setDeletepop] = useState(false);
   const jobVar = useSelector((state: RootState) => state?.jobs);
   const authVar = useSelector((state: RootState) => state?.auth);
@@ -103,8 +110,6 @@ const MobileMyPosts = () => {
     return `${hour12}:${minutes.toString().padStart(2, "0")} ${suffix}`;
   }
 
-  
-
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Hide header when logged in on mobile */}
@@ -120,18 +125,14 @@ const MobileMyPosts = () => {
             size="sm"
             onClick={() => {
               if (
-                !authVar?.user?.firstName ||
-                !authVar?.user?.lastName ||
-                !authVar?.user?.city ||
-                !authVar?.user?.state ||
-                !authVar?.user?.email ||
-                !authVar?.user?.profile
+                authVar?.user?.status === "active" &&
+                authVar?.user?.isAadharVerified === true &&
+                authVar?.user?.isEmailVerified === true
               ) {
-                warningHandler("Update your account settings to continue.");
-                navigate('/user-account-settings')
+                setOpen(true);
               } else {
-                // navigate("/post-job");
-                setOpen(true)
+                warningHandler("Update your account settings to continue.");
+                navigate("/user-account-settings");
               }
             }}
             className="px-2 pr-3 "
@@ -340,33 +341,46 @@ const MobileMyPosts = () => {
 
       <MobileBottomNav />
       <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
-          <DrawerHeader>
-            <DrawerTitle>Choose Booking Type</DrawerTitle>
-          </DrawerHeader>
-          <div className="flex flex-col gap-2 items-center">
-            <Button variant="outline" className="h-28 border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/instant-booking')}>
-              <p>Instant Booking</p>
-              <small className="text-sm text-gray-500">Book freelancers for an immediate requirement.</small>
-            </Button>
-            <Button variant="outline" className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full" onClick={() => navigate('/post-job')}>
-              <p>Post for Future</p>
-              <small className="text-sm text-gray-500 text-left">Post a requirement and let Freelancers see <br /> details and apply with their offer.</small>
-            </Button>
-          </div>
+        <DrawerContent>
+          <div className="mx-auto w-full max-w-sm">
+            <DrawerHeader>
+              <DrawerTitle>Choose Booking Type</DrawerTitle>
+            </DrawerHeader>
+            <div className="flex flex-col gap-2 items-center">
+              <Button
+                variant="outline"
+                className="h-28 border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full"
+                onClick={() => navigate("/instant-booking")}
+              >
+                <p>Instant Booking</p>
+                <small className="text-sm text-gray-500">
+                  Book freelancers for an immediate requirement.
+                </small>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-auto border-neutral-400 p-4 flex flex-col items-start space-y-1 hover:bg-accent w-full"
+                onClick={() => navigate("/post-job")}
+              >
+                <p>Post for Future</p>
+                <small className="text-sm text-gray-500 text-left">
+                  Post a requirement and let Freelancers see <br /> details and
+                  apply with their offer.
+                </small>
+              </Button>
+            </div>
 
-          <DrawerFooter>
-            {/* <div className="flex items-center gap-4 justify-center">
+            <DrawerFooter>
+              {/* <div className="flex items-center gap-4 justify-center">
               <Button>Submit</Button>
               <DrawerClose asChild>
                 <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
               </DrawerClose>
             </div> */}
-          </DrawerFooter>
-        </div>
-      </DrawerContent>
-    </Drawer>
+            </DrawerFooter>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };

@@ -30,6 +30,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { a } from "node_modules/framer-motion/dist/types.d-BJcRxCew";
 
 
 const MobileFreelancerProfile = () => {
@@ -109,13 +110,19 @@ const MobileFreelancerProfile = () => {
     }
 
     if (authVar?.isAuthenticated) {
-      if (!authVar?.user?.firstName) {
+      if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
         navigate(`/user-account-settings`);
       }
     }
   };
 
   const handleBookService = (id) => {
+    if(authVar?.isAuthenticated) {
+      if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
+        navigate(`/user-account-settings`);
+        return;
+      }
+    }
     navigate(`/multi-service-booking/${id}`)
   }
 

@@ -93,14 +93,6 @@ export const MobileDashboardSidebar = () => {
     return null;
   }
 
-  const isProfileIncomplete = [
-    authVar?.user?.firstName,
-    authVar?.user?.lastName,
-    authVar?.user?.city,
-    authVar?.user?.state,
-    authVar?.user?.email,
-    authVar?.user?.profile,
-  ].some((value) => !value);
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -154,7 +146,7 @@ export const MobileDashboardSidebar = () => {
               to={item.href}
               onClick={(e) => {
                 if (localService.get("role") === "user") {
-                  if (item.href === "/instant-booking" && isProfileIncomplete) {
+                  if (item.href === "/instant-booking" && (authVar.user.status !== 'active' || authVar.user.isEmailVerified === false)) {
                     e.preventDefault();
                     setIsOpen(false);
                     navigate("/user-account-settings");
