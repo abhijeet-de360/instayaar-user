@@ -6,7 +6,7 @@ import { useUserRole } from "@/contexts/UserRoleContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, MessageCircle, Phone, Star, Play, Square, Clock, IndianRupee, ArrowLeft, X, ClockIcon, Info } from "lucide-react";
+import { Calendar, MapPin, MessageCircle, Phone, Star, Play, Square, Clock, IndianRupee, ArrowLeft, X, ClockIcon, Info, Clock1 } from "lucide-react";
 import { BookingData } from "@/types/bookingTypes";
 import { JobOTPBottomSheet } from "@/components/job/JobOTPBottomSheet";
 import { useToast } from "@/hooks/use-toast";
@@ -355,7 +355,9 @@ const MobileMyBookings = () => {
                       {booking?.status === 'cancelled' && <span className="text-xs text-red-600 bg-red-100 px-2 py-0.5 rounded-full">{booking?.status === 'cancelled' ? 'Canceled' : ""}</span>}
                     </div>
                   </div>
-
+                  {localService.get('role') === 'user' && booking.status === 'booked' && (
+                    <div className="flex gap-1 items-center"><Clock1 className="h-4 text-primary"/> <i className="text-xs font-light">Confirmation awaited from the Yaar..</i></div>
+                  )}
                   {/* OTP Sections */}
                   {localService.get('role') === 'user' && booking.status === 'confirmed' && (
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-2">
@@ -386,11 +388,11 @@ const MobileMyBookings = () => {
                           onClick={() => handleServiceView(booking)}>
                           <Info className="w-8 h-8 text-primary" />
                         </Button>
-                        <a href={`tel:${booking?.freelancerId?.phoneNumber}`} className="min-w-20">
+                        {/* <a href={`tel:${booking?.freelancerId?.phoneNumber}`} className="min-w-20">
                           <Button size="sm" variant="outline" className="h-8 w-full">
                             Call
                           </Button>
-                        </a>
+                        </a> */}
                         {booking?.status === 'onGoing' && <Link to={`/freelancer-services/${booking?.freelancerId?._id}`} className="min-w-20">
                           <Button size="sm" variant="outline" className="h-8 w-full">
                             Extend
@@ -484,6 +486,7 @@ const MobileMyBookings = () => {
                     </div>
                   </div>
 
+
                   {/* OTP Sections */}
                   {localService.get('role') === 'user' && booking.status === 'hired' && (
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-2">
@@ -514,11 +517,11 @@ const MobileMyBookings = () => {
                         >
                           <Info className="w-8 h-8 text-primary" />
                         </Button>
-                        <a href={`tel:${booking?.freelancerId?.phoneNumber}`} className="min-w-20">
+                        {/* <a href={`tel:${booking?.freelancerId?.phoneNumber}`} className="min-w-20">
                           <Button size="sm" variant="outline" className="h-8 w-full">
                             Call
                           </Button>
-                        </a>
+                        </a> */}
                         {booking?.status === 'inProgress' && <Link to={`/freelancer-services/${booking?.freelancerId?._id}`} className="min-w-20">
                           <Button size="sm" variant="outline" className="h-8 w-full">
                             Extend
