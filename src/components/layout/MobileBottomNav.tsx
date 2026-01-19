@@ -5,6 +5,7 @@ import { useUserRole } from "@/contexts/UserRoleContext";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { localService } from "@/shared/_session/local";
+import { Capacitor } from "@capacitor/core";
 
 interface MobileBottomNavProps {
   onProfileClick?: () => void;
@@ -32,7 +33,7 @@ const freelancerNavItems = [
 const guestNavItems = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Yaars', href: '/discover', icon: Search },
-  { name: 'Post', href: '/browse-jobs', icon: FileText,requiresAuth: true }, 
+  { name: 'Post', href: '/browse-jobs', icon: FileText, requiresAuth: true },
   { name: 'Chat', href: '/messages', icon: MessageCircle, requiresAuth: true },
   { name: 'Login', href: '#', icon: User, requiresAuth: true, isLoginButton: true },
 ];
@@ -62,7 +63,12 @@ export const MobileBottomNav = ({ onProfileClick }: MobileBottomNavProps) => {
   };
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40"
+      style={{
+        paddingBottom: Capacitor.getPlatform() === "ios"
+          ? "calc(10px + env(safe-area-inset-bottom))"
+          : "",
+      }}>
       <div className="flex items-center justify-around h-16">
         {navItems.map((item) => (
           <NavLink

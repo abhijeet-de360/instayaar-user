@@ -1,10 +1,14 @@
 {
-  "appId": "com.kaamdham",
-  "appName": "KaamDham",
+  "appId": "com.instayaar.app",
+  "appName": "InstaYaar",
   "webDir": "dist",
   "plugins": {
     "Keyboard": {
       "resizeOnFullScreen": false
+    },
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "DARK"
     },
     "EdgeToEdge": {
       "backgroundColor": "#ffffff"
