@@ -912,7 +912,7 @@ const AccountSettings = () => {
                   </div>
 
                   <div className="space-y-1">
-                    <Label className="text-sm">Dispaly Title*</Label>
+                    <Label className="text-sm">Display Title*</Label>
                     <div className="flex flex-wrap gap-2">
                       {formData?.skills?.length > 0 ? (
                         formData.skills.map((skill, index) => (
