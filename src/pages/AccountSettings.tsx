@@ -11,14 +11,16 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import {  aadharVerify,  emailSendOtp,  emailVerifyOtp,  getFreelancerProfile,  updateFreelancer,  updateFreelancerImage,  updateUser,  updateUserProfile,} from "@/store/authSlice";
+import { aadharVerify, emailSendOtp, emailVerifyOtp, getFreelancerProfile, updateFreelancer, updateFreelancerImage, updateUser, updateUserProfile, } from "@/store/authSlice";
 import { localService } from "@/shared/_session/local";
 import Dropzone from "react-dropzone";
-import {  Select,  SelectContent,  SelectItem,  SelectTrigger,  SelectValue,} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import { toast } from "sonner";
-import {  Dialog,  DialogClose,  DialogContent,  DialogDescription,  DialogFooter,  DialogHeader,  DialogTitle,} from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, } from "@/components/ui/dialog";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
+import { Capacitor } from "@capacitor/core";
+import { Browser } from "@capacitor/browser";
 
 const AccountSettings = () => {
   const authVar = useSelector((state: RootState) => state.auth);
@@ -117,7 +119,7 @@ const AccountSettings = () => {
       }, 1000);
 
       const timeout = setTimeout(() => {
-        if(localService.get('role') === 'freelancer'){
+        if (localService.get('role') === 'freelancer') {
           dispatch(getFreelancerProfile());
         }
         navigate("/account-settings", { replace: true });
@@ -211,7 +213,7 @@ const AccountSettings = () => {
       lastName: formData?.lastName,
       aadhaarNo: formData?.aadhaarNo,
       panNo: formData?.panNo
-    },navigate));
+    }, navigate));
   };
 
   const allFieldsFilled = Object.values(formData).every(
@@ -288,6 +290,14 @@ const AccountSettings = () => {
     dispatch(emailVerifyOtp(otp, setEmailModal));
     // setEmailModal(false);
   }
+
+  const openLink = async (url: string) => {
+    if (Capacitor.isNativePlatform()) {
+      await Browser.open({ url: `https://app.kaamdham.com${url}` });
+    } else {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -723,43 +733,10 @@ const AccountSettings = () => {
               </Card>
             ) : (
               <Card>
-                <CardHeader className={`${isMobile ? "pb-3" : "pb-4"}`}>
-                  {/* <div className="flex items-center justify-between">
-                    <CardTitle
-                      className={`flex items-center gap-2 ${isMobile ? "text-lg" : "text-lg"
-                        }`}
-                    >
-                      <Camera className="h-4 w-4" />
-                      Profile Information
-                    </CardTitle>
-                    {isMobile && (
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    )}
-                  </div> */}
-                </CardHeader>
 
                 <CardContent
                   className={`${isMobile ? "p-4 pt-0" : "p-4"} space-y-4`}
                 >
-                  {/* <div className="flex items-center gap-4">
-                    <div
-                      className={`${isMobile ? "w-12 h-12" : "w-16 h-16"
-                        } rounded-full bg-muted flex items-center justify-center overflow-hidden`}
-                    >
-                      {formData?.image ? (
-                        <img
-                          src={authVar?.freelancer?.profile}
-                          alt="Profile"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <Camera
-                          className={`${isMobile ? "h-5 w-5" : "h-6 w-6"
-                            } text-muted-foreground`}
-                        />
-                      )}
-                    </div>
-                  </div> */}
 
                   <div className="flex items-center gap-4">
                     <Dropzone
@@ -768,21 +745,13 @@ const AccountSettings = () => {
                       onDrop={async (acceptedFiles) => {
                         if (acceptedFiles.length > 0) {
                           let file = acceptedFiles[0];
-
-                          // Compress the image (if you have a compressImage function)
                           file = await compressImage(file);
-
-                          // Create a local preview URL
                           const localPreview = URL.createObjectURL(file);
                           setPreview(localPreview);
-
-                          // Update local form state
                           setFormData((prev: any) => ({
                             ...prev,
                             image: file,
                           }));
-
-                          // Dispatch the action to update profile
                           dispatch(updateFreelancerImage(file));
                         }
                       }}
@@ -958,56 +927,6 @@ const AccountSettings = () => {
             )
           )
         }
-
-
-
-
-        {/* Notification Preferences */}
-        {/* <Card>
-          <CardContent className="p-4 space-y-4">
-            <div className="flex items-center justify-between py-2">
-              <div>
-                <p className="font-medium">Email Notifications</p>
-                <p className="text-sm text-muted-foreground">
-                  Receive updates via email
-                </p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-
-            <div className="flex items-center justify-between py-2">
-              <div>
-                <p className="font-medium">SMS Notifications</p>
-                <p className="text-sm text-muted-foreground">
-                  Receive updates via SMS
-                </p>
-              </div>
-              <Switch />
-            </div>
-
-            <div className="flex items-center justify-between py-2">
-              <div>
-                <p className="font-medium">Push Notifications</p>
-                <p className="text-sm text-muted-foreground">
-                  Receive browser notifications
-                </p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-
-            <div className="flex items-center justify-between py-2">
-              <div>
-                <p className="font-medium">Marketing Emails</p>
-                <p className="text-sm text-muted-foreground">
-                  Receive promotional content
-                </p>
-              </div>
-              <Switch />
-            </div>
-          </CardContent>
-        </Card> */}
-
-        {/* Conditional Section - Payment Methods for Employers, Verification for Freelancers */}
         {localService.get("role") === "user" ? (
           <Card>
             <CardHeader className="pb-4">
@@ -1042,35 +961,6 @@ const AccountSettings = () => {
             </CardContent>
           </Card>
         ) : (
-          // <Card>
-          //   <CardHeader className="pb-4">
-          //     <CardTitle className="flex items-center gap-2 text-lg">
-          //       <FileCheck className="h-4 w-4" />
-          //       Identity Verification
-          //     </CardTitle>
-          //   </CardHeader>
-          //   <CardContent className="p-4 space-y-4">
-          //     {/* Default state: Not verified */}
-          //     <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
-          //       <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
-          //         <AlertCircle className="h-4 w-4 text-amber-600" />
-          //       </div>
-          //       <div className="flex-1">
-          //         <p className="font-medium text-amber-800">Aadhaar Not Verified</p>
-          //         <p className="text-sm text-amber-600">Please verify your identity to continue using our services</p>
-          //       </div>
-          //     </div>
-
-          //     <div className="space-y-2">
-          //       <Label htmlFor="aadhaar">Aadhaar Number</Label>
-          //       <Input id="aadhaar" placeholder="Enter your Aadhaar number" />
-          //     </div>
-
-          //     <Button className="w-full">
-          //       Verify with OTP
-          //     </Button>
-          //   </CardContent>
-          // </Card>
           <span></span>
         )}
 
@@ -1089,11 +979,9 @@ const AccountSettings = () => {
                       Learn how we handle your data
                     </p>
                   </div>
-                  <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" size="sm">
-                      Read
-                    </Button>
-                  </Link>
+                  <Button variant="outline" size="sm" onClick={() => openLink("/privacy-policy")}>
+                    Read
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -1110,20 +998,15 @@ const AccountSettings = () => {
                       Understand the rules of using our services
                     </p>
                   </div>
-                  <Link to="/terms&condition" target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" size="sm">
-                      View
-                    </Button>
-                  </Link>
+                  <Button variant="outline" size="sm" onClick={() => openLink("/terms&condition")}>
+                    View
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
 
-        {/* <Button variant="destructive" className="w-full">
-          Delete Account
-        </Button> */}
       </div>
 
       <MobileBottomNav />
@@ -1149,13 +1032,13 @@ const AccountSettings = () => {
               onDrop={async (acceptedFiles) => {
                 if (acceptedFiles.length > 0) {
                   const file = acceptedFiles[0];
-                  const compressedFile = await compressFile(file); // compress here
+                  const compressedFile = await compressFile(file);
                   const localPreview = URL.createObjectURL(compressedFile);
 
                   setPanPreview(localPreview);
                   setFormData((prev: any) => ({
                     ...prev,
-                    panImage: compressedFile, // now it's a compressed File, not Blob
+                    panImage: compressedFile,
                   }));
                 }
               }}
@@ -1209,82 +1092,6 @@ const AccountSettings = () => {
           <p className="font-medium">Verifying...({count}s)</p>
         </div>
       </div>}
-
-      {/* <Dialog open={isAadhaar} onOpenChange={() => setIsAadhaar(false)}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Upload Aadhaar Card</DialogTitle>
-              <DialogDescription>
-                Please upload a clear image of your Aadhaar card. This will be
-                stored securely.
-              </DialogDescription>
-            </DialogHeader>
-
-            <Dropzone
-              accept={{ "image/*": [] }}
-              multiple={false}
-              onDrop={(acceptedFiles) => {
-                if (acceptedFiles.length > 0) {
-                  const file = acceptedFiles[0];
-                  const localPreview = URL.createObjectURL(file);
-
-                  setAadhaarPreview(localPreview);
-                  setFormData((prev: any) => ({
-                    ...prev,
-                    aadhaarImage: file,
-                  }));
-                }
-              }}
-            >
-              {({ getRootProps, getInputProps }) => (
-                <div
-                  {...getRootProps()}
-                  className="w-full h-36 object-cover border-2 border-dashed border-muted-foreground rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-muted/30 transition"
-                >
-                  <input {...getInputProps()} />
-
-                  {aadhaarPreview ||
-                    (typeof formData?.aadhaarImage === "string" &&
-                      formData?.aadhaarImage) ? (
-                    <img
-                      src={aadhaarPreview || (formData?.aadhaarImage as string)}
-                      alt="Aadhaar Card"
-                      className="w-full h-full object-contain rounded-lg"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center text-center text-muted-foreground">
-                      <Camera className="h-8 w-8 mb-2" />
-                      <p className="text-sm">
-                        Click or drag & drop to upload Aadhaar card
-                      </p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </Dropzone>
-
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button variant="outline">Cancel</Button>
-              </DialogClose>
-              <Button
-                type="submit"
-                onClick={() => {
-                  setIsAadhaar(false);
-                  dispatch(uploadAadharCard(formData?.aadhaarImage));
-                }}
-              >
-                Save changes
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </form>
-      </Dialog> */}
     </div>
   );
 };
