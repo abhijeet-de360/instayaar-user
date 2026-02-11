@@ -82,6 +82,18 @@ async function userAadharVerify(data:any) {
   })
 }
 
+async function deleteUserProfile(id: string) {
+  return await axios.post(userAuthUrl + `/deleteProfile/${id}`, {
+    headers: await authHeader('')
+  })
+}
+
+async function userChangeAgreement(image) {
+  return await axios.post(userAuthUrl + `/userAcceptAgreement`, { image }, {
+    headers: await authHeader('')
+  })
+}
+
 
 // =========================== Freelancer =========================================
 
@@ -161,7 +173,17 @@ async function setOffDays(dates){
   })
 }
 
+async function deleteFreelancerProfile(id: string) {
+  return await axios.post(freelancerUrl + `/deleteProfile/${id}`, {
+    headers: await authHeader('')
+  })
+}
 
+async function freelancerChangeAgreement(image) {
+  return await axios.post(freelancerUrl + `/freelancerAcceptAgreement`, { image }, {
+    headers: await authHeader('')
+  })
+}
 
 
 // ======================== Category ================================================
@@ -572,9 +594,9 @@ async function getBookingsForFreelancerInstant(limit, offset, lat, lng){
 
 
 export const service = {
-  userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify, 
+  userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify,  deleteUserProfile, userChangeAgreement,
 
-  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp, 
+  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp,deleteFreelancerProfile, freelancerChangeAgreement, 
 
   getCategories,
 

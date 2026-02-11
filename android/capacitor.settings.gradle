@@ -2,9 +2,6 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
-include ':capacitor-community-fcm'
-project(':capacitor-community-fcm').projectDir = new File('../node_modules/@capacitor-community/fcm/android')
-
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/@capacitor/app/android')
 
@@ -37,3 +34,9 @@ project(':capacitor-toast').projectDir = new File('../node_modules/@capacitor/to
 
 include ':capawesome-capacitor-android-edge-to-edge-support'
 project(':capawesome-capacitor-android-edge-to-edge-support').projectDir = new File('../node_modules/@capawesome/capacitor-android-edge-to-edge-support/android')
+
+include ':capawesome-capacitor-app-update'
+project(':capawesome-capacitor-app-update').projectDir = new File('../node_modules/@capawesome/capacitor-app-update/android')
+
+include ':capgo-inappbrowser'
+project(':capgo-inappbrowser').projectDir = new File('../node_modules/@capgo/inappbrowser/android')

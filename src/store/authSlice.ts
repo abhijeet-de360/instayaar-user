@@ -4,7 +4,7 @@ import { errorHandler, successHandler } from "@/shared/_helper/responseHelper";
 import { service } from "@/shared/_services/api_service";
 import { localService } from "@/shared/_session/local";
 import { Capacitor } from "@capacitor/core";
-import { Browser } from "@capacitor/browser";
+import { BackgroundColor, InAppBrowser, ToolBarType } from "@capgo/inappbrowser";
 
 
 const STATUSES = Object.freeze({
@@ -55,14 +55,14 @@ const authSlice = createSlice({
         setGpsPromptShown(state, { payload }) {
             state.gpsPromptShown = payload;
         },
-        setInstantBooking(state, {payload}){
+        setInstantBooking(state, { payload }) {
             state.freelancer.instantBooking = payload
         }
     },
 });
 
 
-export const { setUser, setStatus, setAuth, setFreelancer, setRole, logout, setChatModal,setGpsPromptShown, setInstantBooking } = authSlice.actions;
+export const { setUser, setStatus, setAuth, setFreelancer, setRole, logout, setChatModal, setGpsPromptShown, setInstantBooking } = authSlice.actions;
 export default authSlice.reducer;
 
 
@@ -123,11 +123,14 @@ export function userVerifyOtp({ phoneNumber, otp, lat, lon, fcm }, navigate, onC
                 successHandler("OTP verified successfully");
                 localService.set("token", response.data?.token);
                 localService.set("role", 'user');
-
+                localService.set("agreementAccepted", response.data.isAgreementAccepted);
                 dispatch(setAuth(true));
                 dispatch(getUserProfile());
-                if (!response.data.latest) {
-                    navigate("/profile");
+                if (response.data.isAgreementAccepted === false) {
+                    navigate('/client-agreement')
+                }
+                else if (response.data.latest) {
+                    navigate("/user-account-settings");
                 }
                 navigate("/discover");
                 onClose();
@@ -241,13 +244,18 @@ export function freelancerVerifyOtp({ phoneNumber, otp, lat, lon, fcm }, navigat
                 onClose();
                 localService.set("token", response.data?.token);
                 localService.set("role", 'freelancer');
-                if (response.data.latest === true) {
-                    navigate('/account-settings')
+                localService.set("agreementAccepted", response.data.isAgreementAccepted);
+                if (response.data.isAgreementAccepted === false) {
+                    navigate('/freelancer-agreement')
                 }
                 else {
-                    navigate('/browse-jobs')
+                    if (response.data.latest === true) {
+                        navigate('/account-settings')
+                    }
+                    else {
+                        navigate('/browse-jobs')
+                    }
                 }
-
             }
         } catch (error) {
             errorHandler(error?.response || error.message || "Something went wrong");
@@ -373,30 +381,37 @@ export function aadharVerify(data, navigate) {
             }
             navigate("/freelancer-dashboard");
             if (Capacitor.isNativePlatform()) {
-                console.log("📱 Running inside Capacitor app — opening in-app browser...");
-                const pageLoadedListener = (Browser as any).addListener(
-                    "browserPageLoaded",
-                    async (event: any) => {
-                        const currentUrl = event?.url || "";
-                        console.log("🌐 In-app browser navigated to:", currentUrl);
-                        if (currentUrl.startsWith("https://kaamdham.com/account-settings?modal=true")) {
-                            console.log("✅ Return URL detected — closing browser...");
-                            await Browser.close();
-                            pageLoadedListener.remove();
+                await InAppBrowser.removeAllListeners();
+                const urlListener = await InAppBrowser.addListener(
+                    "urlChangeEvent",
+                    async (event) => {
+                        const url = event.url;
+                        console.log("🔗 InAppBrowser URL:", url);
+
+                        if (url.startsWith("https://app.instayaar.com/account-settings") && url.includes("modal=true")) {
+                            await InAppBrowser.close();
+                            return;
+                        }
+                        if (url.includes("status=failed") || url.includes("cancel")) {
+                            await InAppBrowser.close();
+                            dispatch(setStatus(STATUSES.ERROR));
                         }
                     }
                 );
-                const finishedListener = (Browser as any).addListener(
-                    "browserFinished",
-                    () => {
-                        console.log("🧭 Aadhaar verification browser closed manually");
-                        finishedListener.remove();
+
+                const closeListener = await InAppBrowser.addListener(
+                    "closeEvent",
+                    async () => {
+                        await urlListener.remove();
+                        await closeListener.remove();
                     }
                 );
-                await Browser.open({
+                await InAppBrowser.openWebView({
                     url: redirectUrl,
-                    presentationStyle: "fullscreen",
-                    toolbarColor: "#ffffff",
+                    title: "Aadhaar Verification",
+                    toolbarType: ToolBarType.BLANK,
+                    backgroundColor: BackgroundColor.WHITE,
+                    showReloadButton: false,
                 });
             } else {
                 console.log("💻 Running on web — redirecting via window.location");
@@ -428,30 +443,37 @@ export function userAadharVerify(data, navigate) {
             }
             navigate("/employer-dashboard");
             if (Capacitor.isNativePlatform()) {
-                console.log("📱 Running inside Capacitor app — opening in-app browser...");
-                const pageLoadedListener = (Browser as any).addListener(
-                    "browserPageLoaded",
-                    async (event: any) => {
-                        const currentUrl = event?.url || "";
-                        console.log("🌐 In-app browser navigated to:", currentUrl);
-                        if (currentUrl.startsWith("https://instayaar.com/user-account-settings?modal=true")) {
-                            console.log("✅ Return URL detected — closing browser...");
-                            await Browser.close();
-                            pageLoadedListener.remove();
+                await InAppBrowser.removeAllListeners();
+                const urlListener = await InAppBrowser.addListener(
+                    "urlChangeEvent",
+                    async (event) => {
+                        const url = event.url;
+                        console.log("🔗 InAppBrowser URL:", url);
+
+                        if (url.startsWith("https://app.kaamdham.com/user-account-settings") && url.includes("modal=true")) {
+                            await InAppBrowser.close();
+                            return;
+                        }
+                        if (url.includes("status=failed") || url.includes("cancel")) {
+                            await InAppBrowser.close();
+                            dispatch(setStatus(STATUSES.ERROR));
                         }
                     }
                 );
-                const finishedListener = (Browser as any).addListener(
-                    "browserFinished",
-                    () => {
-                        console.log("🧭 Aadhaar verification browser closed manually");
-                        finishedListener.remove();
+
+                const closeListener = await InAppBrowser.addListener(
+                    "closeEvent",
+                    async () => {
+                        await urlListener.remove();
+                        await closeListener.remove();
                     }
                 );
-                await Browser.open({
+                await InAppBrowser.openWebView({
                     url: redirectUrl,
-                    presentationStyle: "fullscreen",
-                    toolbarColor: "#ffffff",
+                    title: "Aadhaar Verification",
+                    toolbarType: ToolBarType.BLANK,
+                    backgroundColor: BackgroundColor.WHITE,
+                    showReloadButton: false,
                 });
             } else {
                 console.log("💻 Running on web — redirecting via window.location");
@@ -585,6 +607,83 @@ export function setInstantBookingFreelancer(data) {
             dispatch(setLoading(false));
         } finally {
             dispatch(setLoading(false));
+        }
+    }
+}
+
+
+export function deleteFreelancerProfile(id: string, navigate) {
+    return async function deleteFreelancerProfileThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING))
+        setLoading(true)
+        try {
+            await service.deleteFreelancerProfile(id).then((response) => {
+                dispatch(setLogout(navigate));
+                setLoading(false);
+                dispatch(setStatus(STATUSES.IDLE));
+
+            })
+        } catch (error) {
+            errorHandler(error.response);
+            setLoading(false);
+            dispatch(setStatus(STATUSES.IDLE));
+        }
+    }
+}
+
+
+export function deleteUserProfile(id: string, navigate: any) {
+    return async function deleteUserProfileThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING))
+        setLoading(true)
+        try {
+            await service.deleteUserProfile(id).then((response) => {
+                dispatch(setLogout(navigate));
+                setLoading(false);
+                dispatch(setStatus(STATUSES.IDLE));
+            })
+        } catch (error) {
+            errorHandler(error.response);
+            setLoading(false);
+            dispatch(setStatus(STATUSES.IDLE));
+        }
+    }
+}
+
+export function freelancerChangeAgreement(image: string, navigate: any) {
+    return async function freelancerChangeAgreementThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING))
+        setLoading(true)
+        try {
+            await service.freelancerChangeAgreement(image).then((response) => {
+                navigate('/')
+                localService.set("agreementAccepted", true)
+                setLoading(false);
+                dispatch(setStatus(STATUSES.IDLE));
+            })
+        } catch (error) {
+            errorHandler(error.response);
+            setLoading(false);
+            dispatch(setStatus(STATUSES.IDLE));
+        }
+    }
+}
+
+export function userChangeAgreement(image: string, navigate: any) {
+    return async function userChangeAgreementThunk(dispatch) {
+        dispatch(setStatus(STATUSES.LOADING))
+        setLoading(true)
+        try {
+            await service.userChangeAgreement(image).then((response) => {
+                navigate('/')
+                localService.set("agreementAccepted", true)
+                setLoading(false);
+                dispatch(setStatus(STATUSES.IDLE));
+            })
+        } catch (error) {
+            errorHandler(error.response);
+            setLoading(false);
+            dispatch(setStatus(STATUSES.IDLE));
         }
     }
 }

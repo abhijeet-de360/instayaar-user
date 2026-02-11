@@ -67,6 +67,11 @@ import { requestAppPermissions } from "./shared/_services/permissions/useAppPerm
 import { setCoords, setLocationName, setPermissionDenied, } from "@/store/locationSlice";
 import { Geolocation } from "@capacitor/geolocation";
 
+import { AppUpdate, AppUpdateAvailability, AppUpdateResultCode, FlexibleUpdateInstallStatus, } from "@capawesome/capacitor-app-update";
+import { PrivateRoute } from "./components/auth/PrivateRoute";
+import Agreement from "./pages/Agreement";
+import ClientAgreement from "./pages/ClientAgreement";
+
 
 
 declare global {
@@ -290,7 +295,52 @@ const App = () => {
     return () => resumeListener.remove();
   }, []);
 
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
 
+    const checkForUpdate = async () => {
+      try {
+        const info = await AppUpdate.getAppUpdateInfo();
+        if (info.updateAvailability !== AppUpdateAvailability.UPDATE_AVAILABLE) {
+          return;
+        }
+        const isCriticalUpdate = info.updatePriority !== undefined && info.updatePriority >= 2;
+
+        if (Capacitor.getPlatform() === "android") {
+          if (isCriticalUpdate && info.immediateUpdateAllowed) {
+            const result = await AppUpdate.performImmediateUpdate();
+          } else if (info.flexibleUpdateAllowed) {
+            const result = await AppUpdate.startFlexibleUpdate();
+            await AppUpdate.addListener(
+              "onFlexibleUpdateStateChange",
+              (state) => {
+                if (state.installStatus === FlexibleUpdateInstallStatus.DOWNLOADED) {
+                  AppUpdate.completeFlexibleUpdate();
+                }
+
+                if (state.installStatus === FlexibleUpdateInstallStatus.FAILED) {
+                }
+
+                if (state.installStatus === FlexibleUpdateInstallStatus.CANCELED) {
+                }
+              }
+            );
+          } else {
+            console.warn("⚠️ No allowed update type");
+          }
+        }
+
+        if (Capacitor.getPlatform() === "ios") {
+          console.log("🍎 iOS update available — redirect to App Store");
+          await AppUpdate.openAppStore({ appId: "6757517329" });
+        }
+      } catch (err) {
+        console.error("❌ Update check failed:", err);
+      }
+    };
+
+    checkForUpdate();
+  }, []);
 
 
   if (authvar?.freelancer?.status === 'suspended' && localService.get('role') === 'freelancer')
@@ -316,7 +366,7 @@ const App = () => {
       </div>
     );
 
-    if (authvar?.user?.status === 'suspended' && localService.get('role') === 'user')
+  if (authvar?.user?.status === 'suspended' && localService.get('role') === 'user')
     return (
       <div className="flex justify-center items-center min-h-screen bg-muted/10">
         <Card className="max-w-sm w-full py-6 px-4 text-center shadow-md">
@@ -361,47 +411,58 @@ const App = () => {
               <Routes>
                 <Route
                   path="/"
-                  element={
-                    authvar?.isAuthenticated ? (
-                      localService.get("role") === "user" ? (
-                        <Navigate to="/discover" replace />
-                      ) : localService.get("role") === "freelancer" ? (
-                        <Navigate to="/browse-jobs" replace />
-                      ) : (
-                        <Navigate to="/discover" replace />
-                      )
-                    ) : (
+                  element={(() => {
+                    const isAuth = authvar?.isAuthenticated;
+                    const role = localService.get("role");
+                    const agreementAccepted = localService.get("agreementAccepted") === "true";
+                    console.log(agreementAccepted)
+                    const path = window.location.pathname;
+                    if (path !== "/") {
+                      return null;
+                    }
+                    if (isAuth) {
+                      if (role === "freelancer" && agreementAccepted === false) {
+                        return <Navigate to="/freelancer-agreement" replace />;
+                      }
+                      if (role === "user" && agreementAccepted === false) {
+                        return <Navigate to="/client-agreement" replace />;
+                      }
+                      if (role === "freelancer") {
+                        return <Navigate to="/browse-jobs" replace />;
+                      }
+                      return <Navigate to="/discover" replace />;
+                    }
+                    return (
                       <ProtectedRoute>
                         <Index />
                       </ProtectedRoute>
-                    )
-                  }
+                    );
+                  })()}
                 />
-
-                <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-                <Route path="/freelancer-dashboard" element={<FreelancerDashboard />} />
-                <Route path="/post-job" element={<PostJob />} />
-                <Route path="/edit-job/:id" element={<EditJob />} />
-                <Route path="/my-bookings" element={<MyBookings />} />
-                <Route path="/bookings" element={<MyBookings />} />
-                <Route path="/payment-history" element={<PaymentHistory />} />
-                <Route path="/freelancer-reviews" element={<FreelancerReviews />} />
-                <Route path="/freelancer-reviews/:id" element={<FreelancerReviews />} />
-                <Route path="/account-settings" element={<AccountSettings />} />
-                <Route path="/user-account-settings" element={<UserAccountSetting />} />
-                <Route path="/help-support" element={<HelpSupport />} />
-                <Route path="/instant-booking" element={<InstantBooking />} />
-                <Route path="/browse-jobs" element={<BrowseJobs />} />
-                <Route path="/my-services" element={<MyServices />} />
-                <Route path="/earnings" element={<Earnings />} />
-                <Route path="/my-jobs" element={<MyJobs />} />
-                <Route path="/applied-jobs" element={<AppliedJobs />} />
-                <Route path="/create-service" element={<CreateService />} />
-                <Route path="/edit-service/:id" element={<EditService />} />
-                <Route path="/my-posts" element={<MyPosts />} />
-                <Route path="/messages" element={<Messages />} />
-                <Route path="/wallet" element={<Wallet />} />
-                <Route path="/offday" element={<MobileOFFday />} />
+                <Route path="/employer-dashboard" element={<PrivateRoute><EmployerDashboard /></PrivateRoute>} />
+                <Route path="/freelancer-dashboard" element={<PrivateRoute><FreelancerDashboard /></PrivateRoute>} />
+                <Route path="/post-job" element={<PrivateRoute><PostJob /></PrivateRoute>} />
+                <Route path="/edit-job/:id" element={<PrivateRoute><EditJob /></PrivateRoute>} />
+                <Route path="/my-bookings" element={<PrivateRoute><MyBookings /></PrivateRoute>} />
+                <Route path="/bookings" element={<PrivateRoute><MyBookings /></PrivateRoute>} />
+                <Route path="/payment-history" element={<PrivateRoute><PaymentHistory /></PrivateRoute>} />
+                <Route path="/freelancer-reviews" element={<PrivateRoute><FreelancerReviews /></PrivateRoute>} />
+                <Route path="/freelancer-reviews/:id" element={<PrivateRoute><FreelancerReviews /></PrivateRoute>} />
+                <Route path="/account-settings" element={<PrivateRoute><AccountSettings /></PrivateRoute>} />
+                <Route path="/user-account-settings" element={<PrivateRoute><UserAccountSetting /></PrivateRoute>} />
+                <Route path="/help-support" element={<PrivateRoute><HelpSupport /></PrivateRoute>} />
+                <Route path="/instant-booking" element={<PrivateRoute><InstantBooking /></PrivateRoute>} />
+                <Route path="/browse-jobs" element={<PrivateRoute><BrowseJobs /></PrivateRoute>} />
+                <Route path="/my-services" element={<PrivateRoute><MyServices /></PrivateRoute>} />
+                <Route path="/earnings" element={<PrivateRoute><Earnings /></PrivateRoute>} />
+                <Route path="/my-jobs" element={<PrivateRoute><MyJobs /></PrivateRoute>} />
+                <Route path="/applied-jobs" element={<PrivateRoute><AppliedJobs /></PrivateRoute>} />
+                <Route path="/create-service" element={<PrivateRoute><CreateService /></PrivateRoute>} />
+                <Route path="/edit-service/:id" element={<PrivateRoute><EditService /></PrivateRoute>} />
+                <Route path="/my-posts" element={<PrivateRoute><MyPosts /></PrivateRoute>} />
+                <Route path="/messages" element={<PrivateRoute><Messages /></PrivateRoute>} />
+                <Route path="/wallet" element={<PrivateRoute><Wallet /></PrivateRoute>} />
+                <Route path="/offday" element={<PrivateRoute><MobileOFFday /></PrivateRoute>} />
                 <Route path="/shortlist" element={<Navigate to="/shortlist-freelancers" replace />} />
                 <Route path="/shortlist-freelancers" element={<ShortlistFreelancersPage />} />
                 <Route path="/shortlist-jobs" element={<ShortlistJobs />} />
@@ -420,6 +481,9 @@ const App = () => {
                 <Route path="/data-deletion" element={<DataDeletion />} />
                 <Route path="/home" element={<WebLanding />} />
                 <Route path="/dispute" element={<Dispute />} />
+                <Route path="/freelancer-agreement" element={<PrivateRoute><Agreement /></PrivateRoute>} />
+                <Route path="/client-agreement" element={<PrivateRoute><ClientAgreement /></PrivateRoute>} />
+
                 {/* Catch-all */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
