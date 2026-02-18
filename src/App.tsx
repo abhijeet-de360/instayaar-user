@@ -332,7 +332,7 @@ const App = () => {
 
         if (Capacitor.getPlatform() === "ios") {
           console.log("🍎 iOS update available — redirect to App Store");
-          await AppUpdate.openAppStore({ appId: "6757517329" });
+          // await AppUpdate.openAppStore({ appId: "6757517329" });
         }
       } catch (err) {
         console.error("❌ Update check failed:", err);
