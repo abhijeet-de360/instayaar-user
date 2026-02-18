@@ -46,12 +46,11 @@ const ClientAgreement = () => {
             </p>
           </div>
 
-          {/* 1 */}
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">1. Parties</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              This Agreement is between Joshful Apps Private Limited (“InstaYaar”) and the Client booking services
-              through the platform.
+              This Agreement is between Joshful Apps Private Limited (“Instayaar”) and the Client booking services through
+              the platform.
             </p>
           </section>
 
@@ -59,7 +58,15 @@ const ClientAgreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">2. Platform Role</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              InstaYaar is a facilitator and not a service provider. Freelancers are independent professionals.
+              Instayaar is a facilitator and not a service provider. Freelancers are independent service providers and not
+              employees, agents, or partners of Instayaar.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Instayaar provides a digital marketplace, booking tools, communication features, and platform-managed payment
+              handling.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Instayaar does not guarantee services of same standard, as every freelancer has their own style and processes.
             </p>
           </section>
 
@@ -67,8 +74,11 @@ const ClientAgreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">3. Bookings & Payments</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              Clients must pay 100% advance. Payments are held in a platform-managed escrow/nodal account until
-              service completion.
+              Clients must pay 100% advance. Payments are held in a platform-managed account until service completion. An
+              Escrow account may be used, if required.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Clients must not make any direct payment to the Freelancer.
             </p>
           </section>
 
@@ -76,7 +86,7 @@ const ClientAgreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">4. Pricing & Invoices</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              Prices are set by freelancers and Invoices are also provided by them directly. InstaYaar may issue payment
+              Prices are set by freelancers and Invoices are also provided by them directly. Instayaar may issue payment
               receipts.
             </p>
           </section>
@@ -88,13 +98,12 @@ const ClientAgreement = () => {
               Refunds are processed only in eligible cases as per platform policies within 5–7 working days.
             </p>
             <p className="text-sm leading-relaxed text-gray-700">
-              For Direct Bookings via Availability Calendar, Freelancers can set their own Cancellation Policy clearly
-              visible to Clients before booking. In such cases of cancellation by Clients, the platform will follow the
-              Freelancers Policy.
+              For Direct Bookings, Freelancers can set their own Cancellation Policy clearly visible to Clients before
+              booking. In such cases of cancellation by Clients, the platform will follow the Freelancers Policy.
             </p>
             <p className="text-sm leading-relaxed text-gray-700">
-              For Job Posts, 50% Refund is done incase of Cancellation by Client at least 48 hours before Job start time,
-              100% thereafter.
+              For Job Posts, 50% Refund is done in case of Cancellation by Client at least 48 hours before Job start time, no
+              refund thereafter.
             </p>
             <p className="text-sm leading-relaxed text-gray-700">
               For Instant Bookings, no cancellation permitted once booked.
@@ -121,7 +130,7 @@ const ClientAgreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">8. Limitation of Liability</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              InstaYaar is not liable for service quality or disputes beyond the platform fee.
+              Instayaar is not liable for service quality or disputes beyond the platform fee.
             </p>
           </section>
 
@@ -129,7 +138,7 @@ const ClientAgreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">9. Termination</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              InstaYaar may suspend or terminate access for misuse or fraud.
+              Instayaar may suspend or terminate access for misuse or fraud.
             </p>
           </section>
 
