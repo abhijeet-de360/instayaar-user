@@ -52,8 +52,8 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">1. Parties</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              This Agreement is entered into between Joshful Apps Private Limited (InstaYaar or “Platform”) and the individual/entity
-              registering as a Freelancer.
+              This Agreement is entered into between Joshful Apps Private Limited (“Instayaar” or “Platform”) and the
+              individual/entity registering as a Freelancer.
             </p>
           </section>
 
@@ -61,8 +61,15 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">2. Nature of Relationship</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              InstaYaar is a technology platform and facilitator only. Freelancers are independent service providers and not employees,
-              agents, or partners of InstaYaar.
+              Instayaar is a technology platform and facilitator only. Freelancers are independent service providers and
+              not employees, agents, or partners of Instayaar.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Instayaar provides a digital marketplace, booking tools, communication features, and platform-managed payment
+              handling.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Instayaar does not guarantee services of same standard, as every freelancer has their own style and processes.
             </p>
           </section>
 
@@ -70,37 +77,46 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">3. Scope of Platform Services</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              InstaYaar provides a digital marketplace, booking tools, communication features, and platform-managed payment handling.
-              InstaYaar does not supervise or guarantee services.
+              Instayaar provides a digital marketplace, booking tools, communication features, and platform-managed payment
+              handling.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Instayaar does not guarantee services. However, the platform takes action as per feedback, including account
+              suspension.
             </p>
           </section>
 
           {/* 4 */}
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">4. Booking & Work Modes</h3>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm leading-relaxed text-gray-700">
               Freelancers may receive bookings through:
             </p>
-            <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-              <li>a) Instant Requests (real-time bidding)</li>
-              <li>b) Direct Bookings via availability calendar</li>
-              <li>c) Job Posts (apply & bid)</li>
-            </ul>
+            <p className="text-sm leading-relaxed text-gray-700">
+              a) Instant Requests (real-time bidding)
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              b) Direct Bookings (as per availability calendar)
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              c) Job Posts (apply & bid)
+            </p>
           </section>
 
           {/* 5 */}
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">5. Payment Handling & Escrow</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              All client payments are collected upfront by InstaYaar and held in a platform-managed escrow/nodal account until service
-              completion. Freelancers must not accept direct payments.
+              All client payments are collected upfront by Instayaar and held in a platform-managed account until service
+              completion. An Escrow account may be used, if required. Freelancers must not accept direct payments.
             </p>
             <p className="text-sm leading-relaxed text-gray-700">
-              For Direct Bookings via Availability Calendar, Freelancers can set their own Cancellation Policy clearly visible to Clients
-              before booking. In such cases of cancellation by Clients, the platform will follow the Freelancers Policy.
+              For Direct Bookings, Freelancers can set their own Cancellation Policy clearly visible to Clients before
+              booking. In such cases of cancellation by Clients, the platform will follow the Freelancers Policy.
             </p>
             <p className="text-sm leading-relaxed text-gray-700">
-              For Job Posts, 50% Refund is done in case of Cancellation by Client at least 48 hours before Job start time, 100% thereafter.
+              For Job Posts, 50% Refund is done in case of Cancellation by Client at least 48 hours before Job start time, no
+              refund thereafter.
             </p>
             <p className="text-sm leading-relaxed text-gray-700">
               For Instant Bookings, no cancellation permitted once booked.
@@ -111,8 +127,11 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">6. Platform Fee</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              InstaYaar charges a platform fee (currently 10% inclusive of GST) deducted weekly from total earnings. Invoice for this
+              Instayaar charges a platform fee (currently 15% inclusive of GST) deducted from earnings. Invoice for this
               Platform Fee is issued by the Platform to the Freelancer.
+            </p>
+            <p className="text-sm leading-relaxed text-gray-700">
+              Invoice for the Full Amount of Service has to be issued by the Freelancer to the Client directly.
             </p>
           </section>
 
@@ -120,7 +139,8 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">7. Payouts</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              Payouts are added to the wallet, 48 hours after job completion and can be withdrawn whenever required.
+              Payouts are added to the wallet, 48 hours after job completion. Withdrawal can be done as per requirement or a
+              weekly auto-payout can be setup.
             </p>
           </section>
 
@@ -128,7 +148,8 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">8. Taxes & Compliance</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              Freelancers are solely responsible for all applicable taxes and statutory compliances. InstaYaar may deduct TDS as per law.
+              Freelancers are solely responsible for all applicable taxes and statutory compliances. Instayaar may deduct
+              TDS as per law.
             </p>
           </section>
 
@@ -144,7 +165,8 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">10. Liability</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              Freelancers are responsible for service quality, safety, tools, and compliance. InstaYaar is not liable for disputes or damages.
+              Freelancers are responsible for service quality, safety, tools, and compliance. Instayaar is not liable for
+              disputes or damages.
             </p>
           </section>
 
@@ -152,7 +174,7 @@ const Agreement = () => {
           <section className="space-y-2">
             <h3 className="font-semibold text-gray-800">11. Suspension & Termination</h3>
             <p className="text-sm leading-relaxed text-gray-700">
-              InstaYaar reserves the right to suspend or terminate accounts for policy violations.
+              Instayaar reserves the right to suspend or terminate accounts for policy violations.
             </p>
           </section>
 
@@ -163,6 +185,7 @@ const Agreement = () => {
               This Agreement is governed by Indian law. Jurisdiction: Kolkata, West Bengal.
             </p>
           </section>
+
           <br />
           <br />
           <div className="mt-4 mb-2">
