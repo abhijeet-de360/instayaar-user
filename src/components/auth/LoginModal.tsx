@@ -39,7 +39,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
     if (formData?.phoneNumber.length !== 10) {
       return;
     } else {
-      if (localService?.get('role') === 'user') {
+      if (authVar.role === 'user') {
         dispatch(userSendOtp({ phoneNumber: formData?.phoneNumber })).then((res) => {
           setStep('otp');
         })
