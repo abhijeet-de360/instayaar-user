@@ -86,7 +86,6 @@ const UserAccountSetting = () => {
 
   const isDisabled =
     !formData.firstName.trim() ||
-    !formData.lastName.trim() ||
     !formData.email.trim() ||
     !formData.city.trim() ||
     !formData.state.trim() ||
@@ -306,7 +305,7 @@ const UserAccountSetting = () => {
                 className="w-full mt-2 bg-primary hover:bg-primary/90 transition-all"
                 onClick={handleAadharVerify}
                 disabled={
-                  !formData.firstName.trim() || !formData.lastName.trim()
+                  !formData.firstName.trim()
                 }
               >
                 Verify with Aadhaar OTP

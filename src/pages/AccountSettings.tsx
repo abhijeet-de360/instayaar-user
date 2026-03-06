@@ -73,7 +73,6 @@ const AccountSettings = () => {
 
   const isDisabled =
     !formData.firstName?.trim() ||
-    !formData.lastName?.trim() ||
     !formData.email?.trim() ||
     !formData.phoneNumber?.trim() ||
     !formData.bio?.trim() ||
@@ -410,7 +409,7 @@ const AccountSettings = () => {
               <Button
                 className="w-full mt-2 bg-primary hover:bg-primary/90 transition-all"
                 onClick={handleAadharVerify}
-                disabled={!formData.firstName.trim() || !formData.lastName.trim() || !formData.panNo.trim()}
+                disabled={!formData.firstName.trim() || !formData.panNo.trim()}
               >
                 Verify with Aadhaar OTP
               </Button>
