@@ -293,7 +293,7 @@ const AccountSettings = () => {
 
   const openLink = async (url: string) => {
     if (Capacitor.isNativePlatform()) {
-      await Browser.open({ url: `https://app.kaamdham.com${url}` });
+      await Browser.open({ url: `https://app.instayaar.com${url}` });
     } else {
       window.open(url, "_blank", "noopener,noreferrer");
     }
