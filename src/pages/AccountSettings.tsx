@@ -78,7 +78,7 @@ const AccountSettings = () => {
     !formData.bio?.trim() ||
     !formData.city?.trim() ||
     !formData.state?.trim() ||
-    !formData.experience?.trim() ||
+    // !formData.experience?.trim() ||
     !formData.panNo?.trim() ||
     !formData.aadhaarNo?.trim() ||
     formData.skills.length === 0 ||
@@ -702,7 +702,7 @@ const AccountSettings = () => {
                       />
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="experience">Years of Experience*</Label>
                     <Select
                       value={formData?.experience}
@@ -724,7 +724,7 @@ const AccountSettings = () => {
                         <SelectItem value="10+ years">10+ years</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
+                  </div> */}
                   <Button className={`w-full `} onClick={handleChange} disabled={isDisabled}>
                     {authVar?.status === "loading" ? 'Saving...' : 'Save Changes'}
                   </Button>

@@ -412,6 +412,7 @@ export function aadharVerify(data, navigate) {
                     toolbarType: ToolBarType.BLANK,
                     backgroundColor: BackgroundColor.WHITE,
                     showReloadButton: false,
+                    enabledSafeBottomMargin: true,
                 });
             } else {
                 console.log("💻 Running on web — redirecting via window.location");
@@ -474,6 +475,7 @@ export function userAadharVerify(data, navigate) {
                     toolbarType: ToolBarType.BLANK,
                     backgroundColor: BackgroundColor.WHITE,
                     showReloadButton: false,
+                    enabledSafeBottomMargin: true,
                 });
             } else {
                 console.log("💻 Running on web — redirecting via window.location");
