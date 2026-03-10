@@ -148,10 +148,7 @@ const UserAccountSetting = () => {
   const handleChange = () => {
     if (!localService.get("role")) return;
     if (localService.get("role") === "user") {
-      if (!isFormValid) {
-        toast.warning("All fields are required");
-        return;
-      }
+
       dispatch(updateUser(formData));
       dispatch(updateUserProfile(formData?.image));
     }
@@ -159,7 +156,7 @@ const UserAccountSetting = () => {
 
   const isFormValid = Object.entries(formData).every(([key, value]) => {
     if (
-      ["phoneNumber", "price", "panImage", "aadharImage", "gstNo"].includes(key)
+      ["phoneNumber", "price"].includes(key)
     )
       return true;
     if (Array.isArray(value)) return value.length > 0;

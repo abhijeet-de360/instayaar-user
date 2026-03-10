@@ -179,10 +179,6 @@ const AccountSettings = () => {
       dispatch(updateUser(formData));
       dispatch(updateUserProfile(formData?.image));
     } else {
-      if (!isFormValid) {
-        toast.warning("All fields are required");
-        return;
-      }
       // dispatch(updateFreelancerProfile(formData?.image));
       dispatch(updateFreelancer(
         {
@@ -220,7 +216,7 @@ const AccountSettings = () => {
   );
 
   const isFormValid = Object.entries(formData).every(([key, value]) => {
-    if (["phoneNumber", "price", "panImage", "aadharImage", "gst"].includes(key)) return true;
+    if (["phoneNumber", "price", "panImage", "aadharImage"].includes(key)) return true;
     if (Array.isArray(value)) return value.length > 0;
     return String(value).trim() !== "";
   });
