@@ -56,6 +56,7 @@ const UserAccountSetting = () => {
     phoneNumber: "",
     gstNo: "",
     image: {},
+    imageFile: null,
     city: "",
     state: "",
     aadhaarNo: "",
@@ -103,6 +104,7 @@ const UserAccountSetting = () => {
         email: authVar?.user?.email || "",
         phoneNumber: authVar?.user?.phoneNumber || "",
         image: authVar?.user?.profile || "",
+        imageFile: null,
         city: authVar?.user?.city || "",
         state: authVar?.user?.state || "",
         gstNo: authVar?.user?.gstNo || "",
@@ -150,18 +152,12 @@ const UserAccountSetting = () => {
     if (localService.get("role") === "user") {
 
       dispatch(updateUser(formData));
-      dispatch(updateUserProfile(formData?.image));
+      if(formData.imageFile)
+      dispatch(updateUserProfile(formData?.imageFile));
     }
   };
 
-  const isFormValid = Object.entries(formData).every(([key, value]) => {
-    if (
-      ["phoneNumber", "price"].includes(key)
-    )
-      return true;
-    if (Array.isArray(value)) return value.length > 0;
-    return String(value).trim() !== "";
-  });
+ 
 
   const handleSendOtp = () => {
     dispatch(userEmailSent(formData?.email, setOtpSent));
@@ -217,7 +213,7 @@ const UserAccountSetting = () => {
           <Card className="max-w-md mx-auto border border-secondary-foreground rounded-xl shadow-sm p-4 sm:p-6">
             <CardHeader className="p-0 mb-4 text-center">
               <h2 className="text-lg font-semibold text-foreground">
-                Aadhaar & PAN Verification
+                Aadhaar Verification
               </h2>
             </CardHeader>
 
@@ -353,6 +349,7 @@ const UserAccountSetting = () => {
                       setFormData((prev: any) => ({
                         ...prev,
                         image: file,
+                        imageFile: file,
                       }));
                     }
                   }}

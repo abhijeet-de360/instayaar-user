@@ -108,12 +108,11 @@ const App = () => {
     if (!Capacitor.isNativePlatform()) return;
 
     const reg = PushNotifications.addListener("registration", (token) => {
-      console.log("✅ FCM TOKEN:", token.value);
       window.fcmToken = token.value;
     });
 
     const err = PushNotifications.addListener("registrationError", (e) => {
-      console.error("❌ FCM ERROR:", e);
+      console.error("FCM ERROR:", e);
     });
 
     const action = PushNotifications.addListener("pushNotificationActionPerformed", (event) => {
@@ -237,27 +236,20 @@ const App = () => {
 
 
   useEffect(() => {
-    const log = (msg: string, data?: any) => console.log(`📍 CapLocation: ${msg}`, data ?? "");
 
     const getAndSetLocation = async () => {
       try {
         if (Capacitor.isNativePlatform()) {
           let perm = await Geolocation.checkPermissions();
-          log("Permission check", perm);
-
           if (perm.location !== "granted") {
             perm = await Geolocation.requestPermissions();
-            log("Permission request result", perm);
             if (perm.location !== "granted") {
-              log("Permission denied by user");
               dispatch(setPermissionDenied(true));
               return;
             }
           }
 
           const pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout: 15000 });
-          log("Location success", pos.coords);
-
           dispatch(setCoords({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }));
 
           // Reverse geocode
@@ -271,18 +263,15 @@ const App = () => {
         } else {
           navigator.geolocation.getCurrentPosition(
             (pos) => {
-              log("Web location success", pos.coords);
               dispatch(setCoords({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }));
             },
             (err) => {
-              log("Web location error", err);
               dispatch(setPermissionDenied(true));
             },
             { enableHighAccuracy: true, timeout: 15000 }
           );
         }
       } catch (err) {
-        log("Failed to get location", err);
         dispatch(setPermissionDenied(true));
       }
     };
@@ -415,11 +404,7 @@ const App = () => {
                     const isAuth = authvar?.isAuthenticated;
                     const role = localService.get("role");
                     const agreementAccepted = localService.get("agreementAccepted") === "true";
-                    console.log(agreementAccepted)
-                    const path = window.location.pathname;
-                    if (path !== "/") {
-                      return null;
-                    }
+                    const path = window.location.pathname;    
                     if (isAuth) {
                       if (role === "freelancer" && agreementAccepted === false) {
                         return <Navigate to="/freelancer-agreement" replace />;

@@ -126,6 +126,7 @@ export function userVerifyOtp({ phoneNumber, otp, lat, lon, fcm }, navigate, onC
                 localService.set("agreementAccepted", response.data.isAgreementAccepted);
                 dispatch(setAuth(true));
                 dispatch(getUserProfile());
+            console.log(response.data)
                 if (response.data.isAgreementAccepted === false) {
                     navigate('/client-agreement')
                 }
