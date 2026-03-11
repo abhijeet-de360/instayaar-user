@@ -293,6 +293,8 @@ const AccountSettings = () => {
       window.open(url, "_blank", "noopener,noreferrer");
     }
   };
+  
+  const isValidPan = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData?.panNo || "");
 
   return (
     <div className="min-h-screen bg-background">
@@ -405,8 +407,7 @@ const AccountSettings = () => {
               <Button
                 className="w-full mt-2 bg-primary hover:bg-primary/90 transition-all"
                 onClick={handleAadharVerify}
-                disabled={!formData.firstName.trim() || !formData.panNo.trim()}
-              >
+                disabled={!formData.firstName.trim() || !isValidPan}              >
                 Verify with Aadhaar OTP
               </Button>
 
@@ -913,10 +914,10 @@ const AccountSettings = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-1">
+                  {/* <div className="space-y-1">
                     <Label className="text-sm">Years of Experience</Label>
                     <p className="text-base">{formData?.experience}</p>
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
             )
