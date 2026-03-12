@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Heart, MapPin, Users, Clock, X } from "lucide-react";
+import { Heart, MapPin, Users, Clock, X, Flag } from "lucide-react";
 import { useJobShortlist } from "@/hooks/useJobShortlist";
 import { useUserRole } from "@/contexts/UserRoleContext";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -14,10 +14,11 @@ import { useToast } from "@/hooks/use-toast";
 import { parseISO, format } from "date-fns";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/store/store";
+import { ReportModal } from "@/components/shared/ReportModal";
+import { submitJobReportAction } from "@/store/jobSlice";
 
 interface Job {
   id: number;
@@ -44,9 +45,11 @@ export const JobCard = ({ job, onApply, showShortlistButton = true, isShortlistP
   const isMobile = useIsMobile();
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [verify, setVerify] = useState(false)
   const { toast } = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleShortlistToggle = () => {
     if (!isLoggedIn || userRole !== 'freelancer') {
@@ -64,6 +67,24 @@ export const JobCard = ({ job, onApply, showShortlistButton = true, isShortlistP
         title: !wasShortlisted ? "Job added to shortlist" : "Job removed from shortlist"
       });
     }
+  };
+
+  const handleReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!authVar?.isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+    setShowReportModal(true);
+  };
+
+  const submitReport = (reason: string, details?: string) => {
+    const payload = {
+      reportedEntityId: job._id || job.id,
+      reason,
+      details
+    };
+    dispatch(submitJobReportAction(payload, userRole === 'freelancer', () => setShowReportModal(false)));
   };
 
   const handleApply = () => {
@@ -117,20 +138,30 @@ export const JobCard = ({ job, onApply, showShortlistButton = true, isShortlistP
 
               </div>
             </div>
-            {showShortlistButton && userRole === 'freelancer' && (
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleShortlistToggle}
-                className={`p-2 hover:bg-transparent ${isShortlistPage ? 'text-red-500 hover:text-red-600' : isShortlisted ? 'text-red-500 hover:text-red-600' : 'text-muted-foreground hover:text-red-500'}`}
+                onClick={handleReport}
+                className="p-2 text-muted-foreground hover:text-red-500 hover:bg-transparent"
               >
-                {isShortlistPage ? (
-                  <X className="h-5 w-5" />
-                ) : (
-                  <Heart className={`h-5 w-5 ${isShortlisted ? 'fill-current' : ''}`} />
-                )}
+                <Flag className="h-4 w-4" />
               </Button>
-            )}
+              {showShortlistButton && userRole === 'freelancer' && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleShortlistToggle}
+                  className={`p-2 hover:bg-transparent ${isShortlistPage ? 'text-red-500 hover:text-red-600' : isShortlisted ? 'text-red-500 hover:text-red-600' : 'text-muted-foreground hover:text-red-500'}`}
+                >
+                  {isShortlistPage ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Heart className={`h-5 w-5 ${isShortlisted ? 'fill-current' : ''}`} />
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Job title */}
@@ -219,6 +250,13 @@ export const JobCard = ({ job, onApply, showShortlistButton = true, isShortlistP
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={submitReport}
+      />
     </>
   );
 };

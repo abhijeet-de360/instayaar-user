@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Star, MapPin, Heart } from "lucide-react";
+import { Star, MapPin, Heart, Flag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useShortlist } from "@/hooks/useShortlist";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
@@ -10,8 +10,10 @@ import type { Freelancer } from "@/types/freelancerTypes";
 import { LoginModal } from "../auth/LoginModal";
 import { useState } from "react";
 import { localService } from "@/shared/_session/local";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/store/store";
+import { ReportModal } from "@/components/shared/ReportModal";
+import { submitServiceReportAction } from "@/store/ServiceSlice";
 
 interface FreelancerCardMobileProps {
   freelancer: Freelancer;
@@ -25,6 +27,7 @@ export const FreelancerCardMobile = ({
   className = "",
 }: FreelancerCardMobileProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const { isShortlisted, toggleShortlist } = useShortlist();
   const { checkAuth } = useAuthCheck();
   const { userRole, isLoggedIn } = useUserRole();
@@ -39,6 +42,7 @@ export const FreelancerCardMobile = ({
   };
 
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const handleShortlistAfterAuth = () => {
     if (userRole !== "employer") {
@@ -78,6 +82,24 @@ export const FreelancerCardMobile = ({
   const handleViewProfile = (e: React.MouseEvent) => {
     e.stopPropagation();
     navigate(`/freelancer-profile/${freelancer?._id}`);
+  };
+
+  const handleReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!authVar?.isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+    setShowReportModal(true);
+  };
+
+  const submitReport = (reason: string, details?: string) => {
+    const payload = {
+      reportedEntityId: freelancer.freelancerId?._id || freelancer._id,
+      reason,
+      details
+    };
+    dispatch(submitServiceReportAction(payload, userRole === 'freelancer', () => setShowReportModal(false)));
   };
 
 
@@ -157,6 +179,15 @@ export const FreelancerCardMobile = ({
                 >
                   Profile
                 </Button>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className="h-10 w-10 shrink-0 border-gray-200"
+                  onClick={handleReport}
+                  title="Report User"
+                >
+                  <Flag className="h-3.5 w-3.5 text-red-500 hover:text-red-700" />
+                </Button>
                 {/* <Button
                   size="icon"
                   variant="outline"
@@ -189,6 +220,12 @@ export const FreelancerCardMobile = ({
         onClose={() => setShowLoginModal(false)}
         onLoginSuccess={() => { }}
         isMobile={true}
+      />
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={submitReport}
+        title="Report Freelancer"
       />
     </>
   );

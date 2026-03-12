@@ -316,3 +316,23 @@ export function completJobApplication(id, otp) {
     }
   };
 }
+
+export function submitJobReportAction(payload: { reportedEntityId: string; reason: string; details?: string }, isFreelancer: boolean = false, onSuccess?: () => void) {
+    return async function submitJobReportThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        try {
+            const response = isFreelancer 
+                ? await service.submitFreelancerJobReportApi(payload)
+                : await service.submitJobReportApi(payload);
+                
+            if (response.data?.success || response.status === 201) {
+                dispatch(successHandler(response.data?.message || "Job reported successfully for investigation"));
+                if (onSuccess) onSuccess();
+            }
+        } catch (error: any) {
+            dispatch(errorHandler(error?.response || error));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}

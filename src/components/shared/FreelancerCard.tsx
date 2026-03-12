@@ -1,18 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, Heart } from "lucide-react";
+import { Star, MapPin, Heart, Flag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useShortlist } from "@/hooks/useShortlist";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
 import { useUserRole } from "@/contexts/UserRoleContext";
 import { toast } from "sonner";
 import type { Freelancer } from "@/types/freelancerTypes";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/store/store";
 import { localService } from "@/shared/_session/local";
 import { LoginModal } from "../auth/LoginModal";
+import { ReportModal } from "@/components/shared/ReportModal";
 import { useState } from "react";
+import { submitServiceReportAction } from "@/store/ServiceSlice";
 
 interface FreelancerCardProps {
   freelancer: Freelancer;
@@ -23,8 +25,10 @@ interface FreelancerCardProps {
 
 export const FreelancerCard = ({ freelancer, variant = "default", showPrice = true, className = "" }: FreelancerCardProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const { isShortlisted, toggleShortlist } = useShortlist();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
   const { checkAuth } = useAuthCheck();
   const { userRole } = useUserRole();
   const authVar = useSelector((state: RootState) => state.auth);
@@ -71,9 +75,23 @@ export const FreelancerCard = ({ freelancer, variant = "default", showPrice = tr
     navigate(`/freelancer-profile/${freelancer.freelancerId._id}`);
   };
 
+  const handleReport = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!authVar?.isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+    setShowReportModal(true);
+  };
 
-
-  if (variant === "compact") {
+  const submitReport = (reason: string, details?: string) => {
+    const payload = {
+      reportedEntityId: freelancer.freelancerId._id,
+      reason,
+      details
+    };
+    dispatch(submitServiceReportAction(payload, userRole === 'freelancer', () => setShowReportModal(false)));
+  };  if (variant === "compact") {
     return (
       <Card className={`overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${className}`}>
         <CardContent className="p-0">
@@ -95,15 +113,17 @@ export const FreelancerCard = ({ freelancer, variant = "default", showPrice = tr
                   <h3 className="font-semibold text-base leading-tight">{freelancer.freelancerId.firstName}</h3>
                   <p className="text-sm text-muted-foreground">{freelancer.primaryService} | Available</p>
                 </div>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8"
-                  onClick={handleShortlist}
-                >
-                  <Heart className={`h-4 w-4 transition-colors ${isShortlisted(freelancer.id) ? 'text-red-500 fill-current' : 'text-gray-600'
-                    }`} />
-                </Button>
+                <div className="flex gap-1">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="h-8 w-8"
+                    onClick={handleShortlist}
+                  >
+                    <Heart className={`h-4 w-4 transition-colors ${isShortlisted(freelancer.id) ? 'text-red-500 fill-current' : 'text-gray-600'
+                      }`} />
+                  </Button>
+                </div>
               </div>
 
               <div className="flex items-center gap-3 text-xs">
@@ -141,6 +161,15 @@ export const FreelancerCard = ({ freelancer, variant = "default", showPrice = tr
                 >
                   View Profile
                 </Button>
+                <Button
+                  size="icon"
+                  variant="outline"
+                  className="h-8 w-8 px-0 shrink-0 border-gray-200"
+                  onClick={handleReport}
+                  title="Report User"
+                >
+                  <Flag className="h-3.5 w-3.5 text-red-500 hover:text-red-700" />
+                </Button>
               </div>
             </div>
           </div>
@@ -159,17 +188,6 @@ export const FreelancerCard = ({ freelancer, variant = "default", showPrice = tr
             className="w-full h-full object-cover"
 
           />
-          {/* <div className="absolute top-3 right-3">
-          <Button
-            size="sm"
-            variant="ghost"
-            className="h-8 w-8 p-0 bg-background/80 hover:bg-background"
-            onClick={handleShortlist}
-          >
-            <Heart className={`h-4 w-4 transition-colors ${isShortlisted(freelancer.id) ? 'text-red-500 fill-current' : 'text-gray-600'
-              }`} />
-          </Button>
-        </div> */}
         </div>
 
         <CardContent className="p-4">
@@ -201,14 +219,24 @@ export const FreelancerCard = ({ freelancer, variant = "default", showPrice = tr
             </div>
           )}
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full"
-            onClick={handleViewProfile}
-          >
-            View Profile
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={handleViewProfile}
+            >
+              View Profile
+            </Button>
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={handleReport}
+              title="Report User"
+              className="h-9 w-9 shrink-0 border-gray-200"
+            >
+              <Flag className="h-3.5 w-3.5 text-red-500 hover:text-red-700" />
+            </Button>
+          </div>
         </CardContent>
       </Card>
       <LoginModal
@@ -216,6 +244,12 @@ export const FreelancerCard = ({ freelancer, variant = "default", showPrice = tr
         onClose={() => setShowLoginModal(false)}
         onLoginSuccess={() => { }}
         isMobile={false}
+      />
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={submitReport}
+        title="Report Freelancer"
       />
     </>
   );

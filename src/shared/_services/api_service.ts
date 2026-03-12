@@ -6,8 +6,8 @@ import { authHeader } from "../_helper/auth-header";
 
 //  export const rootUrl = 'https://server.instayaar.com/api/v1/';
 // export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
-// export const rootUrl = 'http://localhost:3230/api/v1/';
-export const rootUrl = 'https://4xwn5v2s-3230.inc1.devtunnels.ms/api/v1/';
+export const rootUrl = 'http://localhost:3230/api/v1/';
+// export const rootUrl = 'https://4xwn5v2s-3230.inc1.devtunnels.ms/api/v1/';
 
 
 export const socketUrl = 'https://server.instayaar.com';
@@ -30,6 +30,7 @@ const widthrawalUrl = rootUrl + 'freelancer'
 const dashboardUrl = rootUrl + 'dashboard'
 const serviceReview = rootUrl + 'serviceReview'
 const jobReview = rootUrl + 'jobReview'
+const reportUrl = rootUrl + 'report'
 
 
 // ===================== User Auth ===========================
@@ -588,6 +589,31 @@ async function getBookingsForFreelancerInstant(limit, offset, lat, lng){
   });
 }
 
+// =================== Report =================================
+async function submitServiceReport(data) {
+  return await axios.post(reportUrl + '/service', data, {
+    headers: await authHeader('')
+  })
+}
+
+async function submitFreelancerServiceReport(data) {
+  return await axios.post(reportUrl + '/service/freelancer', data, {
+    headers: await authHeader('')
+  })
+}
+
+async function submitJobReportApi(data) {
+  return await axios.post(reportUrl + '/job', data, {
+    headers: await authHeader('')
+  })
+}
+
+async function submitFreelancerJobReportApi(data) {
+  return await axios.post(reportUrl + '/job/freelancer', data, {
+    headers: await authHeader('')
+  })
+}
+
 
 
 
@@ -626,7 +652,7 @@ export const service = {
 
   searchService, 
 
-  setOffDays, 
-  
   setInstantBooking, getInstantBookingData, postInstantBooking, getBookingsForFreelancerInstant, 
+  
+  submitServiceReport, submitFreelancerServiceReport, submitJobReportApi, submitFreelancerJobReportApi,
 }

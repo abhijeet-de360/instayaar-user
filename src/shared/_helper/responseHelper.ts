@@ -8,9 +8,9 @@ const isNative = Capacitor.isNativePlatform();
 
 export const errorHandler = async (res) => {
   if (res.status === 401) {
-    sessionService.clearAll();
-    localService.clearAll();
-    window.location.href = "/";
+    // sessionService.clearAll();
+    // localService.clearAll();
+    // window.location.href = "/";
   }
 
   const message = Array.isArray(res.data.message)
@@ -23,7 +23,7 @@ export const errorHandler = async (res) => {
       duration: "short",
     });
   } else {
-    sonnerToast.error(message, {duration: 700});
+    sonnerToast.error(message, { duration: 700 });
   }
 };
 
@@ -34,7 +34,7 @@ export const successHandler = async (msg) => {
       duration: "short",
     });
   } else {
-    sonnerToast.success(msg, {duration: 700});
+    sonnerToast.success(msg, { duration: 700 });
   }
 };
 
@@ -45,6 +45,6 @@ export const warningHandler = async (msg) => {
       duration: "short",
     });
   } else {
-    sonnerToast.warning(msg,{duration: 700});
+    sonnerToast.warning(msg, { duration: 700 });
   }
 };

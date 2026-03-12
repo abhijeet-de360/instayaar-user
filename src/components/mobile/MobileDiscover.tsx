@@ -9,22 +9,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetHeader } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "../ui/label";
-import { Users, Clock, MapPin, Heart, StarIcon, Map, MapPinCheckIcon, MapPinIcon, Search, CircleCheckBig } from "lucide-react";
+import { Users, Clock, MapPin, Heart, StarIcon, Map, MapPinCheckIcon, MapPinIcon, Search, CircleCheckBig, Flag } from "lucide-react";
 import freelancerData from "@/data/freelancerData.json";
 import type { FreelancerData, Freelancer } from "@/types/freelancerTypes";
 import { FreelancerCardMobile } from "@/components/shared/FreelancerCardMobile";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { getAllFreelancer } from "@/store/freelancerSlice";
-import { getServiceByCategoryId } from "@/store/ServiceSlice";
+import { getServiceByCategoryId, submitServiceReportAction } from "@/store/ServiceSlice";
+import { submitJobReportAction } from "@/store/jobSlice";
 import { LoginModal } from "../auth/LoginModal";
+import { ReportModal } from "@/components/shared/ReportModal";
 import { localService } from "@/shared/_session/local";
 import { searchService } from "@/store/searchSlice";
 import { Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { toast } from "sonner";
 
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
@@ -69,6 +71,7 @@ const MobileDiscover = () => {
   const [isTopRated, setIsTopRated] = useState(false);
   const [visibleFreelancers, setVisibleFreelancers] = useState(6);
   const [showMobileAuth, setShowMobileAuth] = useState(false);
+  const [reportJobId, setReportJobId] = useState<string | null>(null);
   const categoryVar = useSelector((state: RootState) => state.category);
   const searchVar = useSelector((state: RootState) => state?.search);
   const [open, setOpen] = useState(false)
@@ -185,6 +188,25 @@ const MobileDiscover = () => {
 
   const handleMobileProfileClick = () => {
     setShowMobileAuth(true);
+  };
+
+  const handleReportJob = (e: React.MouseEvent, jobId: string) => {
+    e.stopPropagation();
+    if (!authVar?.isAuthenticated) {
+      setShowMobileAuth(true);
+      return;
+    }
+    setReportJobId(jobId);
+  };
+
+  const submitJobReport = (reason: string, details?: string) => {
+    if (!reportJobId) return;
+    const payload = {
+      reportedEntityId: reportJobId,
+      reason,
+      details
+    };
+    dispatch(submitJobReportAction(payload, userRole === 'freelancer', () => setReportJobId(null)));
   };
 
   const allFreelancers = (freelancerData as FreelancerData).freelancers;
@@ -383,8 +405,13 @@ const MobileDiscover = () => {
                           {job.category}
                         </Badge>
                       </div>
-                      <Button size="icon" variant="ghost" className="h-8 w-8">
-                        <Heart className="h-4 w-4" />
+                      <Button 
+                        size="icon" 
+                        variant="outline" 
+                        className="h-8 w-8 bg-white shadow-sm rounded-full"
+                        onClick={(e) => handleReportJob(e, String(job.id))}
+                      >
+                        <Flag className="h-4 w-4 text-red-500" />
                       </Button>
                     </div>
                     <h3 className="font-semibold text-base leading-tight">{job.title}</h3>
@@ -423,6 +450,12 @@ const MobileDiscover = () => {
         onClose={() => setShowMobileAuth(false)}
         onLoginSuccess={handleLogin}
         isMobile={isMobile}
+      />
+      <ReportModal
+        isOpen={!!reportJobId}
+        onClose={() => setReportJobId(null)}
+        onSubmit={submitJobReport}
+        title="Report Job Posting"
       />
     </div>
   );

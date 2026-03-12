@@ -222,3 +222,22 @@ export function getServicesByFreelancer(id: string) {
     };
 }
 
+export function submitServiceReportAction(payload: { reportedEntityId: string; reason: string; details?: string }, isFreelancer: boolean = false, onSuccess?: () => void) {
+    return async function submitReportThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        try {
+            const response = isFreelancer 
+                ? await service.submitFreelancerServiceReport(payload)
+                : await service.submitServiceReport(payload);
+                
+            if (response.data?.success || response.status === 201) {
+                successHandler(response.data?.message || "Reported successfully for investigation");
+                if (onSuccess) onSuccess();
+            }
+        } catch (error: any) {
+            errorHandler(error?.response || error);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}

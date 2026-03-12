@@ -13,7 +13,9 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Star, MapPin, Filter, Search, Heart, Users, Clock, SlidersHorizontal } from "lucide-react";
+import { Star, MapPin, Filter, Search, Heart, Users, Clock, SlidersHorizontal, Flag } from "lucide-react";
+import { toast } from "sonner";
+import { ReportModal } from "@/components/shared/ReportModal";
 
 import freelancerData from "@/data/freelancerData.json";
 import type { FreelancerData, Freelancer } from "@/types/freelancerTypes";
@@ -23,7 +25,8 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllFreelancer } from "@/store/freelancerSlice";
 import { AppDispatch, RootState } from "@/store/store";
-import { getServiceByCategoryId } from "@/store/ServiceSlice";
+import { getServiceByCategoryId, submitServiceReportAction } from "@/store/ServiceSlice";
+import { submitJobReportAction } from "@/store/jobSlice";
 import { localService } from "@/shared/_session/local";
 import { LoginModal } from "@/components/auth/LoginModal";
 
@@ -38,6 +41,7 @@ const Discover = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { userRole, isLoggedIn } = useUserRole();
   const { isMobile, } = useAuthCheck();
+  const [reportJobId, setReportJobId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -57,6 +61,25 @@ const Discover = () => {
 
   const handleLogin = (role: string) => {
 
+  };
+
+  const handleReportJob = (e: React.MouseEvent, jobId: string) => {
+    e.stopPropagation();
+    if (!authVar?.isAuthenticated) {
+      setShowMobileAuth(true);
+      return;
+    }
+    setReportJobId(jobId);
+  };
+
+  const submitJobReport = (reason: string, details?: string) => {
+    if (!reportJobId) return;
+    const payload = {
+      reportedEntityId: reportJobId,
+      reason,
+      details
+    };
+    dispatch(submitJobReportAction(payload, userRole === 'freelancer', () => setReportJobId(null)));
   };
 
 
@@ -315,7 +338,16 @@ const Discover = () => {
                           <h3 className="font-semibold text-lg mb-2">{job.title}</h3>
                           <p className="text-muted-foreground text-sm">{job.description}</p>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right flex flex-col items-end gap-2 z-10">
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            className="h-8 w-8 -mr-2 -mt-2 bg-white border-gray-200 shadow-sm"
+                            onClick={(e) => handleReportJob(e, String(job.id))}
+                            title="Report Job"
+                          >
+                            <Flag className="h-4 w-4 text-red-500 hover:text-red-700" />
+                          </Button>
                           <div className="text-xl font-bold text-primary">{job.budget}</div>
                         </div>
                       </div>

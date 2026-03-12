@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Checkbox } from "@/components/ui/checkbox";
 import { X } from "lucide-react";
 import { localService } from "@/shared/_session/local";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { freelancerSendOtp, freelancerVerifyOtp, setRole, userSendOtp, userVerifyOtp, } from "@/store/authSlice";
+import { ClientAgreementText, FreelancerAgreementText } from "./AgreementTexts";
+
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -20,11 +24,23 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>()
   const authVar = useSelector((state: RootState) => state.auth)
-  const [step, setStep] = useState<'phone' | 'otp' | 'role'>('role');
+  const [step, setStep] = useState<'phone' | 'otp' | 'role' | 'terms'>('role');
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [otpTimer, setOtpTimer] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [selectedTempRole, setSelectedTempRole] = useState<'user' | 'freelancer' | null>(null);
+  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  const viewportRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (step === 'terms' && viewportRef.current) {
+      if (viewportRef.current.scrollHeight <= viewportRef.current.clientHeight + 1) {
+        setHasScrolledToBottom(true);
+      }
+    }
+  }, [step, selectedTempRole]);
 
   const [formData, setFromData] = useState({
     phoneNumber: '',
@@ -69,8 +85,17 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
 
 
   const handleRoleSelection = (role: 'user' | 'freelancer') => {
-    dispatch(setRole(role))
-    setStep("phone")
+    setSelectedTempRole(role);
+    setAgreedToTerms(false);
+    setHasScrolledToBottom(false);
+    setStep('terms');
+  };
+
+  const handleTermsAccept = () => {
+    if (agreedToTerms && selectedTempRole) {
+      dispatch(setRole(selectedTempRole));
+      setStep("phone");
+    }
   };
 
 
@@ -89,11 +114,20 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
   const handleOtpChange = (value: string) => {
     setFromData((prev) => ({ ...prev, otp: value }));
   };
-  const AuthContent = () => <div className="space-y-6">
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const bottom = e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight + 1;
+    if (bottom) {
+      setHasScrolledToBottom(true);
+    }
+  };
+
+  const authContent = <div className="space-y-6">
     <div className="flex justify-between items-center">
       <h2 className="text-xl font-semibold text-foreground">
         {step === 'phone' && 'Welcome to InstaYaar'}
         {step === 'otp' && 'Enter OTP'}
+        {step === 'terms' && 'Terms & Conditions'}
         {/* {step === 'role' && 'Select your Role'} */}
       </h2>
 
@@ -136,8 +170,8 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
       {otpTimer === 0 && <Button variant="ghost" onClick={handleSendOtp} className="w-full">
         Resend OTP
       </Button>}
-      <Button onClick={handleVerifyOtp} disabled={formData?.otp.length !== 6 || authVar?.status === 'loading'} className="w-full">
-        {authVar?.status === 'loading' ? 'Verifying...' : 'Verify OTP'}
+      <Button onClick={handleVerifyOtp} disabled={formData?.otp.length !== 6 || (authVar?.status as string) === 'loading'} className="w-full">
+        {(authVar?.status as string) === 'loading' ? 'Verifying...' : 'Verify OTP'}
       </Button>
     </div>}
 
@@ -158,6 +192,46 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
       </div>
     </div>}
 
+    {step === 'terms' && <div className="space-y-6">
+      <div className="bg-muted rounded-md border overflow-hidden">
+        <ScrollArea className="h-[240px] w-full p-4" viewportRef={viewportRef} onScrollViewport={handleScroll}>
+          {selectedTempRole === 'user' ? <ClientAgreementText /> : <FreelancerAgreementText />}
+        </ScrollArea>
+      </div>
+      <div className="flex items-start space-x-3">
+        <Checkbox 
+          id="terms" 
+          checked={agreedToTerms} 
+          disabled={!hasScrolledToBottom}
+          onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)} 
+        />
+        <label
+          htmlFor="terms"
+          className={`text-sm font-medium leading-none mt-1 cursor-pointer select-none ${hasScrolledToBottom ? '' : 'opacity-70 cursor-not-allowed'}`}
+        >
+          {hasScrolledToBottom 
+            ? "I agree to the terms stating that objectionable content is not allowed."
+            : "Please scroll to the bottom of the terms to agree."}
+        </label>
+      </div>
+      <div className="flex gap-3">
+        <Button 
+          variant="outline" 
+          onClick={() => setStep('role')} 
+          className="w-full flex-1"
+        >
+          Back
+        </Button>
+        <Button 
+          onClick={handleTermsAccept} 
+          disabled={!agreedToTerms} 
+          className="w-full flex-1"
+        >
+          Accept
+        </Button>
+      </div>
+    </div>}
+
     <p className="text-xs text-muted-foreground text-center">
       By continuing, you agree to our <Link to={'/terms&condition'} target="_blank" className="font-semibold underline text-primary" >Terms</Link> & <Link to={'/privacy-policy'} target="_blank" className="font-semibold underline text-primary">Privacy Policy</Link>.
     </p>
@@ -168,7 +242,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
       setStep('role')
     }}>
       <SheetContent side="bottom" className="rounded-t-lg">
-        <AuthContent />
+        {authContent}
       </SheetContent>
     </Sheet>;
   }
@@ -177,7 +251,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess, isMobile = false }
     setStep('role')
   }}>
     <DialogContent className="sm:max-w-md mx-4 rounded-lg">
-      <AuthContent />
+      {authContent}
     </DialogContent>
   </Dialog>;
 };

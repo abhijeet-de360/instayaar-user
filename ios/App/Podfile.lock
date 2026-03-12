@@ -19,6 +19,9 @@ PODS:
     - Capacitor
   - CapacitorPushNotifications (8.0.0):
     - Capacitor
+  - CapacitorRazorpay (1.3.0):
+    - Capacitor
+    - razorpay-pod
   - CapacitorStatusBar (8.0.0):
     - Capacitor
   - CapacitorToast (8.0.0):
@@ -28,6 +31,9 @@ PODS:
   - CapgoInappbrowser (8.1.15):
     - Capacitor
   - IONGeolocationLib (2.0.0)
+  - razorpay-core-pod (1.0.3)
+  - razorpay-pod (1.5.2):
+    - razorpay-core-pod (= 1.0.3)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -40,6 +46,7 @@ DEPENDENCIES:
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorLocalNotifications (from `../../node_modules/@capacitor/local-notifications`)"
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
+  - CapacitorRazorpay (from `../../node_modules/capacitor-razorpay`)
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
   - "CapawesomeCapacitorAppUpdate (from `../../node_modules/@capawesome/capacitor-app-update`)"
@@ -48,6 +55,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - IONGeolocationLib
+    - razorpay-core-pod
+    - razorpay-pod
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -70,6 +79,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/local-notifications"
   CapacitorPushNotifications:
     :path: "../../node_modules/@capacitor/push-notifications"
+  CapacitorRazorpay:
+    :path: "../../node_modules/capacitor-razorpay"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorToast:
@@ -90,12 +101,15 @@ SPEC CHECKSUMS:
   CapacitorKeyboard: d7868c079a4d5277a3deca27a10a488fcbbb8b69
   CapacitorLocalNotifications: 177cfbf8228d9bd82a147e094cb7984d7afb9e29
   CapacitorPushNotifications: 722c1528eabbefd355f47e373a4c6235d01e85e9
+  CapacitorRazorpay: 838a2b4e3c67f2b0e65193311b83471c5a8009d1
   CapacitorStatusBar: 312e2e67928dfe9514c4a8916a1fd610552f5f35
   CapacitorToast: aefebcd4cead9f44a04ace80c66a7eb4031751e7
   CapawesomeCapacitorAppUpdate: 02d66677e9ae97d851a358207f7e7df40b22aa72
   CapgoInappbrowser: 18f8aaa785c1dd8d5d55710e750f5363dc6e7c4c
   IONGeolocationLib: a5e40b54edc2ee9902036eda5aaa41ddf07bb68d
+  razorpay-core-pod: ef0309dbf8e3e5a1330f6cad89dcf9226d8ef758
+  razorpay-pod: a9cb6e158aee8754053b147008eff6b4897789c8
 
-PODFILE CHECKSUM: f564b2f2679b5ad8358b398655ee16e016cbcb68
+PODFILE CHECKSUM: 4c256238fc6e8133cbb7816969a67cca42667261
 
 COCOAPODS: 1.16.2
