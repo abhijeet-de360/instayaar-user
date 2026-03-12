@@ -320,7 +320,24 @@ export function updateFreelancer(data, image, panImage, aadharFrontImage, aadhar
         }
     };
 }
+export function updateFreelancerCategory(categoryIds) {
+    return async function updateUserThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        dispatch(setStatus(STATUSES.LOADING));
 
+        try {
+            const response = await service.updateFreelancerCategoryData(categoryIds);
+            dispatch(getFreelancerProfile());
+            dispatch(setLoading(false));
+        } catch (error) {
+            errorHandler(error?.response);
+            dispatch(setStatus(STATUSES.ERROR));
+        } finally {
+            dispatch(getFreelancerProfile());
+            dispatch(setLoading(false));
+        }
+    };
+}
 export function updateFreelancerImage(image) {
     return async function updateFreelancerImageThunk(dispatch) {
         dispatch(setLoading(true));

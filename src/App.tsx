@@ -71,6 +71,7 @@ import { AppUpdate, AppUpdateAvailability, AppUpdateResultCode, FlexibleUpdateIn
 import { PrivateRoute } from "./components/auth/PrivateRoute";
 import Agreement from "./pages/Agreement";
 import ClientAgreement from "./pages/ClientAgreement";
+import MobileMyCategories from "./pages/MobileMyCategories";
 
 
 
@@ -440,6 +441,7 @@ const App = () => {
                 <Route path="/browse-jobs" element={<PrivateRoute><BrowseJobs /></PrivateRoute>} />
                 <Route path="/my-services" element={<PrivateRoute><MyServices /></PrivateRoute>} />
                 <Route path="/earnings" element={<PrivateRoute><Earnings /></PrivateRoute>} />
+                <Route path="/my-categories" element={< MobileMyCategories />} />
                 <Route path="/my-jobs" element={<PrivateRoute><MyJobs /></PrivateRoute>} />
                 <Route path="/applied-jobs" element={<PrivateRoute><AppliedJobs /></PrivateRoute>} />
                 <Route path="/create-service" element={<PrivateRoute><CreateService /></PrivateRoute>} />

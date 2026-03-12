@@ -4,9 +4,9 @@ import { authHeader } from "../_helper/auth-header";
 
 
 
-//  export const rootUrl = 'https://server.instayaar.com/api/v1/';
+ export const rootUrl = 'https://server.instayaar.com/api/v1/';
 // export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
-export const rootUrl = 'http://localhost:3230/api/v1/';
+// export const rootUrl = 'http://localhost:3230/api/v1/';
 // export const rootUrl = 'https://4xwn5v2s-3230.inc1.devtunnels.ms/api/v1/';
 
 
@@ -123,6 +123,11 @@ async function updateFreelancerdata(payload) {
   });
 }
 
+async function updateFreelancerCategoryData(categoryIds) {
+  return await axios.patch(freelancerUrl + '/profile/category', { categoryIds }, {
+    headers: await authHeader('')
+  });
+}
 
 async function updateFreelancerProfile(image) {
   return await axios.put(freelancerUrl + '/image', {image}, {
@@ -622,7 +627,7 @@ async function submitFreelancerJobReportApi(data) {
 export const service = {
   userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify,  deleteUserProfile, userChangeAgreement,
 
-  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp,deleteFreelancerProfile, freelancerChangeAgreement, 
+  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerCategoryData, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp,deleteFreelancerProfile, freelancerChangeAgreement, 
 
   getCategories,
 

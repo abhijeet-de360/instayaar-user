@@ -24,12 +24,10 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app may access your location in the background to update nearby posts and location-based content even when the app is not open.</string>
-
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app uses your location while the app is open to show nearby users, posts, and services based on your current city.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app uses your location to help you discover nearby users and location-based content even when the app is running in the background.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs camera access so you can take a profile photo or upload images when creating posts.</string>
 

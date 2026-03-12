@@ -27,6 +27,7 @@ import {
   Calendar1,
   User2Icon,
   Zap,
+  Layers,
 } from "lucide-react";
 import { useUserRole } from "@/contexts/UserRoleContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -72,12 +73,9 @@ export const MobileDashboardSidebar = () => {
         // { icon: Briefcase, label: 'Active Jobs', href: '/my-jobs' },
         // { icon: Heart, label: 'My Shortlist', href: '/shortlist-jobs' },
         { icon: Shield, label: "My Earnings", href: "/earnings" },
+        { icon: Layers, label: 'My Categories', href: '/my-categories' },
         { icon: CreditCard, label: "Payouts", href: "/wallet" },
-        {
-          icon: Star,
-          label: "Reviews & Ratings",
-          href: `/freelancer-reviews/${authVar?.freelancer?._id}`,
-        },
+        { icon: Star, label: "Reviews & Ratings", href: `/freelancer-reviews/${authVar?.freelancer?._id}`, },
         { icon: User2Icon, label: "Profile", href: "/account-settings" },
         { icon: Calendar1, label: "Blocked Dates", href: "/offday" },
         { icon: Zap, label: "Instant Booking", href: "/instant-booking" },
@@ -154,7 +152,7 @@ export const MobileDashboardSidebar = () => {
                   }
                 }
 
-                if(localService.get('role') === 'freelancer'){
+                if (localService.get('role') === 'freelancer') {
                   if (item.href === "/offday" && authVar.freelancer.status !== 'active') {
                     e.preventDefault();
                     setIsOpen(false);

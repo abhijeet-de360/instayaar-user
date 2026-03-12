@@ -293,7 +293,7 @@ const AccountSettings = () => {
       window.open(url, "_blank", "noopener,noreferrer");
     }
   };
-  
+
   const isValidPan = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData?.panNo || "");
 
   return (
@@ -758,7 +758,10 @@ const AccountSettings = () => {
                           className={`${isMobile ? "w-12 h-12" : "w-16 h-16"} rounded-full bg-muted flex items-center justify-center cursor-pointer overflow-hidden`}
                         >
                           <input
-                            {...getInputProps({ refKey: "ref" })}
+                            {...getInputProps({
+                              refKey: "ref", accept: "image/*",
+                              capture: undefined
+                            })}
                             ref={(el) => (inputRef.current = el)}
                           />
                           {preview || (typeof formData?.image === "string" && formData?.image) ? (
