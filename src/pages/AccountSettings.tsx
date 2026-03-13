@@ -11,7 +11,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { aadharVerify, emailSendOtp, emailVerifyOtp, getFreelancerProfile, updateFreelancer, updateFreelancerImage, updateUser, updateUserProfile, } from "@/store/authSlice";
+import { aadharVerify, emailSendOtp, emailVerifyOtp, getFreelancerProfile, setLogout, updateFreelancer, updateFreelancerImage, updateUser, updateUserProfile, } from "@/store/authSlice";
 import { localService } from "@/shared/_session/local";
 import Dropzone from "react-dropzone";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
@@ -21,6 +21,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import { Capacitor } from "@capacitor/core";
 import { Browser } from "@capacitor/browser";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const AccountSettings = () => {
   const authVar = useSelector((state: RootState) => state.auth);
@@ -66,7 +67,9 @@ const AccountSettings = () => {
     pincode: ''
   });
 
-
+  const handleDelete = () => {
+    dispatch(setLogout(navigate))
+  }
 
   const isFileOrUrl = (val) =>
     val instanceof File || (typeof val === "string" && val.trim() !== "");
@@ -1005,7 +1008,29 @@ const AccountSettings = () => {
             </Card>
           </div>
         </div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button className="w-full" variant="destructive">
+              Account Delete
+            </Button>
+          </AlertDialogTrigger>
 
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription className="leading-relaxed">
+                Your account will be permanently deleted after 15 days. If you change your mind, you can cancel the request by logging in before this period ends.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete} className="bg-red-600">
+                Yes, Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       <MobileBottomNav />
