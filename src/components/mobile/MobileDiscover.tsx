@@ -9,50 +9,26 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "../ui/label";
-import { Users, Clock, MapPin, Heart, StarIcon, Map, MapPinCheckIcon, MapPinIcon, Search, CircleCheckBig, Flag } from "lucide-react";
+import { Users, Clock, MapPin, MapPinIcon, Flag } from "lucide-react";
 import freelancerData from "@/data/freelancerData.json";
 import type { FreelancerData, Freelancer } from "@/types/freelancerTypes";
 import { FreelancerCardMobile } from "@/components/shared/FreelancerCardMobile";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { getAllFreelancer } from "@/store/freelancerSlice";
-import { getServiceByCategoryId, submitServiceReportAction } from "@/store/ServiceSlice";
+import { getGuestServiceByCategoryId, getServiceByCategoryId } from "@/store/ServiceSlice";
 import { submitJobReportAction } from "@/store/jobSlice";
 import { LoginModal } from "../auth/LoginModal";
 import { ReportModal } from "@/components/shared/ReportModal";
 import { localService } from "@/shared/_session/local";
 import { searchService } from "@/store/searchSlice";
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { toast } from "sonner";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, } from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "../ui/dialog";
+
 
 const MobileDiscover = () => {
   const navigate = useNavigate();
@@ -65,11 +41,6 @@ const MobileDiscover = () => {
   const { handleLogin, isMobile } = useAuthCheck();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [isVerifiedOnly, setIsVerifiedOnly] = useState(false);
-  const [isAvailableToday, setIsAvailableToday] = useState(false);
-  const [isTopRated, setIsTopRated] = useState(false);
-  const [visibleFreelancers, setVisibleFreelancers] = useState(6);
   const [showMobileAuth, setShowMobileAuth] = useState(false);
   const [reportJobId, setReportJobId] = useState<string | null>(null);
   const categoryVar = useSelector((state: RootState) => state.category);
@@ -114,7 +85,10 @@ const MobileDiscover = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(getServiceByCategoryId("", formData?.lat, formData?.lng))
+    if (authVar.isAuthenticated)
+      dispatch(getServiceByCategoryId("", formData?.lat, formData?.lng))
+    else
+      dispatch(getGuestServiceByCategoryId("", formData?.lat, formData?.lng))
   }, [formData?.lat, formData?.lng])
 
   const fetchAddressSuggestions = (input: string) => {
@@ -405,9 +379,9 @@ const MobileDiscover = () => {
                           {job.category}
                         </Badge>
                       </div>
-                      <Button 
-                        size="icon" 
-                        variant="outline" 
+                      <Button
+                        size="icon"
+                        variant="outline"
                         className="h-8 w-8 bg-white shadow-sm rounded-full"
                         onClick={(e) => handleReportJob(e, String(job.id))}
                       >

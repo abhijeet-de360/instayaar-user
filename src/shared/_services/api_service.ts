@@ -4,15 +4,15 @@ import { authHeader } from "../_helper/auth-header";
 
 
 
-//  export const rootUrl = 'https://server.instayaar.com/api/v1/';
+ export const rootUrl = 'https://server.instayaar.com/api/v1/';
 // export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
-export const rootUrl = 'http://localhost:3230/api/v1/';
+// export const rootUrl = 'http://localhost:3230/api/v1/';
 // export const rootUrl = 'https://4xwn5v2s-3230.inc1.devtunnels.ms/api/v1/';
 
 
-// export const socketUrl = 'https://server.instayaar.com';
+export const socketUrl = 'https://server.instayaar.com';
 // export const socketUrl = 'http://192.168.1.3:3230';
-export const socketUrl = 'http://localhost:3230';
+// export const socketUrl = 'http://localhost:3230';
 
 
 
@@ -263,6 +263,9 @@ async function getServiceByCategoryId(id, lat, lng) {
   return await axios.get(serviceUrl + `/user/byCategory?categoryId=${id}&lat=${lat}&lng=${lng}`, {
     headers: await authHeader('')
   });
+}
+async function getGuestServiceByCategoryId(id, lat, lng) {
+  return await axios.get(serviceUrl + `/guest/byCategory?categoryId=${id}&lat=${lat}&lng=${lng}`);
 }
 
 async function getServicesByFreelancer(id) {
@@ -665,7 +668,7 @@ export const service = {
 
   getHomePageCategoryServices,
 
-  createService, getAllServices, updateService, getServiceById, uploadImages, deletedService, getServiceByCategoryId, getServicesByFreelancer,
+  createService, getAllServices, updateService, getServiceById, uploadImages, deletedService, getServiceByCategoryId, getGuestServiceByCategoryId, getServicesByFreelancer,
 
   getAllFreelancer, getFreelancerById,
 

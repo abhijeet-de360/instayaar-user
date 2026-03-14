@@ -200,6 +200,26 @@ export function getServiceByCategoryId(id: string, lat, lng) {
     };
 }
 
+export function getGuestServiceByCategoryId(id: string, lat, lng) {
+    return async function getGuestServiceByCategoryIdThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        dispatch(setStatus(STATUSES.LOADING));
+        try {
+            await service.getGuestServiceByCategoryId(id, lat, lng).then((response) => {
+                if (response.data) {
+                    dispatch(setServiceByCategory(response.data));
+                }
+                dispatch(setStatus(STATUSES.IDLE));
+            })
+        } catch (error) {
+            errorHandler(error.response);
+            dispatch(setStatus(STATUSES.ERROR));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
 
 export function getServicesByFreelancer(id: string) {
     return async function getServicesByFreelancerThunk(dispatch: any) {

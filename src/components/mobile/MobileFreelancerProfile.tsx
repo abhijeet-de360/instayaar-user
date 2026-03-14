@@ -202,7 +202,8 @@ const MobileFreelancerProfile = () => {
               </div>
 
               {/* Header Right Action - Block */}
-              {freelancerVar?.freelancerDetails?._id && (
+              {isBlocked && 
+              freelancerVar?.freelancerDetails?._id && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
@@ -237,6 +238,7 @@ const MobileFreelancerProfile = () => {
                   </AlertDialogContent>
                 </AlertDialog>
               )}
+            
             </div>
           </div>
 
