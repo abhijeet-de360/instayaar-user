@@ -31,9 +31,9 @@ PODS:
   - CapgoInappbrowser (8.1.15):
     - Capacitor
   - IONGeolocationLib (2.0.0)
-  - razorpay-core-pod (1.0.3)
-  - razorpay-pod (1.5.2):
-    - razorpay-core-pod (= 1.0.3)
+  - razorpay-core-pod (1.0.6)
+  - razorpay-pod (1.5.3):
+    - razorpay-core-pod (= 1.0.6)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -107,8 +107,8 @@ SPEC CHECKSUMS:
   CapawesomeCapacitorAppUpdate: 02d66677e9ae97d851a358207f7e7df40b22aa72
   CapgoInappbrowser: 18f8aaa785c1dd8d5d55710e750f5363dc6e7c4c
   IONGeolocationLib: a5e40b54edc2ee9902036eda5aaa41ddf07bb68d
-  razorpay-core-pod: ef0309dbf8e3e5a1330f6cad89dcf9226d8ef758
-  razorpay-pod: a9cb6e158aee8754053b147008eff6b4897789c8
+  razorpay-core-pod: 6da5fb4ed280279d665507fdb50e213d793a5fe2
+  razorpay-pod: 4385cf844aa29389313b741e20c72fe668970d49
 
 PODFILE CHECKSUM: 4c256238fc6e8133cbb7816969a67cca42667261
 
