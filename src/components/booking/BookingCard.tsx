@@ -11,6 +11,9 @@ import { JobOTPBottomSheet } from '@/components/job/JobOTPBottomSheet';
 import { useToast } from '@/hooks/use-toast';
 import { localService } from '@/shared/_session/local';
 import dayjs from "dayjs";
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store/store';
+import { getConversationId } from '@/store/chatSlice';
 
 interface BookingCardProps {
   booking: any;
@@ -25,6 +28,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
 }) => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const { userRole } = useUserRole();
   const { toast } = useToast();
   const [showOTP, setShowOTP] = useState(false);
@@ -201,7 +205,7 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => navigate(`/chat/${booking.id}`)}
+                    onClick={() => dispatch(getConversationId(localService.get('role') === 'user' ? booking?.freelancerId?._id : booking?.userId, navigate, booking?._id))}
                   >
                     <MessageCircle className="h-4 w-4 mr-2" />
                     Chat

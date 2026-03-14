@@ -333,129 +333,134 @@ const MyJobs = () => {
                 )}
               </div>
 
-              {!isCompleted && job?.status !== "cancelled" && (
+              {job?.status !== "cancelled" && (
                 <div className="flex gap-2 pt-2">
                   <Button
-                    className="h-8  text-xs"
-                    size="icon"
+                    className={`h-8 text-xs ${isCompleted ? 'w-full' : ''}`}
+                    size={isCompleted ? "sm" : "icon"}
                     variant="outline"
                     onClick={() => handleServiceView(job)}
                   >
                     <Info className="w-8 h-8 text-primary" />
+                    {isCompleted && <span className="ml-2">View Details</span>}
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 h-8 text-xs"
-                    onClick={() => handleServiceChat(job?.userId?._id)}
-                  >
-                    Chat
-                  </Button>
-                  {job?.status === "booked" && (
+                  {!isCompleted && (
                     <>
                       <Button
-                        className="h-8 flex-1 text-xs"
                         variant="outline"
-                        onClick={() => setCancelConfirm(true)}
-                      >
-                        Reject
-                      </Button>
-                      <Dialog
-                        open={cancelConfirm}
-                        onOpenChange={() => setCancelConfirm(false)}
-                      >
-                        <DialogContent className="sm:max-w-[360px] rounded-lg shadow-lg">
-                          <DialogHeader className="text-center">
-                            <DialogTitle className="text-lg font-semibold">
-                              Cancel Service
-                            </DialogTitle>
-                            <DialogDescription className="text-muted-foreground">
-                              Sure you want to cancel this service booking?
-                            </DialogDescription>
-                          </DialogHeader>
-
-                          <DialogFooter className="flex justify-center gap-3 mt-4">
-                            <DialogClose asChild>
-                              <Button variant="outline">No</Button>
-                            </DialogClose>
-                            <Button
-                              variant="destructive"
-                              onClick={() => handleCancel(job?._id)}
-                            >
-                              Yes, Cancel
-                            </Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </>
-                  )}
-                  {job.status === "booked" && (
-                    <>
-                      <Button
-                        className="flex-1 h-8 text-xs"
                         size="sm"
-                        onClick={() => setConfirm(true)}
+                        className="flex-1 h-8 text-xs"
+                        onClick={() => handleServiceChat(job?.userId?._id)}
                       >
-                        Confirm
+                        Chat
                       </Button>
-                      <Dialog
-                        open={confirm}
-                        onOpenChange={() => setConfirm(false)}
-                      >
-                        <DialogContent className="sm:max-w-[360px] rounded-lg shadow-lg">
-                          <DialogHeader className="text-center">
-                            <DialogTitle className="text-lg font-semibold">
-                              Confirm Service
-                            </DialogTitle>
-                            <DialogDescription className="text-muted-foreground">
-                              Sure you want to confirm this service booking?
-                            </DialogDescription>
-                          </DialogHeader>
+                      {job?.status === "booked" && (
+                        <>
+                          <Button
+                            className="h-8 flex-1 text-xs"
+                            variant="outline"
+                            onClick={() => setCancelConfirm(true)}
+                          >
+                            Reject
+                          </Button>
+                          <Dialog
+                            open={cancelConfirm}
+                            onOpenChange={() => setCancelConfirm(false)}
+                          >
+                            <DialogContent className="sm:max-w-[360px] rounded-lg shadow-lg">
+                              <DialogHeader className="text-center">
+                                <DialogTitle className="text-lg font-semibold">
+                                  Cancel Service
+                                </DialogTitle>
+                                <DialogDescription className="text-muted-foreground">
+                                  Sure you want to cancel this service booking?
+                                </DialogDescription>
+                              </DialogHeader>
 
-                          <DialogFooter className="flex justify-center gap-3 mt-4">
-                            <DialogClose asChild>
-                              <Button variant="outline">Close</Button>
-                            </DialogClose>
-                            <Button onClick={() => handleConfirm(job?._id)}>
-                              Confirm
+                              <DialogFooter className="flex justify-center gap-3 mt-4">
+                                <DialogClose asChild>
+                                  <Button variant="outline">No</Button>
+                                </DialogClose>
+                                <Button
+                                  variant="destructive"
+                                  onClick={() => handleCancel(job?._id)}
+                                >
+                                  Yes, Cancel
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        </>
+                      )}
+                      {job.status === "booked" && (
+                        <>
+                          <Button
+                            className="flex-1 h-8 text-xs"
+                            size="sm"
+                            onClick={() => setConfirm(true)}
+                          >
+                            Confirm
+                          </Button>
+                          <Dialog
+                            open={confirm}
+                            onOpenChange={() => setConfirm(false)}
+                          >
+                            <DialogContent className="sm:max-w-[360px] rounded-lg shadow-lg">
+                              <DialogHeader className="text-center">
+                                <DialogTitle className="text-lg font-semibold">
+                                  Confirm Service
+                                </DialogTitle>
+                                <DialogDescription className="text-muted-foreground">
+                                  Sure you want to confirm this service booking?
+                                </DialogDescription>
+                              </DialogHeader>
+
+                              <DialogFooter className="flex justify-center gap-3 mt-4">
+                                <DialogClose asChild>
+                                  <Button variant="outline">Close</Button>
+                                </DialogClose>
+                                <Button onClick={() => handleConfirm(job?._id)}>
+                                  Confirm
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        </>
+                      )}
+                      {job.status === "confirmed" && (
+                        <>
+                          <a
+                            href={`tel:${job?.userId?.phoneNumber}`}
+                            className="flex-1"
+                          >
+                            <Button
+                              size="sm"
+                              className="h-8 text-xs w-full"
+                              variant="outline"
+                            >
+                              <Phone />
+                              Call
                             </Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
-                    </>
-                  )}
-                  {job.status === "confirmed" && (
-                    <>
-                      <a
-                        href={`tel:${job?.userId?.phoneNumber}`}
-                        className="flex-1"
-                      >
+                          </a>
+                          <Button
+                            size="sm"
+                            className="flex-1 h-8 text-xs"
+                            onClick={() => handleStartJob(job)}
+                          >
+                            Start
+                          </Button>
+                        </>
+                      )}
+                      {job.status === "onGoing" && (
                         <Button
                           size="sm"
-                          className="h-8 text-xs w-full"
-                          variant="outline"
+                          className="flex-1 h-8 text-xs"
+                          onClick={() => handleCompleteJob(job)}
                         >
-                          <Phone />
-                          Call
+                          Complete
                         </Button>
-                      </a>
-                      <Button
-                        size="sm"
-                        className="flex-1 h-8 text-xs"
-                        onClick={() => handleStartJob(job)}
-                      >
-                        Start
-                      </Button>
+                      )}
                     </>
-                  )}
-                  {job.status === "onGoing" && (
-                    <Button
-                      size="sm"
-                      className="flex-1 h-8 text-xs"
-                      onClick={() => handleCompleteJob(job)}
-                    >
-                      Complete
-                    </Button>
                   )}
                 </div>
               )}
@@ -787,7 +792,7 @@ const MyJobs = () => {
               bookingVar?.freelancerBookings.completed?.result.map(
                 (job, index) =>
                   job.type === "service" ? (
-                    <JobCard key={index} job={job?.data} />
+                    <JobCard key={index} job={job?.data} isCompleted={true} />
                   ) : (
                     <Card key={index} className="mb-4">
                       <div className="p-4">
@@ -849,21 +854,12 @@ const MyJobs = () => {
                         )}
                         <div className="flex items-center justify-end gap-2 mt-2 w-full">
                           <Button
-                            className="h-8  text-xs"
-                            size="icon"
+                            className="h-8 text-xs w-full"
                             variant="outline"
                             onClick={() => handleJobView(job?.data)}
                           >
-                            <Info className="w-8 h-8 text-primary" />
-                          </Button>
-                          <Button
-                            className=" h-9 w-full"
-                            variant="outline"
-                            onClick={() =>
-                              handleChat(job?.data?.jobId?.userId?._id)
-                            }
-                          >
-                            Chat
+                            <Info className="w-4 h-4 text-primary mr-2" />
+                            View Details
                           </Button>
                         </div>
                       </div>

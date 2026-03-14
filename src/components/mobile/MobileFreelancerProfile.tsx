@@ -141,17 +141,6 @@ const MobileFreelancerProfile = () => {
     ],
   };
 
-  const handleChat = (id) => {
-    if (authVar?.isAuthenticated) {
-      if (!authVar?.user?.firstName) {
-        navigate(`/user-account-settings`);
-      } else {
-        dispatch(getConversationId(id, navigate));
-      }
-    } else {
-      setShowLoginModal(true);
-    }
-  };
 
   const handleHire = (id) => {
     if (authVar?.isAuthenticated) {
@@ -308,16 +297,6 @@ const MobileFreelancerProfile = () => {
                   >
                     {/* <Button className="flex-1" onClick={() => navigate(`/freelancer-services/${freelancerVar?.freelancerDetails?._id}`)}> */}
                     Hire Now
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() =>
-                      handleChat(freelancerVar?.freelancerDetails?._id)
-                    }
-                    disabled={isBlocked}
-                  >
-                    Chat
                   </Button>
                   <Button
                     variant="outline"

@@ -398,7 +398,7 @@ const MobileMyBookings = () => {
                             Extend
                           </Button>
                         </Link>}
-                        <Button size="sm" className="h-8 min-w-20" onClick={() => dispatch(getConversationId(booking?.freelancerId?._id, navigate))}>
+                        <Button size="sm" className="h-8 min-w-20" onClick={() => dispatch(getConversationId(booking?.freelancerId?._id, navigate, booking?._id))}>
                           Chat
                         </Button>
 
@@ -527,7 +527,7 @@ const MobileMyBookings = () => {
                             Extend
                           </Button>
                         </Link>}
-                        <Button size="sm" className="h-8 min-w-20" onClick={() => dispatch(getConversationId(booking?.freelancerId._id, navigate))}>
+                        <Button size="sm" className="h-8 min-w-20" onClick={() => dispatch(getConversationId(booking?.freelancerId._id, navigate, booking?._id))}>
                           Chat
                         </Button>
 

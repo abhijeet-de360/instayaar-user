@@ -57,6 +57,8 @@ const MobileChat = () => {
     ? authVar?.user?.blockedFreelancers?.includes(chatVar?.profile?._id)
     : chatVar?.profile?.blockedFreelancers?.includes(authVar?.freelancer?._id);
 
+  const isBookingCompleted = chatVar?.serviceBookingId?.status === 'completed';
+
   const handleLogin = (role: string) => {
     setIsLoggedIn(true);
     setUserRole(role as "employer" | "freelancer");
@@ -255,8 +257,12 @@ const MobileChat = () => {
 
       {/* Message Input */}
       {/* Message Input or Blocked Status */}
-      <div className="bg-background border-t px-4 py-3 fixed bottom-0 left-0 right-0 z-10">
-        {isFreelancerBlocked ? (
+      <div className="bg-background border-t px-4 py-3 fixed bottom-0 left-0 right-0 z-10 font-medium">
+        {isBookingCompleted ? (
+          <div className="flex items-center justify-center p-3 rounded-xl bg-primary/10 text-primary text-sm font-medium">
+            Communication ended for this completed booking
+          </div>
+        ) : isFreelancerBlocked ? (
           <div className="flex items-center justify-center p-2 rounded-md bg-muted text-muted-foreground text-sm">
             {localService.get('role') === 'user' ? "You blocked this Yaar" : "You cannot send messages"}
           </div>
@@ -267,15 +273,15 @@ const MobileChat = () => {
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
-              className="flex-1 min-h-10 resize-none"
+              className="flex-1 min-h-10 resize-none h-11"
             />
             <Button
               onClick={handleSendMessage}
               size="icon"
-              className="h-10 w-10 flex-shrink-0"
+              className="h-11 w-11 flex-shrink-0"
               disabled={!newMessage.trim()}
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-5 w-5" />
             </Button>
           </div>
         )}

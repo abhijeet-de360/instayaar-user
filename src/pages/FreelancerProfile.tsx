@@ -133,9 +133,6 @@ const FreelancerProfile = () => {
     }
   ];
 
-  const handleChat = () => {
-    checkAuth(() => navigate(`/chat/${freelancerId}`));
-  };
 
   const handleHire = () => {
     checkAuth(() => navigate(`/freelancer-services/${freelancerId}`));
@@ -196,10 +193,6 @@ const FreelancerProfile = () => {
                       <Button variant={isBlocked ? "destructive" : "outline"} onClick={handleBlockToggle} disabled={isBlocking}>
                         <Ban className="h-4 w-4 mr-2" />
                         {isBlocked ? "Blocked" : "Block"}
-                      </Button>
-                      <Button variant="outline" onClick={handleChat} disabled={isBlocked}>
-                        <MessageCircle className="h-4 w-4 mr-2" />
-                        Chat
                       </Button>
                       <Button onClick={handleHire} disabled={isBlocked}>
                         <UserCheck className="h-4 w-4 mr-2" />

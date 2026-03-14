@@ -9,9 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Send, Phone, Video, MoreVertical } from "lucide-react";
 import MobileChat from "@/components/mobile/MobileChat";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 import { localService } from "@/shared/_session/local";
+import { getCoversationDetails } from "@/store/chatSlice";
+import { chatSocket } from "@/lib/socket";
+import { format, parseISO } from "date-fns";
+import { useRef } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,7 +49,10 @@ const Chat = () => {
   const [newMessage, setNewMessage] = useState("");
   
   const authVar = useSelector((state: RootState) => state?.auth);
+  const dispatch = useDispatch<AppDispatch>();
   const chatVar: any = useSelector((state: RootState) => state?.chat);
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [reportReason, setReportReason] = useState("");
@@ -56,49 +63,7 @@ const Chat = () => {
     ? authVar?.user?.blockedFreelancers?.includes(chatVar?.profile?._id)
     : chatVar?.profile?.blockedFreelancers?.includes(authVar?.freelancer?._id);
 
-  // Mock messages - moved before early return
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      senderId: "freelancer",
-      senderName: "Arjun Mehta",
-      message: "Hi! Thank you for considering my application for the DJ position.",
-      timestamp: "10:30 AM",
-      isOwn: false
-    },
-    {
-      id: 2,
-      senderId: "employer",
-      senderName: "You",
-      message: "Hello! I saw your proposal and I'm interested. Can you tell me more about your equipment?",
-      timestamp: "10:32 AM",
-      isOwn: true
-    },
-    {
-      id: 3,
-      senderId: "freelancer",
-      senderName: "Arjun Mehta",
-      message: "Absolutely! I have professional Pioneer DJ equipment including CDJ-2000s, DJM-900 mixer, and a full sound system with speakers and lighting.",
-      timestamp: "10:35 AM",
-      isOwn: false
-    },
-    {
-      id: 4,
-      senderId: "employer",
-      senderName: "You",
-      message: "That sounds perfect! What about your music collection?",
-      timestamp: "10:37 AM",
-      isOwn: true
-    },
-    {
-      id: 5,
-      senderId: "freelancer",
-      senderName: "Arjun Mehta",
-      message: "I have an extensive collection of Bollywood hits, international music, and can take special requests. I always customize the playlist based on the event and audience.",
-      timestamp: "10:40 AM",
-      isOwn: false
-    }
-  ]);
+  const isBookingCompleted = chatVar?.serviceBookingId?.status === 'completed';
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -109,6 +74,38 @@ const Chat = () => {
     window.addEventListener('resize', checkIsMobile);
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
+
+  // Fetch conversation on mount
+  useEffect(() => {
+    if (authVar?.isAuthenticated) {
+      dispatch(getCoversationDetails(conversationId));
+    }
+  }, [authVar?.isAuthenticated, conversationId, dispatch]);
+
+  // Sync messages from redux
+  useEffect(() => {
+    if (chatVar?.messages) {
+      setChatMessages(chatVar.messages);
+    }
+  }, [chatVar?.messages]);
+
+  // Listen for new messages from socket
+  useEffect(() => {
+    chatSocket.on("messageSent", (newMessage) => {
+      setChatMessages((prev) => [...prev, newMessage]);
+    });
+
+    return () => {
+      chatSocket.off("messageSent");
+    };
+  }, []);
+
+  // Auto scroll to bottom
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chatMessages]);
 
   const handleLogin = (role: string) => {
     setIsLoggedIn(true);
@@ -125,18 +122,25 @@ const Chat = () => {
   };
 
   const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      const message = {
-        id: messages.length + 1,
-        senderId: "employer",
-        senderName: "You",
-        message: newMessage,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isOwn: true
-      };
-      setMessages([...messages, message]);
-      setNewMessage("");
-    }
+    if (!newMessage.trim()) return;
+
+    const message = {
+      chatParticipantId: conversationId,
+      sender: localService?.get("role"),
+      message: newMessage,
+      messageType: "text",
+      userId: authVar?.user?._id || chatVar?.profile?._id,
+      freelancerId: authVar?.freelancer?._id || chatVar?.profile?._id,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Emit message to server
+    chatSocket.emit("sendMessage", message);
+
+    // Optimistically add message to local state
+    setChatMessages((prev) => [...prev, message]);
+
+    setNewMessage("");
   };
 
   const handleReportChat = async () => {
@@ -200,15 +204,22 @@ const Chat = () => {
               </Button>
               
               <Avatar className="h-10 w-10">
-                <AvatarImage src={freelancer.image} alt={freelancer.name} />
-                <AvatarFallback>{freelancer.name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={chatVar?.profile?.profile} alt={chatVar?.profile?.firstName} />
+                <AvatarFallback>{chatVar?.profile?.firstName?.charAt(0)}</AvatarFallback>
               </Avatar>
               
               <div className="flex-1">
-                <h3 className="font-semibold">{freelancer.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {freelancer.isOnline ? "Online" : "Last seen recently"} • {freelancer.service}
-                </p>
+                <h3 className="font-semibold">{chatVar?.profile?.firstName} {chatVar?.profile?.lastName}</h3>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm text-muted-foreground">
+                    {chatVar?.profile?.isOnline ? "Online" : "Last seen recently"}
+                  </p>
+                  {chatVar?.profile?.serviceBookingId?.serviceId?.title && (
+                    <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-normal">
+                      {chatVar?.profile?.serviceBookingId?.serviceId?.title}
+                    </span>
+                  )}
+                </div>
               </div>
               
               <div className="flex gap-2">
@@ -235,46 +246,60 @@ const Chat = () => {
           </CardHeader>
         </Card>
 
-        {/* Messages Area */}
         <div className="flex-1 p-4 overflow-y-auto">
           <div className="space-y-4">
-            {messages.map((message) => (
-              <div 
-                key={message.id} 
-                className={`flex ${message.isOwn ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`max-w-[70%] ${message.isOwn ? 'order-2' : 'order-1'}`}>
-                  <div 
-                    className={`rounded-lg p-3 ${
-                      message.isOwn 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'bg-muted'
-                    }`}
-                  >
-                    <p className="text-sm">{message.message}</p>
-                  </div>
-                  <p className={`text-xs text-muted-foreground mt-1 ${
-                    message.isOwn ? 'text-right' : 'text-left'
-                  }`}>
-                    {message.timestamp}
-                  </p>
-                </div>
-                
-                {!message.isOwn && (
-                  <Avatar className="h-8 w-8 order-1 mr-2">
-                    <AvatarImage src={freelancer.image} alt={freelancer.name} />
-                    <AvatarFallback className="text-xs">{freelancer.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                )}
+            {chatMessages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center text-muted-foreground">
+                <p className="text-lg font-medium">No messages yet</p>
+                <p className="text-sm">Start the conversation to see messages here</p>
               </div>
-            ))}
+            ) : (
+              chatMessages.map((message, idx) => {
+                const isOwn = message?.sender === localService?.get("role");
+                return (
+                  <div 
+                    key={message._id || idx} 
+                    className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div className={`max-w-[70%] ${isOwn ? 'order-2' : 'order-1'}`}>
+                      <div 
+                        className={`rounded-lg p-3 ${
+                          isOwn 
+                            ? 'bg-primary text-primary-foreground rounded-br-none' 
+                            : 'bg-muted rounded-bl-none'
+                        }`}
+                      >
+                        <p className="text-sm">{message.message}</p>
+                      </div>
+                      <p className={`text-xs text-muted-foreground mt-1 ${
+                        isOwn ? 'text-right' : 'text-left'
+                      }`}>
+                        {message?.createdAt ? format(parseISO(message.createdAt), "p") : ""}
+                      </p>
+                    </div>
+                    
+                    {!isOwn && (
+                      <Avatar className="h-8 w-8 order-1 mr-2 flex-shrink-0">
+                        <AvatarImage src={chatVar?.profile?.profile} alt={chatVar?.profile?.firstName} />
+                        <AvatarFallback className="text-xs">{chatVar?.profile?.firstName?.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                    )}
+                  </div>
+                );
+              })
+            )}
+            <div ref={messagesEndRef} />
           </div>
         </div>
 
-        {/* Message Input */}
+        {/* Message Input or Blocked Status */}
         <Card className="rounded-none border-x-0 border-b-0">
           <CardContent className="p-4">
-            {isFreelancerBlocked ? (
+            {isBookingCompleted ? (
+              <div className="flex items-center justify-center p-3 rounded-xl bg-primary/10 text-primary text-sm font-medium">
+                Communication ended for this completed booking
+              </div>
+            ) : isFreelancerBlocked ? (
               <div className="flex items-center justify-center p-3 rounded-md bg-muted text-muted-foreground text-sm">
                 {localService.get('role') === 'user' ? "You blocked this Yaar" : "You cannot send messages to this Yaar"}
               </div>
@@ -287,7 +312,7 @@ const Chat = () => {
                   placeholder="Type a message..."
                   className="flex-1"
                 />
-                <Button onClick={handleSendMessage}>
+                <Button onClick={handleSendMessage} disabled={!newMessage.trim()}>
                   <Send className="h-4 w-4" />
                 </Button>
               </div>

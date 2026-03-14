@@ -84,15 +84,33 @@ const MobileMessages = () => {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <h4 className="font-semibold truncate text-sm">
-                            {conversation?.freelancerId?.firstName ||
-                              conversation?.userId?.firstName}{" "}
-                            {conversation?.freelancerId?.lastName ||
-                              conversation?.userId?.lastName}
-                          </h4>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-muted-foreground">
+                        <div className="flex items-start justify-between mb-1">
+                          <div className="flex flex-col min-w-0 flex-1">
+                            <h4 className="font-semibold truncate text-sm">
+                              {conversation?.freelancerId?.firstName ||
+                                conversation?.userId?.firstName}{" "}
+                              {conversation?.freelancerId?.lastName ||
+                                conversation?.userId?.lastName}
+                            </h4>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              {conversation?.serviceBookingId?.serviceId?.title && (
+                                <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium inline-block truncate max-w-full">
+                                  {conversation?.serviceBookingId?.serviceId?.title}
+                                </span>
+                              )}
+                              {conversation?.serviceBookingId?.status === "completed" && (
+                                <Badge
+                                  variant="outline"
+                                  className="text-[8px] h-4 px-1.5 bg-green-50 text-green-700 border-green-200 font-bold uppercase tracking-wider"
+                                >
+                                  Completed
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="flex flex-col items-end gap-1 ml-2 flex-shrink-0">
+                            <span className="text-[10px] text-muted-foreground whitespace-nowrap">
                               {conversation?.lastMessageAt
                                 ? formatDistanceToNow(
                                   parseISO(conversation.lastMessageAt),
@@ -101,8 +119,8 @@ const MobileMessages = () => {
                                 : ""}
                             </span>
                             {conversation.unread > 0 && (
-                              <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                                <span className="text-xs text-primary-foreground font-medium">
+                              <div className="w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                                <span className="text-[10px] text-primary-foreground font-medium">
                                   {conversation.unread}
                                 </span>
                               </div>
