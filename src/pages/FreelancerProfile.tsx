@@ -9,7 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"; 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, MapPin, Calendar, MessageCircle, UserCheck, ArrowLeft, Award, Clock, CheckCircle } from "lucide-react";
+import { Star, MapPin, Calendar, MessageCircle, UserCheck, ArrowLeft, Award, Clock, CheckCircle, Ban } from "lucide-react";
+import { service } from "@/shared/_services/api_service";
+import { successHandler, errorHandler } from "@/shared/_helper/responseHelper";
 import MobileFreelancerProfile from "@/components/mobile/MobileFreelancerProfile";
 import { freelancerById } from "@/store/freelancerSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +25,37 @@ const FreelancerProfile = () => {
   const { isMobile, showLoginModal, setShowLoginModal, checkAuth } = useAuthCheck();
 
   const freelancerVar: any = useSelector((state: RootState) => state.freelancer);
+  const user: any = useSelector((state: RootState) => state.auth.user);
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isBlocking, setIsBlocking] = useState(false);
+
+  useEffect(() => {
+    if (user && user.blockedFreelancers) {
+      setIsBlocked(user.blockedFreelancers.includes(freelancerId));
+    }
+  }, [user, freelancerId]);
+
+  const handleBlockToggle = async () => {
+    if (!freelancerId) return;
+    checkAuth(async () => {
+      try {
+        setIsBlocking(true);
+        if (isBlocked) {
+          await service.unblockFreelancer(freelancerId);
+          successHandler("Freelancer unblocked successfully");
+          setIsBlocked(false);
+        } else {
+          await service.blockFreelancer(freelancerId);
+          successHandler("Freelancer blocked successfully");
+          setIsBlocked(true);
+        }
+      } catch (error: any) {
+        errorHandler(error?.response || { data: { message: "Failed to update block status" } });
+      } finally {
+        setIsBlocking(false);
+      }
+    });
+  };
 
   const handleLogin = (role: string) => {
     setIsLoggedIn(true);
@@ -160,11 +193,15 @@ const FreelancerProfile = () => {
                     
                     {/* Action Buttons */}
                     <div className="flex gap-3 ">
-                      <Button variant="outline" onClick={handleChat}>
+                      <Button variant={isBlocked ? "destructive" : "outline"} onClick={handleBlockToggle} disabled={isBlocking}>
+                        <Ban className="h-4 w-4 mr-2" />
+                        {isBlocked ? "Blocked" : "Block"}
+                      </Button>
+                      <Button variant="outline" onClick={handleChat} disabled={isBlocked}>
                         <MessageCircle className="h-4 w-4 mr-2" />
                         Chat
                       </Button>
-                      <Button onClick={handleHire}>
+                      <Button onClick={handleHire} disabled={isBlocked}>
                         <UserCheck className="h-4 w-4 mr-2" />
                         Hire Now
                       </Button>
@@ -268,7 +305,7 @@ const FreelancerProfile = () => {
                           <div className="text-lg font-bold text-primary">₹{service?.price}/hr</div>
                           <div className="text-xs text-muted-foreground">{service?.duration} hours</div>
                         </div>
-                        <Button size="sm">Book Now</Button>
+                        <Button size="sm" disabled={isBlocked}>Book Now</Button>
                       </div>
                     </CardContent>
                   </Card>

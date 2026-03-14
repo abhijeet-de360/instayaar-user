@@ -17,9 +17,23 @@ import {
   Award,
   Clock,
   Calendar,
-  StarIcon,
   Image,
+  Ban,
+  MoreVertical,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { service } from "@/shared/_services/api_service";
+import { successHandler, errorHandler } from "@/shared/_helper/responseHelper";
 import { useEffect, useState } from "react";
 import { freelancerById } from "@/store/freelancerSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +56,10 @@ const MobileFreelancerProfile = () => {
   const freelancerVar: any = useSelector(
     (state: RootState) => state.freelancer
   );
-  const authVar = useSelector((state: RootState) => state.auth);
+  const authVar: any = useSelector((state: RootState) => state.auth);
+  const user: any = authVar?.user;
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isBlocking, setIsBlocking] = useState(false);
 
   const handleLogin = (role: string) => {
     setIsLoggedIn(true);
@@ -51,7 +68,41 @@ const MobileFreelancerProfile = () => {
 
   useEffect(() => {
     dispatch(freelancerById(freelancerId));
-  }, [freelancerId]);
+  }, [freelancerId, dispatch]);
+
+  useEffect(() => {
+    if (user && user.blockedFreelancers) {
+      setIsBlocked(user.blockedFreelancers.includes(freelancerId));
+    }
+  }, [user, freelancerId]);
+
+  const handleBlockToggle = async () => {
+    if (!freelancerId) return;
+    if (authVar?.isAuthenticated) {
+      if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
+        navigate(`/user-account-settings`);
+        return;
+      }
+      try {
+        setIsBlocking(true);
+        if (isBlocked) {
+          await service.unblockFreelancer(freelancerId);
+          successHandler("Freelancer unblocked successfully");
+          setIsBlocked(false);
+        } else {
+          await service.blockFreelancer(freelancerId);
+          successHandler("Freelancer blocked successfully");
+          setIsBlocked(true);
+        }
+      } catch (error: any) {
+        errorHandler(error?.response || { data: { message: "Failed to update block status" } });
+      } finally {
+        setIsBlocking(false);
+      }
+    } else {
+      setShowLoginModal(true);
+    }
+  };
 
   // Mock freelancer data
   const freelancer = {
@@ -134,19 +185,58 @@ const MobileFreelancerProfile = () => {
         <div className="relative">
           {/* Header */}
           <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b px-4 py-3">
-            <div className="flex items-center gap-3">
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={() => navigate(-1)}
-                className="h-8 w-8"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <h1 className="text-lg font-semibold">
-                {freelancerVar?.freelancerDetails?.firstName}{" "}
-                {freelancerVar?.freelancerDetails?.lastName}
-              </h1>
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => navigate(-1)}
+                  className="h-8 w-8"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <h1 className="text-lg font-semibold">
+                  {freelancerVar?.freelancerDetails?.firstName}{" "}
+                  {freelancerVar?.freelancerDetails?.lastName}
+                </h1>
+              </div>
+
+              {/* Header Right Action - Block */}
+              {freelancerVar?.freelancerDetails?._id && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`text-xs px-2 h-8 ${isBlocked ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
+                      disabled={isBlocking}
+                    >
+                      {isBlocked ? "Blocked" : "Block"}
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="w-[90%] rounded-xl">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        {isBlocked ? "Unblock Yaar?" : "Block Yaar?"}
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {isBlocked
+                          ? `Are you sure you want to unblock ${freelancerVar?.freelancerDetails?.firstName}? They will be able to message you and you can book their services again.`
+                          : `Are you sure you want to block ${freelancerVar?.freelancerDetails?.firstName}? You won't be able to communicate with them.`}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="flex-row justify-end space-x-2">
+                      <AlertDialogCancel className="mt-0 flex-1">Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        className="flex-1"
+                        onClick={() => handleBlockToggle()}
+                      >
+                        {isBlocked ? "Unblock" : "Block"}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
             </div>
           </div>
 
@@ -212,6 +302,7 @@ const MobileFreelancerProfile = () => {
                     onClick={() =>
                       handleHire(freelancerVar?.freelancerDetails?._id)
                     }
+                    disabled={isBlocked}
                   >
                     {/* <Button className="flex-1" onClick={() => navigate(`/freelancer-services/${freelancerVar?.freelancerDetails?._id}`)}> */}
                     Hire Now
@@ -222,6 +313,7 @@ const MobileFreelancerProfile = () => {
                     onClick={() =>
                       handleChat(freelancerVar?.freelancerDetails?._id)
                     }
+                    disabled={isBlocked}
                   >
                     Chat
                   </Button>
@@ -233,6 +325,7 @@ const MobileFreelancerProfile = () => {
                         `/freelancer-reviews/${freelancerVar?.freelancerDetails?._id}`
                       )
                     }
+                    disabled={isBlocked}
                   >
                     Review
                   </Button>
@@ -299,7 +392,7 @@ const MobileFreelancerProfile = () => {
                         </p>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center justify-between w-full ">
-                            <Button onClick={() => handleBookService(service._id)}>Book Now</Button>
+                            <Button onClick={() => handleBookService(service._id)} disabled={isBlocked}>Book Now</Button>
                             <div className="text-lg font-bold text-primary">
                               ₹{service?.price}
                             </div>
@@ -382,17 +475,11 @@ const MobileFreelancerProfile = () => {
 
         <LoginModal
           isOpen={showLoginModal}
-          onClose={setShowLoginModal}
+          onClose={() => setShowLoginModal(false)}
           onLoginSuccess={handleLogin}
           isMobile={true}
         />
       </div>
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onLoginSuccess={() => {}}
-        isMobile={true}
-      />
     </>
   );
 };

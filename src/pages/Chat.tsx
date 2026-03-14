@@ -9,19 +9,58 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Send, Phone, Video, MoreVertical } from "lucide-react";
 import MobileChat from "@/components/mobile/MobileChat";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { localService } from "@/shared/_session/local";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { service } from "@/shared/_services/api_service";
+import { successHandler, errorHandler } from "@/shared/_helper/responseHelper";
 
 const Chat = () => {
-  const { freelancerId } = useParams();
+  const { conversationId } = useParams();
   const navigate = useNavigate();
   const { setUserRole, setIsLoggedIn } = useUserRole();
   const [isMobile, setIsMobile] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  
+  const authVar = useSelector((state: RootState) => state?.auth);
+  const chatVar: any = useSelector((state: RootState) => state?.chat);
+
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportDetails, setReportDetails] = useState("");
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+
+  const isFreelancerBlocked = localService.get('role') === 'user' 
+    ? authVar?.user?.blockedFreelancers?.includes(chatVar?.profile?._id)
+    : chatVar?.profile?.blockedFreelancers?.includes(authVar?.freelancer?._id);
 
   // Mock messages - moved before early return
   const [messages, setMessages] = useState([
     {
       id: 1,
-      senderId: freelancerId,
+      senderId: "freelancer",
       senderName: "Arjun Mehta",
       message: "Hi! Thank you for considering my application for the DJ position.",
       timestamp: "10:30 AM",
@@ -37,7 +76,7 @@ const Chat = () => {
     },
     {
       id: 3,
-      senderId: freelancerId,
+      senderId: "freelancer",
       senderName: "Arjun Mehta",
       message: "Absolutely! I have professional Pioneer DJ equipment including CDJ-2000s, DJM-900 mixer, and a full sound system with speakers and lighting.",
       timestamp: "10:35 AM",
@@ -53,7 +92,7 @@ const Chat = () => {
     },
     {
       id: 5,
-      senderId: freelancerId,
+      senderId: "freelancer",
       senderName: "Arjun Mehta",
       message: "I have an extensive collection of Bollywood hits, international music, and can take special requests. I always customize the playlist based on the event and audience.",
       timestamp: "10:40 AM",
@@ -78,7 +117,7 @@ const Chat = () => {
 
   // Mock freelancer data
   const freelancer = {
-    id: freelancerId,
+    id: "freelancer",
     name: "Arjun Mehta",
     service: "DJ",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&h=300&q=80",
@@ -97,6 +136,37 @@ const Chat = () => {
       };
       setMessages([...messages, message]);
       setNewMessage("");
+    }
+  };
+
+  const handleReportChat = async () => {
+    if (!reportReason) {
+      errorHandler({ data: { message: "Please select a reason for reporting." } });
+      return;
+    }
+
+    try {
+      setIsSubmittingReport(true);
+      const reportData = {
+        reportedEntityId: chatVar?.conversationId || chatVar?.messages?.[0]?.chatParticipantId,
+        reason: reportReason,
+        details: reportDetails,
+      };
+
+      if (localService.get('role') === 'user') {
+        await service.submitChatReportUser(reportData);
+      } else {
+        await service.submitChatReport(reportData);
+      }
+
+      successHandler("Chat reported successfully. Our team will review it.");
+      setIsReportModalOpen(false);
+      setReportReason("");
+      setReportDetails("");
+    } catch (error: any) {
+      errorHandler(error?.response || { data: { message: "Failed to submit report." } });
+    } finally {
+      setIsSubmittingReport(false);
     }
   };
 
@@ -148,9 +218,18 @@ const Chat = () => {
                 <Button size="icon" variant="ghost">
                   <Video className="h-5 w-5" />
                 </Button>
-                <Button size="icon" variant="ghost">
-                  <MoreVertical className="h-5 w-5" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="icon" variant="ghost">
+                      <MoreVertical className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => setIsReportModalOpen(true)}>
+                      Report Chat
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </CardHeader>
@@ -195,24 +274,79 @@ const Chat = () => {
         {/* Message Input */}
         <Card className="rounded-none border-x-0 border-b-0">
           <CardContent className="p-4">
-            <div className="flex gap-3">
-              <Input
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type a message..."
-                className="flex-1"
-              />
-              <Button onClick={handleSendMessage}>
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
+            {isFreelancerBlocked ? (
+              <div className="flex items-center justify-center p-3 rounded-md bg-muted text-muted-foreground text-sm">
+                {localService.get('role') === 'user' ? "You blocked this Yaar" : "You cannot send messages to this Yaar"}
+              </div>
+            ) : (
+              <div className="flex gap-3">
+                <Input
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type a message..."
+                  className="flex-1"
+                />
+                <Button onClick={handleSendMessage}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
 
       {/* Don't show MobileBottomNav in chat - commented out */}
       {/* <MobileBottomNav /> */}
+
+      {/* Report Modal */}
+      <Dialog open={isReportModalOpen} onOpenChange={setIsReportModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Report Chat</DialogTitle>
+            <DialogDescription>
+              Please provide a reason why you are reporting this conversation.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Reason</label>
+              <Select onValueChange={setReportReason} value={reportReason}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a reason" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Inappropriate language">Inappropriate language</SelectItem>
+                  <SelectItem value="Spam or scam">Spam or scam</SelectItem>
+                  <SelectItem value="Harassment">Harassment</SelectItem>
+                  <SelectItem value="Off-platform payment request">Off-platform payment request</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Additional Details (Optional)</label>
+              <Textarea
+                placeholder="Provide more information..."
+                value={reportDetails}
+                onChange={(e) => setReportDetails(e.target.value)}
+                className="min-h-[100px]"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="flex justify-end space-x-2">
+            <Button variant="ghost" onClick={() => setIsReportModalOpen(false)} disabled={isSubmittingReport}>
+              Cancel
+            </Button>
+            <Button onClick={handleReportChat} disabled={isSubmittingReport}>
+              {isSubmittingReport ? "Submitting..." : "Submit Report"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

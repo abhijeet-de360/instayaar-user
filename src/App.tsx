@@ -72,6 +72,7 @@ import { PrivateRoute } from "./components/auth/PrivateRoute";
 import Agreement from "./pages/Agreement";
 import ClientAgreement from "./pages/ClientAgreement";
 import MobileMyCategories from "./pages/MobileMyCategories";
+import { BlockedFreelancers } from "./pages/BlockedFreelancers";
 
 
 
@@ -438,6 +439,7 @@ const App = () => {
                 <Route path="/user-account-settings" element={<PrivateRoute><UserAccountSetting /></PrivateRoute>} />
                 <Route path="/help-support" element={<PrivateRoute><HelpSupport /></PrivateRoute>} />
                 <Route path="/instant-booking" element={<PrivateRoute><InstantBooking /></PrivateRoute>} />
+                <Route path="/blocked-freelancers" element={<PrivateRoute><BlockedFreelancers /></PrivateRoute>} />
                 <Route path="/browse-jobs" element={<PrivateRoute><BrowseJobs /></PrivateRoute>} />
                 <Route path="/my-services" element={<PrivateRoute><MyServices /></PrivateRoute>} />
                 <Route path="/earnings" element={<PrivateRoute><Earnings /></PrivateRoute>} />

@@ -28,6 +28,7 @@ import {
   User2Icon,
   Zap,
   Layers,
+  Ban,
 } from "lucide-react";
 import { useUserRole } from "@/contexts/UserRoleContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -59,6 +60,7 @@ export const MobileDashboardSidebar = () => {
           label: "Payment History",
           href: "/payment-history",
         },
+        { icon: Ban, label: "Blocked Yaars", href: "/blocked-freelancers" },
         // { icon: Star, label: 'Reviews & Ratings', href: '/reviews-ratings' },
         { icon: User2Icon, label: "Profile", href: "/user-account-settings" },
         { icon: Zap, label: "Instant Booking", href: "/instant-booking" },

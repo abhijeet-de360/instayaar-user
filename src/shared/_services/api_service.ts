@@ -4,15 +4,15 @@ import { authHeader } from "../_helper/auth-header";
 
 
 
- export const rootUrl = 'https://server.instayaar.com/api/v1/';
+//  export const rootUrl = 'https://server.instayaar.com/api/v1/';
 // export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
-// export const rootUrl = 'http://localhost:3230/api/v1/';
+export const rootUrl = 'http://localhost:3230/api/v1/';
 // export const rootUrl = 'https://4xwn5v2s-3230.inc1.devtunnels.ms/api/v1/';
 
 
-export const socketUrl = 'https://server.instayaar.com';
+// export const socketUrl = 'https://server.instayaar.com';
 // export const socketUrl = 'http://192.168.1.3:3230';
-// export const socketUrl = 'http://localhost:3130';
+export const socketUrl = 'http://localhost:3230';
 
 
 
@@ -23,9 +23,9 @@ const categoryUrl = rootUrl + 'category'
 const serviceUrl = rootUrl + 'service'
 const portfolioUrl = rootUrl + 'portfolio'
 const bookingUrl = rootUrl + 'serviceBooking'
-const jobApplicationUrl  = rootUrl + 'jobApplication'
-const chatUrl  = rootUrl + 'chat'
-const transactionURL  = rootUrl + 'transactions'
+const jobApplicationUrl = rootUrl + 'jobApplication'
+const chatUrl = rootUrl + 'chat'
+const transactionURL = rootUrl + 'transactions'
 const widthrawalUrl = rootUrl + 'freelancer'
 const dashboardUrl = rootUrl + 'dashboard'
 const serviceReview = rootUrl + 'serviceReview'
@@ -60,24 +60,24 @@ async function updateUser(payload) {
 
 
 async function updateUserProfile(image) {
-  return await axios.put(userAuthUrl + '/image', {image}, {
+  return await axios.put(userAuthUrl + '/image', { image }, {
     headers: await authHeader('FormData')
   });
 }
 
-async function userEmailSendOtp(email){
-  return await axios.post(userAuthUrl + '/sendEmail', {email}, {
+async function userEmailSendOtp(email) {
+  return await axios.post(userAuthUrl + '/sendEmail', { email }, {
     headers: await authHeader('')
   });
-} 
+}
 
-async function userEmailOtpVerify(data){
+async function userEmailOtpVerify(data) {
   return await axios.post(userAuthUrl + '/emailVerify', data, {
     headers: await authHeader('')
   });
 }
 
-async function userAadharVerify(data:any) {
+async function userAadharVerify(data: any) {
   return await axios.post(userAuthUrl + '/aadharVerify', data, {
     headers: await authHeader('')
   })
@@ -94,6 +94,25 @@ async function userChangeAgreement(image) {
     headers: await authHeader('')
   })
 }
+
+async function blockFreelancer(freelancerId: string) {
+  return await axios.post(userAuthUrl + '/block-freelancer', { freelancerId }, {
+    headers: await authHeader('')
+  });
+}
+
+async function unblockFreelancer(freelancerId: string) {
+  return await axios.post(userAuthUrl + '/unblock-freelancer', { freelancerId }, {
+    headers: await authHeader('')
+  });
+}
+
+async function getBlockedFreelancers() {
+  return await axios.get(userAuthUrl + '/blocked-freelancers', {
+    headers: await authHeader('')
+  });
+}
+
 
 
 // =========================== Freelancer =========================================
@@ -130,25 +149,25 @@ async function updateFreelancerCategoryData(categoryIds) {
 }
 
 async function updateFreelancerProfile(image) {
-  return await axios.put(freelancerUrl + '/image', {image}, {
+  return await axios.put(freelancerUrl + '/image', { image }, {
     headers: await authHeader('FormData')
   });
 }
 
-async function uploadPanCard(image){
-  return await axios.put(freelancerUrl + '/pancard', {image}, {
+async function uploadPanCard(image) {
+  return await axios.put(freelancerUrl + '/pancard', { image }, {
     headers: await authHeader('FormData')
   });
 }
 
-async function uploadAadharFrontImage(image){
-  return await axios.put(freelancerUrl + '/aadhar/front', {image}, {
+async function uploadAadharFrontImage(image) {
+  return await axios.put(freelancerUrl + '/aadhar/front', { image }, {
     headers: await authHeader('FormData')
   });
 }
 
-async function uploadAadharBackImage(image){
-  return await axios.put(freelancerUrl + '/aadhar/back', {image}, {
+async function uploadAadharBackImage(image) {
+  return await axios.put(freelancerUrl + '/aadhar/back', { image }, {
     headers: await authHeader('FormData')
   });
 }
@@ -161,20 +180,20 @@ async function aadharVerify(data) {
 
 
 
-async function emailSendOtp(email){
-  return await axios.post(freelancerUrl + '/sendEmail', {email}, {
+async function emailSendOtp(email) {
+  return await axios.post(freelancerUrl + '/sendEmail', { email }, {
     headers: await authHeader('')
   });
 }
 
-async function emailVerifyOtp(otp){
-  return await axios.post(freelancerUrl + '/emailVerify', {otp}, {
+async function emailVerifyOtp(otp) {
+  return await axios.post(freelancerUrl + '/emailVerify', { otp }, {
     headers: await authHeader('')
   });
 }
 
-async function setOffDays(dates){
-  return await axios.post(freelancerUrl + `/addBlackOut`, {dates}, {
+async function setOffDays(dates) {
+  return await axios.post(freelancerUrl + `/addBlackOut`, { dates }, {
     headers: await authHeader('')
   })
 }
@@ -195,149 +214,149 @@ async function freelancerChangeAgreement(image) {
 // ======================== Category ================================================
 
 async function getCategories() {
-    return await axios.get(categoryUrl, {
-        headers: await authHeader('')
-    });
+  return await axios.get(categoryUrl, {
+    headers: await authHeader('')
+  });
 }
-async function getHomePageCategoryServices(){
-    return await axios.get(categoryUrl + '/popularServices');
+async function getHomePageCategoryServices() {
+  return await axios.get(categoryUrl + '/popularServices');
 }
 
 // ===================== Service =====================================================
 async function createService(payload) {
-    return await axios.post(serviceUrl, payload, {
-        headers: await authHeader('')
-    });
+  return await axios.post(serviceUrl, payload, {
+    headers: await authHeader('')
+  });
 }
 
 async function getAllServices() {
-    return await axios.get(serviceUrl, {
-        headers: await authHeader('')
-    });
+  return await axios.get(serviceUrl, {
+    headers: await authHeader('')
+  });
 }
 
-async function updateService(payload, id, ) {
-    return await axios.patch(serviceUrl + '/' + id, payload,  {
-        headers: await authHeader('')
-    });
+async function updateService(payload, id,) {
+  return await axios.patch(serviceUrl + '/' + id, payload, {
+    headers: await authHeader('')
+  });
 }
 
 async function getServiceById(id) {
-    return await axios.get(serviceUrl + '/' + id, {
-        headers: await authHeader('')
-    });
+  return await axios.get(serviceUrl + '/' + id, {
+    headers: await authHeader('')
+  });
 }
 
 async function uploadImages(image, id) {
-  return await axios.put(serviceUrl + `/images/${id}`, {image}, {
+  return await axios.put(serviceUrl + `/images/${id}`, { image }, {
     headers: await authHeader('FormData')
   });
 }
 
-async function deletedService(id){
-    return await axios.delete(serviceUrl + `/${id}`, {
-        headers: await authHeader('')
-    });
+async function deletedService(id) {
+  return await axios.delete(serviceUrl + `/${id}`, {
+    headers: await authHeader('')
+  });
 }
 
 async function getServiceByCategoryId(id, lat, lng) {
-    return await axios.get(serviceUrl + `/user/byCategory?categoryId=${id}&lat=${lat}&lng=${lng}`, {
-        headers: await authHeader('')
-    });
+  return await axios.get(serviceUrl + `/user/byCategory?categoryId=${id}&lat=${lat}&lng=${lng}`, {
+    headers: await authHeader('')
+  });
 }
 
 async function getServicesByFreelancer(id) {
-    return await axios.get(serviceUrl + `/freelance/byId/${id}`, {
-        headers: await authHeader('')
-    });
+  return await axios.get(serviceUrl + `/freelance/byId/${id}`, {
+    headers: await authHeader('')
+  });
 }
 
 //========================================= Freelancer ===============================================
 
-async function getAllFreelancer( limit, offset, keyword) {
-    return await axios.get(freelancerUrl +`/all?limit=${limit}&offset=${offset}&keyword=${keyword}`, {
-        headers: await authHeader('')
-    });
+async function getAllFreelancer(limit, offset, keyword) {
+  return await axios.get(freelancerUrl + `/all?limit=${limit}&offset=${offset}&keyword=${keyword}`, {
+    headers: await authHeader('')
+  });
 }
 
 async function getFreelancerById(id) {
-    return await axios.get(freelancerUrl + `/freelancerDetails/${id}`, {
-        headers: await authHeader('')
-    });
+  return await axios.get(freelancerUrl + `/freelancerDetails/${id}`, {
+    headers: await authHeader('')
+  });
 }
 
 
 // ======================== Jobs ========================================================
 
 async function createJob(payload) {
-    return await axios.post(jobUrl , payload, {
-        headers: await authHeader('')
-    });
+  return await axios.post(jobUrl, payload, {
+    headers: await authHeader('')
+  });
 }
 
 async function getMyJobs(limit: number, offset: number) {
-    return await axios.get(jobUrl + `?limit=${limit}&offset=${offset}`, {
-        headers: await authHeader('')
-    });
+  return await axios.get(jobUrl + `?limit=${limit}&offset=${offset}`, {
+    headers: await authHeader('')
+  });
 }
 
 async function updateJobStatus(status: string, id: string) {
-    return await axios.put(jobUrl + `/status/${id}`, {status}, {
-        headers: await authHeader('')
-    });
+  return await axios.put(jobUrl + `/status/${id}`, { status }, {
+    headers: await authHeader('')
+  });
 }
 
 async function getJobById(id) {
-    return await axios.get(jobUrl + `/myJob/${id}`, {
-        headers: await authHeader('')
-    });
+  return await axios.get(jobUrl + `/myJob/${id}`, {
+    headers: await authHeader('')
+  });
 }
 
 async function updateJob(id, data) {
-    return await axios.patch(jobUrl + `/myJob/${id}`, data, {
-        headers: await authHeader('')
-    });
+  return await axios.patch(jobUrl + `/myJob/${id}`, data, {
+    headers: await authHeader('')
+  });
 }
 
 async function getAllJobs(limit, offset) {
-    return await axios.get(jobUrl + `/all?limit=${limit}&offset=${offset}`, {
-        headers: await authHeader('')
-    });
+  return await axios.get(jobUrl + `/all?limit=${limit}&offset=${offset}`, {
+    headers: await authHeader('')
+  });
 }
 async function getRecentJobs() {
-    return await axios.get(jobUrl + `/recentJobs`);
+  return await axios.get(jobUrl + `/recentJobs`);
 }
 
 async function getAllFreelancerJobs(limit, offset, categoryId, lat, lng) {
-    return await axios.get(jobUrl + `/all/freelancer?limit=${limit}&offset=${offset}&categoryId=${categoryId}&lat=${lat}&lng=${lng}`, {
-        headers: await authHeader('')
-    });
+  return await axios.get(jobUrl + `/all/freelancer?limit=${limit}&offset=${offset}&categoryId=${categoryId}&lat=${lat}&lng=${lng}`, {
+    headers: await authHeader('')
+  });
 }
 
 // ======================== Portfolio ========================================================
 
 async function createPortfolio(payload) {
-    return await axios.post(portfolioUrl, payload, {
-        headers: await authHeader('')
-    });
+  return await axios.post(portfolioUrl, payload, {
+    headers: await authHeader('')
+  });
 }
 
 async function uploadPortfolioImage(id, image) {
-    return await axios.put(portfolioUrl + `/${id}`, { image }, {
-        headers: await authHeader('FormData')
-    });
+  return await axios.put(portfolioUrl + `/${id}`, { image }, {
+    headers: await authHeader('FormData')
+  });
 }
 
 async function getAllPortfolio() {
-    return await axios.get(portfolioUrl, {
-        headers: await authHeader('')
-    });
+  return await axios.get(portfolioUrl, {
+    headers: await authHeader('')
+  });
 }
 
 async function deletePortfolio(id) {
-    return await axios.delete(portfolioUrl + `/${id}`, {
-        headers: await authHeader('')
-    });
+  return await axios.delete(portfolioUrl + `/${id}`, {
+    headers: await authHeader('')
+  });
 }
 
 // =========================== Booking ============================================
@@ -347,13 +366,13 @@ async function createBooking(data: any) {
   });
 }
 
-async function getAllBooking(){
+async function getAllBooking() {
   return await axios.get(bookingUrl + `/user`, {
     headers: await authHeader('')
   });
 }
 
-async function getAllActiveBooking(){
+async function getAllActiveBooking() {
   return await axios.get(bookingUrl + `/user/active`, {
     headers: await authHeader('')
   });
@@ -361,7 +380,7 @@ async function getAllActiveBooking(){
 
 
 
-async function getAllFreelancerBookings(limit, offset, allLimit, allOffset){
+async function getAllFreelancerBookings(limit, offset, allLimit, allOffset) {
   return await axios.get(bookingUrl + `/freelancer?limit=${limit}&offset=${offset}?allLimit=${allLimit}&allOffset=${allOffset}`, {
     headers: await authHeader('')
   });
@@ -375,42 +394,42 @@ async function confirmBooking(id: string) {
 
 async function startBooking(id: string, otp: string) {
   console.log(id)
-  return await axios.post(bookingUrl + `/freelancer/verifyStartOtp/${id}`,{otp}, {
+  return await axios.post(bookingUrl + `/freelancer/verifyStartOtp/${id}`, { otp }, {
     headers: await authHeader('')
   });
 }
 async function completeBooking(id: string, otp: string) {
-  return await axios.post(bookingUrl + `/freelancer/completeOtp/${id}`,{otp}, {
+  return await axios.post(bookingUrl + `/freelancer/completeOtp/${id}`, { otp }, {
     headers: await authHeader('')
   });
 }
 
-async function cancelBooking(id){
+async function cancelBooking(id) {
   return await axios.get(bookingUrl + `/freelancer/cancel/${id}`, {
     headers: await authHeader('')
   })
 }
 
-async function confirmJobApplication(id){
+async function confirmJobApplication(id) {
   return await axios.get(jobApplicationUrl + `/freelancer/confirm/${id}`, {
     headers: await authHeader('')
   });
 }
 
-async function rejectJobApplication(id){
+async function rejectJobApplication(id) {
   return await axios.get(jobApplicationUrl + `/freelancer/reject/${id}`, {
     headers: await authHeader('')
   });
 }
 
-async function startJobApplication(id, otp){
-  return await axios.post(jobApplicationUrl + `/freelancer/verifyStartOtp/${id}`, {otp}, {
+async function startJobApplication(id, otp) {
+  return await axios.post(jobApplicationUrl + `/freelancer/verifyStartOtp/${id}`, { otp }, {
     headers: await authHeader('')
   });
 }
 
-async function completeJobApplication(id, otp){
-  return await axios.post(jobApplicationUrl + `/freelancer/completeOtp/${id}`, {otp}, {
+async function completeJobApplication(id, otp) {
+  return await axios.post(jobApplicationUrl + `/freelancer/completeOtp/${id}`, { otp }, {
     headers: await authHeader('')
   });
 }
@@ -423,19 +442,19 @@ async function createJobApplicatiion(id, data) {
   });
 }
 
-async function getJobApplicationByID(id){
+async function getJobApplicationByID(id) {
   return await axios.get(jobApplicationUrl + `/applicants/${id}`, {
     headers: await authHeader('')
   });
 }
 
-async function getAllAppliedJob(){
+async function getAllAppliedJob() {
   return await axios.get(jobApplicationUrl + `/freelancer`, {
     headers: await authHeader('')
   });
 }
 
-async function cancelJobApplication(id){
+async function cancelJobApplication(id) {
   return await axios.delete(jobApplicationUrl + `/withdraw/${id}`, {
     headers: await authHeader('')
   });
@@ -443,7 +462,7 @@ async function cancelJobApplication(id){
 
 
 // ========================== Shortlist ================================
-async function shortListFreelancer(data){
+async function shortListFreelancer(data) {
   console.log(data, "datatrta")
   return await axios.post(jobApplicationUrl + `/shortlist`, data, {
     headers: await authHeader('')
@@ -452,39 +471,39 @@ async function shortListFreelancer(data){
 
 // ====================user Chat ============================
 
-async function getUserConversationId(id){
+async function getUserConversationId(id) {
   return await axios.get(chatUrl + `/createUserConversation/${id}`, {
     headers: await authHeader('')
   });
 }
 
 
-async function getFreelancerConversationId(id){
+async function getFreelancerConversationId(id) {
   return await axios.get(chatUrl + `/createFreelancerConversation/${id}`, {
     headers: await authHeader('')
   });
 }
 
 
-async function getCoversationDetailsForUser(conversationId){
+async function getCoversationDetailsForUser(conversationId) {
   return await axios.get(chatUrl + `/getUserConversations/${conversationId}`, {
     headers: await authHeader('')
   });
 }
 
-async function getCoversationDetailsForFreelancer(conversationId){
+async function getCoversationDetailsForFreelancer(conversationId) {
   return await axios.get(chatUrl + `/getFreelancerConversations/${conversationId}`, {
     headers: await authHeader('')
   });
 }
 
-async function getCoversationListForUser(){
+async function getCoversationListForUser() {
   return await axios.get(chatUrl + `/getUserConversations`, {
     headers: await authHeader('')
   });
 }
 
-async function getCoversationListForFreelancer(){
+async function getCoversationListForFreelancer() {
   return await axios.get(chatUrl + `/getFreelancerConversations`, {
     headers: await authHeader('')
   });
@@ -494,19 +513,19 @@ async function getCoversationListForFreelancer(){
 
 /********** Transaction ************/
 
-async function getFreelancerTransactions(){
+async function getFreelancerTransactions() {
   return await axios.get(transactionURL + `/freelancer`, {
     headers: await authHeader('')
   });
 }
 
-async function getUserTransactions(){
+async function getUserTransactions() {
   return await axios.get(transactionURL + `/user`, {
     headers: await authHeader('')
   });
 }
 
-async function getAllWalletWidthrawal(){
+async function getAllWalletWidthrawal() {
   return await axios.get(transactionURL + `/wallet`, {
     headers: await authHeader('')
   });
@@ -515,19 +534,19 @@ async function getAllWalletWidthrawal(){
 
 
 // ============================ Widthrawal ============================
-async function widthrawalRequest(amount){
-  return await axios.put(freelancerUrl + `/withdrawRequest`, {amount}, {
+async function widthrawalRequest(amount) {
+  return await axios.put(freelancerUrl + `/withdrawRequest`, { amount }, {
     headers: await authHeader('')
   });
 }
 
-async function getAllWidthrawal(){
+async function getAllWidthrawal() {
   return await axios.get(widthrawalUrl, {
     headers: await authHeader('')
   });
 }
 
-async function addPaymentMethod(data){
+async function addPaymentMethod(data) {
   return await axios.patch(freelancerUrl + `/bankAccount`, data, {
     headers: await authHeader('')
   });
@@ -535,26 +554,26 @@ async function addPaymentMethod(data){
 
 
 // ================= Dashboard =======================
-async function getUserDashboardData(){
+async function getUserDashboardData() {
   return await axios.get(dashboardUrl + `/user`, {
     headers: await authHeader('')
   });
 }
 
-async function getFreelancerDashboardData(){
+async function getFreelancerDashboardData() {
   return await axios.get(dashboardUrl + `/freelancer`, {
     headers: await authHeader('')
   });
 }
 
 // ================= review =====================
-async function createReview(data){
+async function createReview(data) {
   return await axios.post(serviceReview, data, {
     headers: await authHeader('')
   });
 }
 
-async function createJobReview(data){
+async function createJobReview(data) {
   return await axios.post(jobReview, data, {
     headers: await authHeader('')
   });
@@ -562,7 +581,7 @@ async function createJobReview(data){
 
 
 // ============= Search =====================
-async function searchService(keyword){
+async function searchService(keyword) {
   return await axios.get(serviceUrl + `/user/search?keyword=${keyword}`, {
     headers: await authHeader('')
   });
@@ -570,8 +589,8 @@ async function searchService(keyword){
 
 
 // =================== Insatnt Booking =================================
-async function setInstantBooking(instantBooking){
-  return await axios.post(freelancerUrl + `/change/instantBookingStatus`, {instantBooking}, {
+async function setInstantBooking(instantBooking) {
+  return await axios.post(freelancerUrl + `/change/instantBookingStatus`, { instantBooking }, {
     headers: await authHeader('')
   })
 }
@@ -588,7 +607,7 @@ async function postInstantBooking(data) {
   })
 }
 
-async function getBookingsForFreelancerInstant(limit, offset, lat, lng){
+async function getBookingsForFreelancerInstant(limit, offset, lat, lng) {
   return await axios.get(jobUrl + `/freelancer/instant?limit=${limit}&offset=${offset}&lat=${lat}&lng=${lng}`, {
     headers: await authHeader('')
   });
@@ -619,45 +638,58 @@ async function submitFreelancerJobReportApi(data) {
   })
 }
 
+async function submitChatReport(data) {
+  return await axios.post(reportUrl + '/chat/freelancer', data, {
+    headers: await authHeader('')
+  })
+}
+
+async function submitChatReportUser(data) {
+  return await axios.post(reportUrl + '/chat/user', data, {
+    headers: await authHeader('')
+  })
+}
+
 
 
 
 
 
 export const service = {
-  userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify,  deleteUserProfile, userChangeAgreement,
+  userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify, deleteUserProfile, userChangeAgreement, blockFreelancer, unblockFreelancer, getBlockedFreelancers,
 
-  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerCategoryData, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp,deleteFreelancerProfile, freelancerChangeAgreement, 
+
+  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerCategoryData, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp, deleteFreelancerProfile, freelancerChangeAgreement,
 
   getCategories,
 
   getHomePageCategoryServices,
 
-  createService, getAllServices, updateService, getServiceById, uploadImages, deletedService, getServiceByCategoryId, getServicesByFreelancer, 
+  createService, getAllServices, updateService, getServiceById, uploadImages, deletedService, getServiceByCategoryId, getServicesByFreelancer,
 
   getAllFreelancer, getFreelancerById,
 
-  createJob, getMyJobs, updateJobStatus, getJobById, updateJob, getAllJobs, getRecentJobs, getAllFreelancerJobs, 
+  createJob, getMyJobs, updateJobStatus, getJobById, updateJob, getAllJobs, getRecentJobs, getAllFreelancerJobs,
 
-  createPortfolio, uploadPortfolioImage, getAllPortfolio, deletePortfolio, 
+  createPortfolio, uploadPortfolioImage, getAllPortfolio, deletePortfolio,
 
-  createBooking, getAllBooking, getAllActiveBooking,  getAllFreelancerBookings, confirmBooking, startBooking, completeBooking, cancelBooking, confirmJobApplication, rejectJobApplication, startJobApplication, completeJobApplication,
+  createBooking, getAllBooking, getAllActiveBooking, getAllFreelancerBookings, confirmBooking, startBooking, completeBooking, cancelBooking, confirmJobApplication, rejectJobApplication, startJobApplication, completeJobApplication,
 
-  createJobApplicatiion, getJobApplicationByID, shortListFreelancer, getAllAppliedJob, cancelJobApplication, 
+  createJobApplicatiion, getJobApplicationByID, shortListFreelancer, getAllAppliedJob, cancelJobApplication,
 
-  getUserConversationId, getCoversationDetailsForUser, getCoversationDetailsForFreelancer, getCoversationListForUser, getCoversationListForFreelancer, getFreelancerConversationId, 
+  getUserConversationId, getCoversationDetailsForUser, getCoversationDetailsForFreelancer, getCoversationListForUser, getCoversationListForFreelancer, getFreelancerConversationId,
 
   getFreelancerTransactions, getUserTransactions,
 
-  widthrawalRequest, getAllWidthrawal, addPaymentMethod,  getAllWalletWidthrawal,
+  widthrawalRequest, getAllWidthrawal, addPaymentMethod, getAllWalletWidthrawal,
 
-  getUserDashboardData, getFreelancerDashboardData, 
+  getUserDashboardData, getFreelancerDashboardData,
 
   createReview, createJobReview,
 
-  searchService, 
+  searchService,
 
-  setInstantBooking, getInstantBookingData, postInstantBooking, getBookingsForFreelancerInstant, 
-  
-  submitServiceReport, submitFreelancerServiceReport, submitJobReportApi, submitFreelancerJobReportApi,
+  setInstantBooking, getInstantBookingData, postInstantBooking, getBookingsForFreelancerInstant,
+
+  submitServiceReport, submitFreelancerServiceReport, submitJobReportApi, submitFreelancerJobReportApi, submitChatReport, submitChatReportUser,
 }
