@@ -19,7 +19,8 @@ const initialState = {
     profile: {} as any,
     conversationId: '',
     conversationList: [],
-    serviceBookingId: null as any
+    serviceBookingId: null as any,
+    jobApplicationId: null as any
 }
 
 
@@ -31,6 +32,7 @@ const chatSlice = createSlice({
             state.messages = payload?.messages;
             state.profile = payload.freelancer || payload.user;
             state.serviceBookingId = payload.serviceBookingId;
+            state.jobApplicationId = payload.jobApplicationId;
         },
         setConversationId: (state, { payload }) => {
             state.conversationId = payload;
@@ -51,13 +53,13 @@ export default chatSlice.reducer;
 // thunk
 
 
-export function getConversationId(id, navigate, bookingId?: string) {
+export function getConversationId(id, navigate, bookingId?: string, jobApplicationId?: string) {
     return async function getConversationIdThunk(dispatch: any) {
         dispatch(setLoading(true));
         dispatch(setStatus(STATUSES.LOADING));
         try {
             if (localService?.get('role') === 'user') {
-                await service.getUserConversationId(id, bookingId).then((response) => {
+                await service.getUserConversationId(id, bookingId, jobApplicationId).then((response) => {
                     if (response.data) {
                         dispatch(setConversationId(response.data));
                         dispatch(setStatus(STATUSES.IDLE));
@@ -65,7 +67,7 @@ export function getConversationId(id, navigate, bookingId?: string) {
                     }
                 })
             } else {
-                await service.getFreelancerConversationId(id, bookingId).then((response) => {
+                await service.getFreelancerConversationId(id, bookingId, jobApplicationId).then((response) => {
                     if (response.data) {
                         dispatch(setConversationId(response.data));
                         dispatch(setStatus(STATUSES.IDLE));

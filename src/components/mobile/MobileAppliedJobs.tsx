@@ -15,22 +15,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { cancelJobApplication, getAllAppliedJob } from "@/store/jobApplicationSlice";
 import { setChatModal } from "@/store/authSlice";
+import { getConversationId } from "@/store/chatSlice";
 
 
 const MobileAppliedJobs = () => {
   const navigate = useNavigate();
-  const { setUserRole, setIsLoggedIn, userRole, isLoggedIn } = useUserRole();
   const dispatch = useDispatch<AppDispatch>();
   const jobVar = useSelector((state: RootState) => state?.jobApplication);
-
-  const handleLogin = (role: string) => {
-    setIsLoggedIn(true);
-    setUserRole(role as "employer" | "freelancer");
-  };
-
-  // Mock applied jobs data
-  const appliedJobs = [];
-
 
   useEffect(() => {
     dispatch(getAllAppliedJob())
@@ -131,24 +122,22 @@ const MobileAppliedJobs = () => {
 
                     <div className="text-lg font-bold text-primary">{job.budget}</div>
 
-                    {job.status !== "rejected" && (
                       <div className="flex gap-2 pt-2">
                         <Button
                           size="sm"
                           variant="outline"
                           className="flex-1"
-                          // onClick={() => navigate(`/chat/${job.id}`)}
-                          onClick={() => dispatch(setChatModal(true))}
+                          onClick={() => dispatch(getConversationId(job?.jobId?.userId?._id, navigate, undefined, job?._id))}
                         >
                           <MessageCircle className="h-3 w-3 mr-1" />
                           Chat
                         </Button>
-                        {job.status === "shortlisted" && (
+                        {job.status !== "rejected" && job.status === "shortlisted" && (
                           <Button size="sm" className="flex-1">
                             View
                           </Button>
                         )}
-                        {job.status === "applied" && (
+                        {job.status !== "rejected" && job.status === "applied" && (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button size="sm" className="flex-1">
@@ -159,8 +148,7 @@ const MobileAppliedJobs = () => {
                               <AlertDialogHeader>
                                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  This action cannot be undone. This will permanently delete from your
-                                  account and remove your data from our servers.
+                                  This action cannot be undone.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
@@ -171,7 +159,6 @@ const MobileAppliedJobs = () => {
                           </AlertDialog>
                         )}
                       </div>
-                    )}
                   </div>
                 </CardContent>
               </Card>

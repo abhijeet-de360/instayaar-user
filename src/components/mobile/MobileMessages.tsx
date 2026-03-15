@@ -94,18 +94,59 @@ const MobileMessages = () => {
                             </h4>
                             <div className="flex items-center gap-2 mt-0.5">
                               {conversation?.serviceBookingId?.serviceId?.title && (
-                                <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium inline-block truncate max-w-full">
+                                <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium inline-block truncate max-w-[150px]">
                                   {conversation?.serviceBookingId?.serviceId?.title}
                                 </span>
                               )}
-                              {conversation?.serviceBookingId?.status === "completed" && (
-                                <Badge
-                                  variant="outline"
-                                  className="text-[8px] h-4 px-1.5 bg-green-50 text-green-700 border-green-200 font-bold uppercase tracking-wider"
-                                >
-                                  Completed
-                                </Badge>
+                              {conversation?.jobApplicationId?.jobId?.title && (
+                                <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium inline-block truncate max-w-[150px]">
+                                  {conversation?.jobApplicationId?.jobId?.title}
+                                </span>
                               )}
+                              {/* Unified Status Badge */}
+                              {(() => {
+                                const isServiceTerminal = conversation?.serviceBookingId?.status === "completed" || 
+                                                        conversation?.serviceBookingId?.serviceId?.status === "closed";
+                                const isJobTerminal = conversation?.jobApplicationId?.jobId?.status === "closed" || 
+                                                    conversation?.jobApplicationId?.jobId?.status === "deleted" ||
+                                                    conversation?.jobApplicationId?.status === "completed" ||
+                                                    conversation?.jobApplicationId?.status === "rejected";
+                                
+                                if (isServiceTerminal || isJobTerminal) {
+                                  return (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-[8px] h-4 px-1.5 bg-green-50 text-green-700 border-green-200 font-bold uppercase tracking-wider"
+                                    >
+                                      Completed
+                                    </Badge>
+                                  );
+                                }
+
+                                if (conversation?.jobApplicationId?.status === 'shortlisted' || conversation?.jobApplicationId?.status === 'hired') {
+                                  return (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-[8px] h-4 px-1.5 bg-blue-50 text-blue-700 border-blue-200 font-bold uppercase tracking-wider"
+                                    >
+                                      {conversation.jobApplicationId.status}
+                                    </Badge>
+                                  );
+                                }
+
+                                if (conversation?.jobApplicationId?.status === 'applied') {
+                                  return (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-[8px] h-4 px-1.5 bg-gray-50 text-gray-700 border-gray-200 font-bold uppercase tracking-wider"
+                                    >
+                                      Applied
+                                    </Badge>
+                                  );
+                                }
+
+                                return null;
+                              })()}
                             </div>
                           </div>
                           

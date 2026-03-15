@@ -210,6 +210,24 @@ async function freelancerChangeAgreement(image) {
   })
 }
 
+async function blockUser(userId: string) {
+  return await axios.post(freelancerUrl + '/block', { userId }, {
+    headers: await authHeader('')
+  });
+}
+
+async function unblockUser(userId: string) {
+  return await axios.post(freelancerUrl + '/unblock', { userId }, {
+    headers: await authHeader('')
+  });
+}
+
+async function getBlockedUsers() {
+  return await axios.get(freelancerUrl + '/blocked-users', {
+    headers: await authHeader('')
+  });
+}
+
 
 // ======================== Category ================================================
 
@@ -474,15 +492,21 @@ async function shortListFreelancer(data) {
 
 // ====================user Chat ============================
 
-async function getUserConversationId(id, serviceBookingId?: string) {
-  return await axios.get(chatUrl + `/createUserConversation/${id}${serviceBookingId ? `?serviceBookingId=${serviceBookingId}` : ''}`, {
+async function getUserConversationId(id, serviceBookingId?: string, jobApplicationId?: string) {
+  let url = chatUrl + `/createUserConversation/${id}?`;
+  if (serviceBookingId) url += `serviceBookingId=${serviceBookingId}&`;
+  if (jobApplicationId) url += `jobApplicationId=${jobApplicationId}&`;
+  return await axios.get(url, {
     headers: await authHeader('')
   });
 }
 
 
-async function getFreelancerConversationId(id, serviceBookingId?: string) {
-  return await axios.get(chatUrl + `/createFreelancerConversation/${id}${serviceBookingId ? `?serviceBookingId=${serviceBookingId}` : ''}`, {
+async function getFreelancerConversationId(id, serviceBookingId?: string, jobApplicationId?: string) {
+  let url = chatUrl + `/createFreelancerConversation/${id}?`;
+  if (serviceBookingId) url += `serviceBookingId=${serviceBookingId}&`;
+  if (jobApplicationId) url += `jobApplicationId=${jobApplicationId}&`;
+  return await axios.get(url, {
     headers: await authHeader('')
   });
 }
@@ -662,7 +686,7 @@ export const service = {
   userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify, deleteUserProfile, userChangeAgreement, blockFreelancer, unblockFreelancer, getBlockedFreelancers,
 
 
-  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerCategoryData, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp, deleteFreelancerProfile, freelancerChangeAgreement,
+  freelancerSendOtp, freelancerVerifyOtp, getFreelancerProfile, updateFreelancerdata, updateFreelancerCategoryData, updateFreelancerProfile, uploadPanCard, uploadAadharFrontImage, uploadAadharBackImage, aadharVerify, emailSendOtp, emailVerifyOtp, setOffDays, deleteFreelancerProfile, freelancerChangeAgreement, blockUser, unblockUser, getBlockedUsers,
 
   getCategories,
 

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Link, useNavigate } from "react-router-dom";
 import { localService } from "@/shared/_session/local";
-import { ArrowLeft, IndianRupee, Star, User2Icon } from "lucide-react";
+import { ArrowLeft, IndianRupee, MessageCircle, Star, User2Icon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -21,6 +21,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { setInstantBookingFreelancer } from "@/store/authSlice";
 import { bidInstantBooking, completeInstantBooking, getBookingsForFreelancer, startInstantBooking } from "@/store/instantBookingSlice";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { getConversationId } from "@/store/chatSlice";
 import { warningHandler } from "@/shared/_helper/responseHelper";
 
 
@@ -121,17 +122,33 @@ const FreelancerInstantBooking = () => {
             <div className="flex items-center gap-2"><span className="text-gray-600 text-sm">{item?.categoryId?.name}</span> | <span className="font-medium text-md mt-0.5">₹{item?.budget}</span></div>
             <div className="flex items-center gap-2"><span className="text-gray-800 text-sm">{item?.address}</span></div>
             <small className="text-gray-400">By {item?.userId?.firstName} {item?.userId?.lastName}</small>
-            {item?.applicationStatus === null && <Button className="h-8 w-full mt-2" onClick={() => {
-              setBookingId(item?._id);
-              setOpen(true)
-            }}>Accept</Button>}
+            {item?.applicationStatus === null && (
+              <div className="flex gap-2 mt-2">
+                <Button className="h-8 flex-1" onClick={() => {
+                  setBookingId(item?._id);
+                  setOpen(true)
+                }}>Accept</Button>
+                <Button
+                  variant="outline"
+                  className="h-8 flex-1"
+                  onClick={() => dispatch(getConversationId(item?.userId?._id, navigate, undefined, item?.appliedJobId))}
+                >
+                  <MessageCircle className="h-4 w-4 mr-1" />
+                  Chat
+                </Button>
+              </div>
+            )}
             {
               item?.applicationStatus === 'applied' && <Button variant="outline" className="h-8 w-full mt-2">Applied</Button>
             }
             {
               item?.applicationStatus === 'shortlisted' &&
               <div className="flex items-center gap-2">
-                <Button variant="outline" className="flex-1 h-8 w-full mt-2">Chat</Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1 h-8 w-full mt-2"
+                  onClick={() => dispatch(getConversationId(item?.userId?._id, navigate, undefined, item?.appliedJobId))}
+                >Chat</Button>
                 <Button variant="outline" className="flex-1 h-8 w-full mt-2">Call</Button>
                 <Button className="flex-1 h-8 w-full mt-2" onClick={() => {
                   setOtpModal(true);
@@ -143,7 +160,11 @@ const FreelancerInstantBooking = () => {
             {
               item?.applicationStatus === 'inProgress' &&
               <div className="flex items-center gap-2">
-                <Button variant="outline" className="flex-1 h-8 w-full mt-2">Chat</Button>
+                <Button 
+                  variant="outline" 
+                  className="flex-1 h-8 w-full mt-2"
+                  onClick={() => dispatch(getConversationId(item?.userId?._id, navigate, undefined, item?.appliedJobId))}
+                >Chat</Button>
                 <Button variant="outline" className="flex-1 h-8 w-full mt-2">Call</Button>
                 <Button className="flex-1 h-8 w-full mt-2" onClick={() => {
                   setOtpModal(true);

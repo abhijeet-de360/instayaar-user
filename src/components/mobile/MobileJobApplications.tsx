@@ -55,9 +55,8 @@ const MobileJobApplications = () => {
     }
   };
 
-  const handleChat = (applicantId: number) => {
-    dispatch(getConversationId(applicantId, navigate))
-    // navigate(`/chat/${applicantId}`);
+  const handleChat = (applicant: any) => {
+    dispatch(getConversationId(applicant?.freelancerId?._id, navigate, undefined, applicant?._id))
   };
 
   const handleViewProfile = (applicantId: number) => {
@@ -141,8 +140,8 @@ const MobileJobApplications = () => {
                     {/* Header with Profile */}
                     <div className="flex items-start gap-3">
                       <Avatar className="h-12 w-12">
-                        <AvatarImage src={applicant?.freelancerId?.profile} alt={applicant.name} className="object-cover object-top" />
-                        {/* <AvatarFallback>{applicant?.freelancerId?.firstName.splice(0, 1)}</AvatarFallback> */}
+                        <AvatarImage src={applicant?.freelancerId?.profile} alt={applicant?.freelancerId?.firstName} className="object-cover object-top" />
+                        <AvatarFallback>{applicant?.freelancerId?.firstName?.charAt(0)}</AvatarFallback>
                       </Avatar>
 
                       <div className="flex-1">
@@ -213,16 +212,15 @@ const MobileJobApplications = () => {
                         <Eye className="h-3 w-3 mr-1" />
                         View
                       </Button>}
-                      {applicant?.status !== 'rejected' && <Button
+                      <Button
                         size="sm"
                         variant="outline"
                         className="flex-1"
-                        onClick={() => handleChat(applicant.freelancerId?._id)}
+                        onClick={() => handleChat(applicant)}
                       >
                         <MessageCircle className="h-3 w-3 mr-1" />
                         Chat
                       </Button>
-                      }
                     </div>
                   </div>
                 </CardContent>

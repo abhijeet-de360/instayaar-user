@@ -12,7 +12,7 @@ import MobileAppliedJobs from "@/components/mobile/MobileAppliedJobs";
 const AppliedJobs = () => {
   const navigate = useNavigate();
   const { setUserRole, setIsLoggedIn } = useUserRole();
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const checkIsMobile = () => {

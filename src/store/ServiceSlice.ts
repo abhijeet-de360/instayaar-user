@@ -242,7 +242,7 @@ export function getServicesByFreelancer(id: string) {
     };
 }
 
-export function submitServiceReportAction(payload: { reportedEntityId: string; reason: string; details?: string }, isFreelancer: boolean = false, onSuccess?: () => void) {
+export function submitReportAction(payload: { reportedEntityId: string; reason: string; details?: string }, isFreelancer: boolean = false, onSuccess?: () => void) {
     return async function submitReportThunk(dispatch: any) {
         dispatch(setLoading(true));
         try {
@@ -261,3 +261,6 @@ export function submitServiceReportAction(payload: { reportedEntityId: string; r
         }
     };
 }
+
+export const submitServiceReportAction = submitReportAction;
+export const submitProfileReportAction = submitReportAction;

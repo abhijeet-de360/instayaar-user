@@ -191,8 +191,7 @@ const MobileFreelancerProfile = () => {
               </div>
 
               {/* Header Right Action - Block */}
-              {isBlocked && 
-              freelancerVar?.freelancerDetails?._id && (
+              {freelancerVar?.freelancerDetails?._id && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
@@ -201,6 +200,7 @@ const MobileFreelancerProfile = () => {
                       className={`text-xs px-2 h-8 ${isBlocked ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
                       disabled={isBlocking}
                     >
+                      <Ban className="h-3.5 w-3.5 mr-1" />
                       {isBlocked ? "Blocked" : "Block"}
                     </Button>
                   </AlertDialogTrigger>
@@ -218,7 +218,7 @@ const MobileFreelancerProfile = () => {
                     <AlertDialogFooter className="flex-row justify-end space-x-2">
                       <AlertDialogCancel className="mt-0 flex-1">Cancel</AlertDialogCancel>
                       <AlertDialogAction
-                        className="flex-1"
+                        className={`flex-1 ${isBlocked ? '' : 'bg-destructive hover:bg-destructive/90'}`}
                         onClick={() => handleBlockToggle()}
                       >
                         {isBlocked ? "Unblock" : "Block"}

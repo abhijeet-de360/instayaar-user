@@ -689,6 +689,74 @@ export function freelancerChangeAgreement(image: string, navigate: any) {
     }
 }
 
+export function blockFreelancerAction(freelancerId: string) {
+    return async function blockFreelancerThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        try {
+            const response = await service.blockFreelancer(freelancerId);
+            if (response.data) {
+                successHandler("Freelancer blocked successfully");
+                dispatch(getUserProfile());
+            }
+        } catch (error: any) {
+            errorHandler(error?.response || { data: { message: "Failed to block freelancer" } });
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
+export function unblockFreelancerAction(freelancerId: string) {
+    return async function unblockFreelancerThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        try {
+            const response = await service.unblockFreelancer(freelancerId);
+            if (response.data) {
+                successHandler("Freelancer unblocked successfully");
+                dispatch(getUserProfile());
+            }
+        } catch (error: any) {
+            errorHandler(error?.response || { data: { message: "Failed to unblock freelancer" } });
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
+export function blockUserAction(userId: string) {
+    return async function blockUserThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        try {
+            const response = await service.blockUser(userId);
+            if (response.data) {
+                successHandler("User blocked successfully");
+                dispatch(getFreelancerProfile());
+            }
+        } catch (error: any) {
+            errorHandler(error?.response || { data: { message: "Failed to block user" } });
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
+export function unblockUserAction(userId: string) {
+    return async function unblockUserThunk(dispatch: any) {
+        dispatch(setLoading(true));
+        try {
+            const response = await service.unblockUser(userId);
+            if (response.data) {
+                successHandler("User unblocked successfully");
+                dispatch(getFreelancerProfile());
+            }
+        } catch (error: any) {
+            errorHandler(error?.response || { data: { message: "Failed to unblock user" } });
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+}
+
 export function userChangeAgreement(image: string, navigate: any) {
     return async function userChangeAgreementThunk(dispatch) {
         dispatch(setStatus(STATUSES.LOADING))

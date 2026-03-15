@@ -73,6 +73,7 @@ import Agreement from "./pages/Agreement";
 import ClientAgreement from "./pages/ClientAgreement";
 import MobileMyCategories from "./pages/MobileMyCategories";
 import { BlockedFreelancers } from "./pages/BlockedFreelancers";
+import { BlockedUsers } from "./pages/BlockedUsers";
 
 
 
@@ -440,6 +441,7 @@ const App = () => {
                 <Route path="/help-support" element={<PrivateRoute><HelpSupport /></PrivateRoute>} />
                 <Route path="/instant-booking" element={<PrivateRoute><InstantBooking /></PrivateRoute>} />
                 <Route path="/blocked-freelancers" element={<PrivateRoute><BlockedFreelancers /></PrivateRoute>} />
+                <Route path="/blocked-users" element={<PrivateRoute><BlockedUsers /></PrivateRoute>} />
                 <Route path="/browse-jobs" element={<PrivateRoute><BrowseJobs /></PrivateRoute>} />
                 <Route path="/my-services" element={<PrivateRoute><MyServices /></PrivateRoute>} />
                 <Route path="/earnings" element={<PrivateRoute><Earnings /></PrivateRoute>} />

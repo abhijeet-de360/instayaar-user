@@ -16,6 +16,7 @@ import MobileFreelancerProfile from "@/components/mobile/MobileFreelancerProfile
 import { freelancerById } from "@/store/freelancerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
+import { blockFreelancerAction, unblockFreelancerAction } from "@/store/authSlice";
 
 const FreelancerProfile = () => {
   const { freelancerId } = useParams();
@@ -38,22 +39,13 @@ const FreelancerProfile = () => {
   const handleBlockToggle = async () => {
     if (!freelancerId) return;
     checkAuth(async () => {
-      try {
         setIsBlocking(true);
         if (isBlocked) {
-          await service.unblockFreelancer(freelancerId);
-          successHandler("Freelancer unblocked successfully");
-          setIsBlocked(false);
+          await dispatch(unblockFreelancerAction(freelancerId));
         } else {
-          await service.blockFreelancer(freelancerId);
-          successHandler("Freelancer blocked successfully");
-          setIsBlocked(true);
+          await dispatch(blockFreelancerAction(freelancerId));
         }
-      } catch (error: any) {
-        errorHandler(error?.response || { data: { message: "Failed to update block status" } });
-      } finally {
         setIsBlocking(false);
-      }
     });
   };
 

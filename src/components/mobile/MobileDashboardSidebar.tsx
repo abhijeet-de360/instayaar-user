@@ -80,6 +80,7 @@ export const MobileDashboardSidebar = () => {
         { icon: Star, label: "Reviews & Ratings", href: `/freelancer-reviews/${authVar?.freelancer?._id}`, },
         { icon: User2Icon, label: "Profile", href: "/account-settings" },
         { icon: Calendar1, label: "Blocked Dates", href: "/offday" },
+        { icon: Ban, label: "Blocked Clients", href: "/blocked-users" },
         { icon: Zap, label: "Instant Booking", href: "/instant-booking" },
         { icon: HelpCircle, label: "Help & Support", href: "/help-support" },
       ];

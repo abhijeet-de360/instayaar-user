@@ -10,14 +10,15 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/comp
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { localService } from '@/shared/_session/local';
-import { ArrowLeft, Star } from 'lucide-react';
-import { Link } from "react-router-dom";
+import { ArrowLeft, MessageCircle, Star } from 'lucide-react';
+import { useNavigate, Link } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { acceptInstateJobBooking, cancelInstantBooking, getInstantBookingData, postInstantBooking } from '@/store/instantBookingSlice';
 import { openRazorpayJob } from '@/components/Razorpay/RazorpayJob';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog"
+import { getConversationId } from '@/store/chatSlice';
 
 
 
@@ -26,12 +27,10 @@ const UserInstantBooking = () => {
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const categoryVar = useSelector((state: RootState) => state.category);
-    const [showBooking, setBooking] = useState(false)
-    const [acceptTerms, setAcceptTerms] = useState(false)
-    const [open, setOpen] = useState(false);
     const authVar = useSelector((state: RootState) => state.auth)
     const instantBookingVar: any = useSelector((state: RootState) => state.instant)
     const dispatch = useDispatch<AppDispatch>()
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState<any>({
         title: "",
@@ -179,12 +178,13 @@ const UserInstantBooking = () => {
     }, [instantBookingVar?.instantShortListData])
 
     const isWithinBookingTime = () => {
-        const now = new Date();
-        const start = new Date();
-        start.setHours(10, 0, 0, 0);
-        const end = new Date();
-        end.setHours(20, 0, 0, 0);
-        return now >= start && now <= end;
+        return true
+        // const now = new Date();
+        // const start = new Date();
+        // start.setHours(10, 0, 0, 0);
+        // const end = new Date();
+        // end.setHours(20, 0, 0, 0);
+        // return now >= start && now <= end;
     };
 
 
@@ -355,8 +355,23 @@ const UserInstantBooking = () => {
                                                 <div>
                                                     <p className="font-medium flex items-center gap-2 truncate capitalize">{user?.freelancerId?.firstName} {user?.freelancerId?.lastName}<span className="flex items-center gap-1 font-normal text-sm"><Star className="text-[#ffda03] w-4 font-normal" fill="#ffda03" />{user?.freelancerId?.averageRating}</span></p>
                                                 </div>
-                                                {user?.status === 'applied' ? <Button className="h-8" onClick={() => acceptBooking(user?.freelancerId?._id)}>Accept</Button>
-                                                    : <Button className="h-8" variant='outline'>Hired</Button>}
+                                                <div className="flex gap-2">
+                                                    {user?.status === 'applied' ? (
+                                                        <>
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="h-8"
+                                                                onClick={() => dispatch(getConversationId(user?.freelancerId?._id, navigate, undefined, user?._id))}
+                                                            >
+                                                                <MessageCircle className="h-4 w-4" />
+                                                            </Button>
+                                                            <Button className="h-8" onClick={() => acceptBooking(user?.freelancerId?._id)}>Accept</Button>
+                                                        </>
+                                                    ) : (
+                                                        <Button className="h-8" variant='outline'>Hired</Button>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                         {user?.status === 'shortlisted' && <div className='rounded-lg p-2 flex items-center justify-between bg-blue-50'>

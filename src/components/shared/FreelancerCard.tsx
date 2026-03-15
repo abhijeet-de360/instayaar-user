@@ -14,7 +14,7 @@ import { localService } from "@/shared/_session/local";
 import { LoginModal } from "../auth/LoginModal";
 import { ReportModal } from "@/components/shared/ReportModal";
 import { useState } from "react";
-import { submitServiceReportAction } from "@/store/ServiceSlice";
+import { submitProfileReportAction } from "@/store/ServiceSlice";
 
 interface FreelancerCardProps {
   freelancer: Freelancer;
@@ -90,8 +90,10 @@ export const FreelancerCard = ({ freelancer, variant = "default", showPrice = tr
       reason,
       details
     };
-    dispatch(submitServiceReportAction(payload, userRole === 'freelancer', () => setShowReportModal(false)));
-  };  if (variant === "compact") {
+    dispatch(submitProfileReportAction(payload, userRole === 'freelancer', () => setShowReportModal(false)));
+  };
+
+  if (variant === "compact") {
     return (
       <Card className={`overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${className}`}>
         <CardContent className="p-0">

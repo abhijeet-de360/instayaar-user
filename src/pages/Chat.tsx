@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ArrowLeft, Send, Phone, Video, MoreVertical } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import MobileChat from "@/components/mobile/MobileChat";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { localService } from "@/shared/_session/local";
 import { getCoversationDetails } from "@/store/chatSlice";
+import { getUserProfile, getFreelancerProfile } from "@/store/authSlice";
 import { chatSocket } from "@/lib/socket";
 import { format, parseISO } from "date-fns";
 import { useRef } from "react";
@@ -59,9 +61,15 @@ const Chat = () => {
   const [reportDetails, setReportDetails] = useState("");
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
 
-  const isFreelancerBlocked = localService.get('role') === 'user' 
-    ? authVar?.user?.blockedFreelancers?.includes(chatVar?.profile?._id)
-    : chatVar?.profile?.blockedFreelancers?.includes(authVar?.freelancer?._id);
+  const amIBlocked = localService.get('role') === 'user'
+    ? chatVar?.profile?.blockedUsers?.some((id: any) => id === authVar?.user?._id || id?._id === authVar?.user?._id)
+    : chatVar?.profile?.blockedFreelancers?.some((id: any) => id === authVar?.freelancer?._id || id?._id === authVar?.freelancer?._id);
+
+  const haveIBlocked = localService.get('role') === 'user'
+    ? authVar?.user?.blockedFreelancers?.some((id: any) => id === chatVar?.profile?._id || id?._id === chatVar?.profile?._id)
+    : authVar?.freelancer?.blockedUsers?.some((id: any) => id === chatVar?.profile?._id || id?._id === chatVar?.profile?._id);
+
+  const isCommunicationBlocked = amIBlocked || haveIBlocked;
 
   const isBookingCompleted = chatVar?.serviceBookingId?.status === 'completed';
 
@@ -174,6 +182,36 @@ const Chat = () => {
     }
   };
 
+  const handleBlockToggle = async () => {
+    try {
+      const role = localService.get('role');
+      const otherId = chatVar?.profile?._id;
+      
+      if (role === 'user') {
+        if (haveIBlocked) {
+          const res = await service.unblockFreelancer(otherId);
+          successHandler(res.data?.message || "Unblocked successfully");
+        } else {
+          const res = await service.blockFreelancer(otherId);
+          successHandler(res.data?.message || "Blocked successfully");
+        }
+        dispatch(getUserProfile());
+      } else {
+        if (haveIBlocked) {
+          const res = await service.unblockUser(otherId);
+          successHandler(res.data?.message || "Unblocked successfully");
+        } else {
+          const res = await service.blockUser(otherId);
+          successHandler(res.data?.message || "Blocked successfully");
+        }
+        dispatch(getFreelancerProfile());
+      }
+      dispatch(getCoversationDetails(conversationId));
+    } catch (error: any) {
+      errorHandler(error);
+    }
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -214,11 +252,49 @@ const Chat = () => {
                   <p className="text-sm text-muted-foreground">
                     {chatVar?.profile?.isOnline ? "Online" : "Last seen recently"}
                   </p>
-                  {chatVar?.profile?.serviceBookingId?.serviceId?.title && (
-                    <span className="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-normal">
-                      {chatVar?.profile?.serviceBookingId?.serviceId?.title}
-                    </span>
-                  )}
+                  {(() => {
+                    const isServiceTerminal = chatVar?.serviceBookingId?.status === "completed" || 
+                                            chatVar?.serviceBookingId?.serviceId?.status === "closed";
+                    const isJobTerminal = chatVar?.jobApplicationId?.jobId?.status === "closed" || 
+                                        chatVar?.jobApplicationId?.jobId?.status === "deleted" ||
+                                        chatVar?.jobApplicationId?.status === "completed" ||
+                                        chatVar?.jobApplicationId?.status === "rejected";
+                    
+                    if (isServiceTerminal || isJobTerminal) {
+                      return (
+                        <Badge
+                          variant="outline"
+                          className="text-[8px] h-4 px-1.5 bg-green-50 text-green-700 border-green-200 font-bold uppercase tracking-wider"
+                        >
+                          Completed
+                        </Badge>
+                      );
+                    }
+
+                    if (chatVar?.jobApplicationId?.status === 'shortlisted' || chatVar?.jobApplicationId?.status === 'hired') {
+                      return (
+                        <Badge
+                          variant="outline"
+                          className="text-[8px] h-4 px-1.5 bg-blue-50 text-blue-700 border-blue-200 font-bold uppercase tracking-wider"
+                        >
+                          {chatVar.jobApplicationId.status}
+                        </Badge>
+                      );
+                    }
+
+                    if (chatVar?.jobApplicationId?.status === 'applied') {
+                      return (
+                        <Badge
+                          variant="outline"
+                          className="text-[8px] h-4 px-1.5 bg-gray-50 text-gray-700 border-gray-200 font-bold uppercase tracking-wider"
+                        >
+                          Applied
+                        </Badge>
+                      );
+                    }
+
+                    return null;
+                  })()}
                 </div>
               </div>
               
@@ -238,6 +314,12 @@ const Chat = () => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => setIsReportModalOpen(true)}>
                       Report Chat
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleBlockToggle} className={haveIBlocked ? "text-primary" : "text-destructive"}>
+                      {haveIBlocked 
+                        ? (localService.get('role') === 'user' ? "Unblock Yaar" : "Unblock Client")
+                        : (localService.get('role') === 'user' ? "Block Yaar" : "Block Client")
+                      }
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -297,11 +379,14 @@ const Chat = () => {
           <CardContent className="p-4">
             {isBookingCompleted ? (
               <div className="flex items-center justify-center p-3 rounded-xl bg-primary/10 text-primary text-sm font-medium">
-                Communication ended for this completed booking
+                Communication ended
               </div>
-            ) : isFreelancerBlocked ? (
-              <div className="flex items-center justify-center p-3 rounded-md bg-muted text-muted-foreground text-sm">
-                {localService.get('role') === 'user' ? "You blocked this Yaar" : "You cannot send messages to this Yaar"}
+            ) : isCommunicationBlocked ? (
+              <div className="flex items-center justify-center p-3 rounded-xl bg-muted text-muted-foreground text-sm font-medium">
+                {haveIBlocked 
+                  ? (localService.get('role') === 'user' ? "You blocked this Yaar" : "You blocked this Client")
+                  : (localService.get('role') === 'user' ? "You cannot send messages to this Yaar" : "You cannot send messages to this Client")
+                }
               </div>
             ) : (
               <div className="flex gap-3">
