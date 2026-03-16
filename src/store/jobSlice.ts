@@ -321,9 +321,7 @@ export function submitJobReportAction(payload: { reportedEntityId: string; reaso
     return async function submitJobReportThunk(dispatch: any) {
         dispatch(setLoading(true));
         try {
-            const response = isFreelancer 
-                ? await service.submitFreelancerJobReportApi(payload)
-                : await service.submitJobReportApi(payload);
+            const response = await service.submitJobReportApi(payload);
                 
             if (response.data?.success || response.status === 201) {
                 dispatch(successHandler(response.data?.message || "Job reported successfully for investigation"));

@@ -246,9 +246,7 @@ export function submitReportAction(payload: { reportedEntityId: string; reason: 
     return async function submitReportThunk(dispatch: any) {
         dispatch(setLoading(true));
         try {
-            const response = isFreelancer 
-                ? await service.submitFreelancerServiceReport(payload)
-                : await service.submitServiceReport(payload);
+            const response = await service.submitFreelancerProfileReport(payload);
                 
             if (response.data?.success || response.status === 201) {
                 successHandler(response.data?.message || "Reported successfully for investigation");

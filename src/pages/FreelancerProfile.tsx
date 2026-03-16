@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button"; 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, MapPin, Calendar, MessageCircle, UserCheck, ArrowLeft, Award, Clock, CheckCircle, Ban } from "lucide-react";
+import { Star, MapPin, Calendar, MessageCircle, UserCheck, ArrowLeft, Award, Clock, CheckCircle, Ban, Flag } from "lucide-react";
 import { service } from "@/shared/_services/api_service";
 import { successHandler, errorHandler } from "@/shared/_helper/responseHelper";
 import MobileFreelancerProfile from "@/components/mobile/MobileFreelancerProfile";
@@ -17,11 +17,13 @@ import { freelancerById } from "@/store/freelancerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { blockFreelancerAction, unblockFreelancerAction } from "@/store/authSlice";
+import { ReportModal } from "@/components/shared/ReportModal";
+import { submitProfileReportAction } from "@/store/ServiceSlice";
 
 const FreelancerProfile = () => {
   const { freelancerId } = useParams();
   const navigate = useNavigate();
-  const { setUserRole, setIsLoggedIn } = useUserRole();
+  const { setUserRole, setIsLoggedIn, userRole } = useUserRole();
   const dispatch = useDispatch<AppDispatch>();
   const { isMobile, showLoginModal, setShowLoginModal, checkAuth } = useAuthCheck();
 
@@ -29,6 +31,7 @@ const FreelancerProfile = () => {
   const user: any = useSelector((state: RootState) => state.auth.user);
   const [isBlocked, setIsBlocked] = useState(false);
   const [isBlocking, setIsBlocking] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   useEffect(() => {
     if (user && user.blockedFreelancers) {
@@ -130,6 +133,20 @@ const FreelancerProfile = () => {
     checkAuth(() => navigate(`/freelancer-services/${freelancerId}`));
   };
 
+  const handleReport = () => {
+    if (!checkAuth(() => setShowReportModal(true))) return;
+    setShowReportModal(true);
+  };
+
+  const submitReport = (reason: string, details?: string) => {
+    const payload = {
+      reportedEntityId: freelancerVar?.freelancerDetails?._id,
+      reason,
+      details
+    };
+    dispatch(submitProfileReportAction(payload, userRole === 'freelancer', () => setShowReportModal(false)));
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header onLogin={handleLogin} />
@@ -182,6 +199,9 @@ const FreelancerProfile = () => {
                     
                     {/* Action Buttons */}
                     <div className="flex gap-3 ">
+                      <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-red-500 hover:bg-transparent" onClick={handleReport} title="Report Freelancer">
+                        <Flag className="h-5 w-5" />
+                      </Button>
                       <Button variant={isBlocked ? "destructive" : "outline"} onClick={handleBlockToggle} disabled={isBlocking}>
                         <Ban className="h-4 w-4 mr-2" />
                         {isBlocked ? "Blocked" : "Block"}
@@ -364,6 +384,13 @@ const FreelancerProfile = () => {
         onClose={setShowLoginModal}
         onLoginSuccess={handleLogin}
         isMobile={isMobile}
+      />
+      
+      <ReportModal 
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={submitReport}
+        title="Report Freelancer"
       />
     </div>
   );

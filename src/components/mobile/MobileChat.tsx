@@ -139,15 +139,15 @@ const MobileChat = () => {
     try {
       setIsSubmittingReport(true);
       const reportData = {
-        reportedEntityId: conversationId,
+        reportedEntityId: chatVar?.profile?._id,
         reason: reportReason,
         details: reportDetails,
       };
 
       if (localService.get('role') === 'user') {
-        await service.submitChatReportUser(reportData);
-      } else {
         await service.submitChatReport(reportData);
+      } else {
+        await service.submitChatReportUser(reportData);
       }
 
       successHandler("Chat reported successfully. Our team will review it.");

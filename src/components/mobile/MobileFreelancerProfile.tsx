@@ -20,6 +20,7 @@ import {
   Image,
   Ban,
   MoreVertical,
+  Flag,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -44,14 +45,15 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import { a } from "node_modules/framer-motion/dist/types.d-BJcRxCew";
+import { ReportModal } from "@/components/shared/ReportModal";
+import { submitProfileReportAction } from "@/store/ServiceSlice";
 
 
 const MobileFreelancerProfile = () => {
   const { freelancerId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { setUserRole, setIsLoggedIn } = useUserRole();
+  const { setUserRole, setIsLoggedIn, userRole } = useUserRole();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const freelancerVar: any = useSelector(
     (state: RootState) => state.freelancer
@@ -60,6 +62,7 @@ const MobileFreelancerProfile = () => {
   const user: any = authVar?.user;
   const [isBlocked, setIsBlocked] = useState(false);
   const [isBlocking, setIsBlocking] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const handleLogin = (role: string) => {
     setIsLoggedIn(true);
@@ -156,7 +159,7 @@ const MobileFreelancerProfile = () => {
     }
   };
 
-  const handleBookService = (id) => {
+  const handleBookService = (id: string) => {
     if(authVar?.isAuthenticated) {
       if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
         navigate(`/user-account-settings`);
@@ -165,6 +168,15 @@ const MobileFreelancerProfile = () => {
     }
     navigate(`/multi-service-booking/${id}`)
   }
+
+  const submitReport = (reason: string, details?: string) => {
+    const payload = {
+      reportedEntityId: freelancerVar?.freelancerDetails?._id,
+      reason,
+      details
+    };
+    dispatch(submitProfileReportAction(payload, userRole === 'freelancer', () => setShowReportModal(false)));
+  };
 
   return (
     <>
@@ -190,44 +202,53 @@ const MobileFreelancerProfile = () => {
                 </h1>
               </div>
 
-              {/* Header Right Action - Block */}
-              {freelancerVar?.freelancerDetails?._id && (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className={`text-xs px-2 h-8 ${isBlocked ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
-                      disabled={isBlocking}
-                    >
-                      <Ban className="h-3.5 w-3.5 mr-1" />
-                      {isBlocked ? "Blocked" : "Block"}
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="w-[90%] rounded-xl">
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        {isBlocked ? "Unblock Yaar?" : "Block Yaar?"}
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {isBlocked
-                          ? `Are you sure you want to unblock ${freelancerVar?.freelancerDetails?.firstName}? They will be able to message you and you can book their services again.`
-                          : `Are you sure you want to block ${freelancerVar?.freelancerDetails?.firstName}? You won't be able to communicate with them.`}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter className="flex-row justify-end space-x-2">
-                      <AlertDialogCancel className="mt-0 flex-1">Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        className={`flex-1 ${isBlocked ? '' : 'bg-destructive hover:bg-destructive/90'}`}
-                        onClick={() => handleBlockToggle()}
+              {/* Header Right Action - Block & Report */}
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowReportModal(true)}
+                  className="h-8 w-8 text-muted-foreground hover:text-red-500"
+                >
+                  <Flag className="h-4 w-4" />
+                </Button>
+                {freelancerVar?.freelancerDetails?._id && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`text-xs px-2 h-8 ${isBlocked ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
+                        disabled={isBlocking}
                       >
-                        {isBlocked ? "Unblock" : "Block"}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )}
-            
+                        <Ban className="h-3.5 w-3.5 mr-1" />
+                        {isBlocked ? "Blocked" : "Block"}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="w-[90%] rounded-xl">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {isBlocked ? "Unblock Yaar?" : "Block Yaar?"}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {isBlocked
+                            ? `Are you sure you want to unblock ${freelancerVar?.freelancerDetails?.firstName}? They will be able to message you and you can book their services again.`
+                            : `Are you sure you want to block ${freelancerVar?.freelancerDetails?.firstName}? You won't be able to communicate with them.`}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter className="flex-row justify-end space-x-2">
+                        <AlertDialogCancel className="mt-0 flex-1">Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className={`flex-1 ${isBlocked ? '' : 'bg-destructive hover:bg-destructive/90'}`}
+                          onClick={() => handleBlockToggle()}
+                        >
+                          {isBlocked ? "Unblock" : "Block"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
+              </div>
             </div>
           </div>
 
@@ -459,6 +480,13 @@ const MobileFreelancerProfile = () => {
           onClose={() => setShowLoginModal(false)}
           onLoginSuccess={handleLogin}
           isMobile={true}
+        />
+
+        <ReportModal 
+          isOpen={showReportModal}
+          onClose={() => setShowReportModal(false)}
+          onSubmit={submitReport}
+          title="Report Freelancer"
         />
       </div>
     </>

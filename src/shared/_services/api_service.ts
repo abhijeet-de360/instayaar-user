@@ -641,38 +641,26 @@ async function getBookingsForFreelancerInstant(limit, offset, lat, lng) {
 }
 
 // =================== Report =================================
-async function submitServiceReport(data) {
-  return await axios.post(reportUrl + '/service', data, {
+async function submitFreelancerProfileReport(data) {
+  return await axios.post(reportUrl + '/freelancer-profile', data, {
     headers: await authHeader('')
   })
 }
 
-async function submitFreelancerServiceReport(data) {
-  return await axios.post(reportUrl + '/service/freelancer', data, {
+async function submitChatReport(data) {
+  return await axios.post(reportUrl + '/chat-freelancer', data, {
+    headers: await authHeader('')
+  })
+}
+
+async function submitChatReportUser(data) {
+  return await axios.post(reportUrl + '/chat-user', data, {
     headers: await authHeader('')
   })
 }
 
 async function submitJobReportApi(data) {
   return await axios.post(reportUrl + '/job', data, {
-    headers: await authHeader('')
-  })
-}
-
-async function submitFreelancerJobReportApi(data) {
-  return await axios.post(reportUrl + '/job/freelancer', data, {
-    headers: await authHeader('')
-  })
-}
-
-async function submitChatReport(data) {
-  return await axios.post(reportUrl + '/chat/freelancer', data, {
-    headers: await authHeader('')
-  })
-}
-
-async function submitChatReportUser(data) {
-  return await axios.post(reportUrl + '/chat/user', data, {
     headers: await authHeader('')
   })
 }
@@ -718,5 +706,5 @@ export const service = {
 
   setInstantBooking, getInstantBookingData, postInstantBooking, getBookingsForFreelancerInstant,
 
-  submitServiceReport, submitFreelancerServiceReport, submitJobReportApi, submitFreelancerJobReportApi, submitChatReport, submitChatReportUser,
+  submitFreelancerProfileReport, submitChatReport, submitChatReportUser, submitJobReportApi,
 }
