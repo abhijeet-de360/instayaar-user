@@ -21,7 +21,7 @@ const WebLanding = () => {
     }, []);
     return (
         <>
-            <div className="min-h-screen bg-primary flex flex-col md:flex-row items-center justify-between px-8 md:px-24 text-white">
+            <div className="min-h-screen bg-primary flex flex-col md:flex-row items-center justify-between px-24 md:px-10 text-white">
                 {/* Left side - mobile mockups */}
 
                 <div className="flex flex-col md:flex-row gap-10 mt-10 md:mt-0">
@@ -32,9 +32,9 @@ const WebLanding = () => {
                         className="flex flex-col items-center md:items-start"
                     >
                         <img
-                            src="https://ik.imagekit.io/kaamdham/category/1761307723894-784299232_fGrcJuICa.jpg"
+                            src="https://ik.imagekit.io/kaamdham/category/1768820427265-664218167_AKdMvdV72.jpg"
                             alt="Login Screen"
-                            className="w-[280px] md:w-[340px] rounded-3xl shadow-2xl rotate-[-10deg]"
+                            className="w-[280px] md:w-[500px] rounded-3xl shadow-2xl rotate-[-10deg]"
                         />
                     </motion.div>
 
@@ -44,9 +44,9 @@ const WebLanding = () => {
                         transition={{ duration: 0.8 }}
                     >
                         <img
-                            src="https://ik.imagekit.io/kaamdham/category/1761307693579-627158889_tmxyHOU9IX.jpg"
+                            src="https://ik.imagekit.io/kaamdham/category/1768820475872-907220645_GhT_IdDTA.jpg"
                             alt="Home Screen"
-                            className="w-[280px] md:w-[340px] rounded-3xl shadow-2xl"
+                            className="w-[400px] md:w-[500px] rounded-3xl shadow-2xl rotate-[5deg]"
                         />
                     </motion.div>
                 </div>

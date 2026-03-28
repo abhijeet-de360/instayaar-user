@@ -5,7 +5,7 @@ import { useUserRole } from "@/contexts/UserRoleContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, MessageCircle, MoreVertical } from "lucide-react";
+import { ArrowLeft, Send, MessageCircle, MoreVertical, Paperclip, Loader2, Download } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { getCoversationDetails } from "@/store/chatSlice";
@@ -54,6 +54,8 @@ const MobileChat = () => {
   const [reportReason, setReportReason] = useState("");
   const [reportDetails, setReportDetails] = useState("");
   const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const amIBlocked = localService.get('role') === 'user'
     ? chatVar?.profile?.blockedUsers?.some((id: any) => id === authVar?.user?._id || id?._id === authVar?.user?._id)
@@ -128,6 +130,74 @@ const MobileChat = () => {
     setChatMessages((prev) => [...prev, message]);
 
     setNewMessage("");
+  };
+
+  const handleFileClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      errorHandler({ data: { message: "File size must be less than 5MB" } });
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      
+      const tempId = `temp-${Date.now()}`;
+      const messageType: any = file.type.startsWith("image/") ? "image" : file.type.startsWith("video/") ? "video" : "file";
+      
+      const optimisticMessage = {
+        _id: tempId,
+        chatParticipantId: conversationId,
+        sender: localService?.get("role"),
+        message: URL.createObjectURL(file), // Local preview URL
+        messageType: messageType,
+        userId: authVar?.user?._id || chatVar?.profile?._id,
+        freelancerId: authVar?.freelancer?._id || chatVar?.profile?._id,
+        createdAt: new Date().toISOString(),
+        isUploading: true,
+        uploadProgress: 0,
+      };
+
+      setChatMessages((prev) => [...prev, optimisticMessage]);
+
+      const res = await service.uploadChatFile(file, (progressEvent: any) => {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        setChatMessages((prev) => 
+          prev.map((msg) => 
+            msg._id === tempId ? { ...msg, uploadProgress: percentCompleted } : msg
+          )
+        );
+      });
+
+      const { url, messageType: finalType } = res.data;
+
+      const finalMessage = {
+        chatParticipantId: conversationId,
+        sender: localService?.get("role"),
+        message: url,
+        messageType: finalType,
+        userId: authVar?.user?._id || chatVar?.profile?._id,
+        freelancerId: authVar?.freelancer?._id || chatVar?.profile?._id,
+        createdAt: new Date().toISOString(),
+      };
+
+      chatSocket.emit("sendMessage", finalMessage);
+      
+      setChatMessages((prev) => 
+        prev.map((msg) => msg._id === tempId ? { ...finalMessage, _id: res.data._id || Date.now() } : msg)
+      );
+    } catch (error: any) {
+      errorHandler(error?.response || { data: { message: "Failed to upload file" } });
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   const handleReportChat = async () => {
@@ -334,12 +404,58 @@ const MobileChat = () => {
                     }`}
                 >
                   <div
-                    className={`rounded-2xl px-3 py-2 ${message?.sender === localService?.get("role")
+                    className={`rounded-2xl p-2 relative ${message?.sender === localService?.get("role")
                       ? "bg-primary text-primary-foreground rounded-br-md"
                       : "bg-muted rounded-bl-md"
                       }`}
                   >
-                    <p className="text-sm leading-relaxed">{message.message}</p>
+                    {message.isUploading && (
+                      <div className="absolute inset-0 bg-background/60 backdrop-blur-[1px] flex items-center justify-center z-10 rounded-2xl">
+                        <div className="flex flex-col items-center gap-1">
+                          <div className="w-8 h-8 border-3 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                          <span className="text-[9px] font-bold text-primary">{message.uploadProgress || 0}%</span>
+                        </div>
+                      </div>
+                    )}
+                    {message.messageType === "text" || !message.messageType ? (
+                      <p className="text-sm px-1 leading-relaxed">{message.message}</p>
+                    ) : message.messageType === "image" ? (
+                      <div className="rounded-xl overflow-hidden bg-background/10">
+                        <img 
+                          src={message.message} 
+                          alt="Shared image" 
+                          className="max-w-full h-auto max-h-60 object-contain"
+                          onClick={() => window.open(message.message, '_blank')}
+                        />
+                      </div>
+                    ) : message.messageType === "video" ? (
+                      <div className="rounded-xl overflow-hidden bg-black max-w-full">
+                        <video 
+                          src={message.message} 
+                          controls 
+                          className="max-w-full max-h-60"
+                        />
+                      </div>
+                    ) : message.messageType === "file" ? (
+                      <div className="flex items-center gap-3 p-2 bg-background/10 rounded-xl">
+                        <div className="bg-background/20 p-2 rounded-lg">
+                          <Paperclip className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium truncate">
+                            {message.message.split('/').pop() || 'Document'}
+                          </p>
+                        </div>
+                        <Button 
+                          size="icon" 
+                          variant="ghost" 
+                          className="h-8 w-8 text-inherit hover:bg-background/20"
+                          onClick={() => window.open(message.message, '_blank')}
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : null}
                   </div>
                   <p
                     className={`text-xs text-muted-foreground mt-1 px-1 ${message?.sender === localService?.get("role")
@@ -383,11 +499,31 @@ const MobileChat = () => {
               placeholder="Type a message..."
               className="flex-1 min-h-10 resize-none h-11"
             />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileSelect}
+              className="hidden"
+              accept="image/*,video/*,application/pdf"
+            />
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={handleFileClick}
+              disabled={isUploading}
+              className="h-11 w-11 flex-shrink-0"
+            >
+              {isUploading ? (
+                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              ) : (
+                <Paperclip className="h-5 w-5" />
+              )}
+            </Button>
             <Button
               onClick={handleSendMessage}
               size="icon"
               className="h-11 w-11 flex-shrink-0"
-              disabled={!newMessage.trim()}
+              disabled={!newMessage.trim() || isUploading}
             >
               <Send className="h-5 w-5" />
             </Button>

@@ -4,15 +4,15 @@ import { authHeader } from "../_helper/auth-header";
 
 
 
- export const rootUrl = 'https://server.instayaar.com/api/v1/';
+//  export const rootUrl = 'https://server.instayaar.com/api/v1/';
 // export const rootUrl = 'http://192.168.1.2:3230/api/v1/';
-// export const rootUrl = 'http://localhost:3230/api/v1/';
+export const rootUrl = 'http://localhost:3230/api/v1/';
 // export const rootUrl = 'https://4xwn5v2s-3230.inc1.devtunnels.ms/api/v1/';
 
 
-export const socketUrl = 'https://server.instayaar.com';
+// export const socketUrl = 'https://server.instayaar.com';
 // export const socketUrl = 'http://192.168.1.3:3230';
-// export const socketUrl = 'http://localhost:3230';
+export const socketUrl = 'http://localhost:3230';
 
 
 
@@ -665,10 +665,14 @@ async function submitJobReportApi(data) {
   })
 }
 
-
-
-
-
+async function uploadChatFile(file: File, onUploadProgress?: (progressEvent: any) => void) {
+  const formData = new FormData();
+  formData.append("file", file);
+  return await axios.post(chatUrl + '/upload', formData, {
+    headers: await authHeader('FormData'),
+    onUploadProgress
+  });
+}
 
 export const service = {
   userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify, deleteUserProfile, userChangeAgreement, blockFreelancer, unblockFreelancer, getBlockedFreelancers,
@@ -706,5 +710,5 @@ export const service = {
 
   setInstantBooking, getInstantBookingData, postInstantBooking, getBookingsForFreelancerInstant,
 
-  submitFreelancerProfileReport, submitChatReport, submitChatReportUser, submitJobReportApi,
+  submitFreelancerProfileReport, submitChatReport, submitChatReportUser, submitJobReportApi, uploadChatFile,
 }
