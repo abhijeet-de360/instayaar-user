@@ -140,9 +140,9 @@ const HelpSupport = () => {
                     Get instant support
                   </p>
                 </div>
-                <a href="/dispute">
-                <Button size="sm" >Chat</Button>
-                </a>
+                <Link to="/support-chat">
+                  <Button size="sm">Chat</Button>
+                </Link>
               </div>
             </CardContent>
           </Card>

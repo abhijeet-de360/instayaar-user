@@ -31,6 +31,7 @@ const dashboardUrl = rootUrl + 'dashboard'
 const serviceReview = rootUrl + 'serviceReview'
 const jobReview = rootUrl + 'jobReview'
 const reportUrl = rootUrl + 'report'
+const supportUrl = rootUrl + 'support'
 
 
 // ===================== User Auth ===========================
@@ -674,6 +675,40 @@ async function uploadChatFile(file: File, onUploadProgress?: (progressEvent: any
   });
 }
 
+// =================== Support =================================
+async function startSupportChat() {
+  return await axios.post(supportUrl + `/start`, {}, {
+    headers: await authHeader('')
+  });
+}
+
+async function sendSupportMessage(data: { chatId: string; content: string; attachments?: any[] }) {
+  return await axios.post(supportUrl + `/message`, data, {
+    headers: await authHeader(""),
+  });
+}
+
+async function uploadSupportAttachment(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+  return await axios.post(supportUrl + `/upload`, formData, {
+    headers: {
+      ...(await authHeader("")),
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
+
+async function uploadChatAttachment(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+  return await axios.post(chatUrl + `/upload`, formData, {
+    headers: {
+      ...(await authHeader("FormData")),
+    },
+  });
+}
+
 export const service = {
   userSentOtp, userVerifyOtp, getUserProfile, updateUser, updateUserProfile, userEmailSendOtp, userEmailOtpVerify, userAadharVerify, deleteUserProfile, userChangeAgreement, blockFreelancer, unblockFreelancer, getBlockedFreelancers,
 
@@ -711,4 +746,5 @@ export const service = {
   setInstantBooking, getInstantBookingData, postInstantBooking, getBookingsForFreelancerInstant,
 
   submitFreelancerProfileReport, submitChatReport, submitChatReportUser, submitJobReportApi, uploadChatFile,
+  startSupportChat, sendSupportMessage, uploadSupportAttachment, uploadChatAttachment
 }

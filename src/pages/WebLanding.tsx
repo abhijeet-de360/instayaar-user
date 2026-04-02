@@ -95,26 +95,12 @@ const WebLanding = () => {
                                     <Play size={20} /> Google Play
                                 </Button>
                             </a>
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                    <Button className="bg-black flex items-center gap-2 hover:bg-gray-800 relative">
-                                        <Apple size={20} /> App Store
-                                    </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-sm">
-                                    <DialogHeader>
-                                        <DialogTitle className='text-center'>Coming Soon </DialogTitle>
-                                    </DialogHeader>
-                                    <div className="py-4 text-center text-sm text-muted-foreground">
-                                        The App Store version of our app is coming soon. Stay tuned!
-                                    </div>
-                                    <DialogFooter>
-                                        <DialogClose asChild>
-                                            <Button>Close</Button>
-                                        </DialogClose>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                            <a href="https://apps.apple.com/in/app/instayaar/id6758010481" target='blank'>
+                                <Button className="bg-black flex items-center gap-2 hover:bg-gray-800 relative">
+                                    <Apple size={20} /> App Store
+                                </Button>
+                            </a>
+
                         </div>
                     </motion.div>
                 </div>

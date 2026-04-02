@@ -37,6 +37,8 @@ import { PlatformBooking } from "./pages/PlatformBooking";
 import MultiServiceBooking from "./pages/MultiServiceBooking";
 import PortfolioGallery from "./pages/PortfolioGallery";
 import Earnings from "./pages/Earnings";
+import SupportChatInterface from "./components/support/SupportChatInterface";
+
 import { useEffect, useRef } from "react";
 import { Capacitor } from "@capacitor/core";
 import { StatusBar, Style } from "@capacitor/status-bar";
@@ -124,9 +126,9 @@ const App = () => {
     });
 
     return () => {
-      reg.remove();
-      err.remove();
-      action.remove();
+      reg.then(h => h.remove());
+      err.then(h => h.remove());
+      action.then(h => h.remove());
     };
   }, []);
 
@@ -147,7 +149,7 @@ const App = () => {
         }
       })
       return () => {
-        listener.remove();
+        listener.then(h => h.remove());
       };
     }
   }, []);
@@ -284,7 +286,7 @@ const App = () => {
 
     // Retry on resume
     const resumeListener = CapApp.addListener("resume", getAndSetLocation);
-    return () => resumeListener.remove();
+    return () => { resumeListener.then(h => h.remove()); };
   }, []);
 
   useEffect(() => {
@@ -472,6 +474,7 @@ const App = () => {
                 <Route path="/data-deletion" element={<DataDeletion />} />
                 <Route path="/home" element={<WebLanding />} />
                 <Route path="/dispute" element={<Dispute />} />
+                <Route path="/support-chat" element={<PrivateRoute><SupportChatInterface /></PrivateRoute>} />
                 <Route path="/freelancer-agreement" element={<PrivateRoute><Agreement /></PrivateRoute>} />
                 <Route path="/client-agreement" element={<PrivateRoute><ClientAgreement /></PrivateRoute>} />
 
