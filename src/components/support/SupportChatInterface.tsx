@@ -22,6 +22,7 @@ interface Message {
   senderType: "user" | "freelancer" | "admin" | "ai";
   content: string;
   attachments?: ISupportAttachment[];
+  options?: string[];
   timestamp: string;
   isAi: boolean;
 }
@@ -116,13 +117,7 @@ const SupportChatInterface = () => {
 
   const lastMessage = messages[messages.length - 1];
   const showOptions = lastMessage?.senderType === "ai" && !chat?.isWithAdmin;
-
-  const preloadedOptions = ["Payment Issue", "Profile Verification", "Job Posting", "Other"];
-  const currentOptions = showOptions 
-    ? (lastMessage.content.includes("Withdrawal") ? ["Withdrawal", "Deposit", "Service Payment"] 
-      : (lastMessage.content.includes("clear Aadhar") ? ["Still Pending", "Rejected", "Need to Update"]
-      : (lastMessage.content.includes("Job Posting") || lastMessage.content.includes("fair to attract") ? ["Cannot find Post tab", "Payment for Post failed", "Job not visible"] : preloadedOptions)))
-    : [];
+  const currentOptions = showOptions ? (lastMessage?.options || []) : [];
 
   return (
     <div className="flex flex-col  min-h-screen w-full  mx-auto bg-background overflow-hidden">
