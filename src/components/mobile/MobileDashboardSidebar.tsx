@@ -1,36 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Menu,
-  User,
-  Plus,
-  FileText,
-  Calendar,
-  Heart,
-  CreditCard,
-  Star,
-  Settings,
-  HelpCircle,
-  LogOut,
-  Target,
-  Briefcase,
-  Image as ImageIcon,
-  Shield,
-  Calendar1,
-  User2Icon,
-  Zap,
-  Layers,
-  Ban,
-} from "lucide-react";
-import { useUserRole } from "@/contexts/UserRoleContext";
+import { Menu, CreditCard, Star, HelpCircle, LogOut, Shield, Calendar1, User2Icon, Zap, Layers, Ban } from "lucide-react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useDispatch, useSelector } from "react-redux";
@@ -156,7 +128,7 @@ export const MobileDashboardSidebar = () => {
                 }
 
                 if (localService.get('role') === 'freelancer') {
-                  if (item.href === "/offday" && authVar.freelancer.status !== 'active') {
+                  if (item.href === "/offday" || item.href === "/instant-booking" && authVar.freelancer.status !== 'active') {
                     e.preventDefault();
                     setIsOpen(false);
                     navigate("/account-settings");

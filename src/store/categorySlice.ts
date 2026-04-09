@@ -14,6 +14,7 @@ const initialState = {
     categoryData: [],
     homeCategoryData: [],
     status: STATUSES.IDLE,
+    isLoading: false,
 }
 
 
@@ -30,10 +31,13 @@ const categorySlice = createSlice({
         setStatus(state, action) {
             state.status = action.payload;
         },
+        setIsLoading (state, {payload}){
+            state.isLoading = payload;
+        }
     },
 })
 
-export const { setCategory, setHomePageService, setStatus } = categorySlice?.actions
+export const { setCategory, setHomePageService, setStatus,setIsLoading } = categorySlice?.actions
 
 export default categorySlice.reducer;
 
@@ -43,6 +47,7 @@ export default categorySlice.reducer;
 export function getCategories() {
     return async function getCategoriesThunk(dispatch: any) {
         dispatch(setLoading(true));
+        dispatch(setIsLoading(true));
         try {
             await service.getCategories().then((response) => {
                 if (response.data) {
@@ -50,10 +55,13 @@ export function getCategories() {
                     dispatch(setLoading(false));
                 }
             })
+            dispatch(setIsLoading(false));
         } catch (error) {
             errorHandler(error);
+            dispatch(setIsLoading(false));
             dispatch(setLoading(false));
         } finally {
+            dispatch(setIsLoading(false));
             dispatch(setLoading(false));
         }
     };

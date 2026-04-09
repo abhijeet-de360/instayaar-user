@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
-
 import { useUserRole } from "@/contexts/UserRoleContext";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,30 +23,25 @@ import { localService } from "@/shared/_session/local";
 import { searchService } from "@/store/searchSlice";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "../ui/dialog";
+import { Skeleton } from "../ui/skeleton";
 
 
 const MobileDiscover = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const freelancerVar = useSelector((state: RootState) => state.freelancer);
   const serviceVar = useSelector((state: RootState) => state.service);
   const authVar = useSelector((state: RootState) => state.auth);
   const [searchParams] = useSearchParams();
   const { userRole, isLoggedIn } = useUserRole();
   const { handleLogin, isMobile } = useAuthCheck();
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [showMobileAuth, setShowMobileAuth] = useState(false);
   const [reportJobId, setReportJobId] = useState<string | null>(null);
   const categoryVar = useSelector((state: RootState) => state.category);
-  const searchVar = useSelector((state: RootState) => state?.search);
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState("");
-  const [search, setSearch] = useState("");
   const [visible, setVisible] = useState(false)
 
   const [formData, setFormData] = useState<any>({
@@ -150,10 +144,6 @@ const MobileDiscover = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(searchService(searchQuery));
-  }, [searchQuery, dispatch]);
-
-  useEffect(() => {
     const service = searchParams.get("service");
     if (service) {
       setSelectedCategories([service]);
@@ -183,12 +173,8 @@ const MobileDiscover = () => {
     dispatch(submitJobReportAction(payload, userRole === 'freelancer', () => setReportJobId(null)));
   };
 
-  const allFreelancers = (freelancerData as FreelancerData).freelancers;
-
 
   const isFreelancer = isLoggedIn && userRole === "freelancer";
-
-  // 👇 Added Effect for outside click detection
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -198,7 +184,30 @@ const MobileDiscover = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  const isLoading = serviceVar.status === 'loading';
 
+  const DiscoverySkeleton = () => (
+    <div className="space-y-4">
+      {[...Array(6)].map((_, i) => (
+        <Card key={i} className="overflow-hidden border-none shadow-none bg-white rounded-xl">
+          <CardContent className="p-0">
+            <div className="flex p-4 gap-4">
+              <div className="flex-1 space-y-3">
+                <Skeleton className="h-6 w-3/4 animate-shimmer" />
+                <Skeleton className="h-4 w-1/2 animate-shimmer" />
+                <Skeleton className="h-4 w-5/6 animate-shimmer" />
+                <div className="flex gap-2 pt-2">
+                  <Skeleton className="h-9 flex-1 rounded-lg animate-shimmer" />
+                  <Skeleton className="h-9 flex-1 rounded-lg animate-shimmer" />
+                </div>
+              </div>
+              <Skeleton className="w-24 h-24 rounded-xl animate-shimmer" />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
   return (
     <div className="min-h-screen bg-background pb-20">
       {!authVar?.isAuthenticated && <Header onLogin={handleLogin} />}
@@ -344,7 +353,9 @@ const MobileDiscover = () => {
         {/* Freelancer or job content */}
         {(!authVar?.isAuthenticated || localService.get("role") === "user") && (
           <div className="space-y-4">
-            {serviceVar?.serviceByCategory?.length > 0 ? (
+            {isLoading ? (
+              <DiscoverySkeleton />
+            ) : serviceVar?.serviceByCategory?.length > 0 ? (
               serviceVar.serviceByCategory.map((freelancer: Freelancer) => (
                 <FreelancerCardMobile
                   key={freelancer._id}

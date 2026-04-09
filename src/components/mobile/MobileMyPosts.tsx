@@ -1,67 +1,32 @@
 import { Header } from "@/components/layout/Header";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
-import { useUserRole } from "@/contexts/UserRoleContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Calendar,
-  MapPin,
-  Users,
-  Clock,
-  Edit,
-  Trash2,
-  Eye,
-  Plus,
-  ArrowLeft,
-  XCircle,
-  CheckCircle,
-  DeleteIcon,
-  Clock10,
-  TableOfContents,
-} from "lucide-react";
+import { Edit, Trash2, Eye, Plus, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
-import { getMyJobs, updateJobStatus } from "@/store/jobSlice";
-import { parseISO, format, set } from "date-fns";
+import { getMyJobs, STATUSES, updateJobStatus } from "@/store/jobSlice";
+import { parseISO, format } from "date-fns";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, } from "@/components/ui/alert-dialog";
 import { Switch } from "../ui/switch";
 import { warningHandler } from "@/shared/_helper/responseHelper";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "../ui/drawer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 const MobileMyPosts = () => {
   const navigate = useNavigate();
-  const { setUserRole, setIsLoggedIn, userRole, isLoggedIn } = useUserRole();
 
-  const handleLogin = (role: string) => {
-    setIsLoggedIn(true);
-    setUserRole(role as "employer" | "freelancer");
-  };
+
   const [open, setOpen] = useState(false);
-  const [deletepop, setDeletepop] = useState(false);
   const jobVar = useSelector((state: RootState) => state?.jobs);
   const authVar = useSelector((state: RootState) => state?.auth);
   const dispatch = useDispatch<AppDispatch>();
+  const isLoading = jobVar.status === STATUSES.LOADING
 
   useEffect(() => {
     dispatch(getMyJobs(10, 0));
@@ -99,7 +64,6 @@ const MobileMyPosts = () => {
 
   const handleDelete = (id) => {
     dispatch(updateJobStatus("deleted", id));
-    setDeletepop(false);
   };
 
   function formatTime(time) {
@@ -113,7 +77,7 @@ const MobileMyPosts = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Hide header when logged in on mobile */}
-      {!authVar?.isAuthenticated && <Header onLogin={handleLogin} />}
+      {!authVar?.isAuthenticated && <Header onLogin={null} />}
 
       <div className="sticky top-0 z-20 bg-background border-b">
         <div className="flex items-center justify-between p-4 py-2">
@@ -144,45 +108,74 @@ const MobileMyPosts = () => {
       </div>
 
       <div className="px-4 py-4 space-y-6">
-        {/* Header */}
-        {/* <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold">My Job Posts</h1>
-            <p className="text-sm text-muted-foreground">Manage your job listings</p>
-          </div>
-          <Link to="/post-job">
-            <Button size="sm" className="h-10 px-4">
-              <Plus className="h-4 w-4 mr-2" />
-              Post Job
-            </Button>
-          </Link>
-        </div> */}
 
-        {/* Quick Stats */}
         <div className="grid grid-cols-4 gap-2">
-          <Card className="p-2 text-center">
-            <div className="text-md">{jobVar?.active}</div>
-            <div className="text-xs text-muted-foreground">Active</div>
-          </Card>
-          <Card className="p-2 text-center">
-            <div className="text-md">{jobVar?.pending}</div>
-            <div className="text-xs text-muted-foreground">Pending</div>
-          </Card>
-          <Card className="p-2 text-center flex items-center justify-center flex-col">
-            <div className="text-md">{jobVar?.completed}</div>
-            <div className="text-xs text-muted-foreground">Completed</div>
-          </Card>
-          <Card className="p-2 text-center">
-            <div className="text-md">{jobVar?.total}</div>
-            <div className="text-xs text-muted-foreground">Total</div>
-          </Card>
+          {isLoading ? (
+            <>
+              {[...Array(4)].map((_, i) => (
+                <Card key={i} className="p-2 text-center overflow-hidden">
+                  <Skeleton className="h-4 w-1/2 mx-auto mb-1 animate-shimmer" />
+                  <Skeleton className="h-3 w-3/4 mx-auto animate-shimmer" />
+                </Card>
+              ))}
+            </>
+          ) : (
+            <>
+              <Card className="p-2 text-center">
+                <div className="text-md">{jobVar?.active}</div>
+                <div className="text-xs text-muted-foreground">Active</div>
+              </Card>
+              <Card className="p-2 text-center">
+                <div className="text-md">{jobVar?.pending}</div>
+                <div className="text-xs text-muted-foreground">Pending</div>
+              </Card>
+              <Card className="p-2 text-center flex items-center justify-center flex-col">
+                <div className="text-md">{jobVar?.completed}</div>
+                <div className="text-xs text-muted-foreground">Completed</div>
+              </Card>
+              <Card className="p-2 text-center">
+                <div className="text-md">{jobVar?.total}</div>
+                <div className="text-xs text-muted-foreground">Total</div>
+              </Card>
+            </>
+          )}
         </div>
 
         {/* Job Posts List */}
         <div className="space-y-4">
           <h3 className="font-semibold">Recent Posts</h3>
 
-          {jobVar?.jobsData?.map((job) => (
+          {isLoading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="overflow-hidden">
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="h-5 w-16 animate-shimmer" />
+                        <Skeleton className="h-5 w-16 animate-shimmer" />
+                      </div>
+                      <Skeleton className="h-6 w-20 animate-shimmer" />
+                    </div>
+                    <Skeleton className="h-5 w-3/4 animate-shimmer" />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Skeleton className="h-4 w-full animate-shimmer" />
+                      <Skeleton className="h-4 w-full animate-shimmer" />
+                      <Skeleton className="h-4 w-full animate-shimmer" />
+                      <Skeleton className="h-4 w-full animate-shimmer" />
+                    </div>
+                    <Skeleton className="h-4 w-full animate-shimmer" />
+                    <Skeleton className="h-4 w-2/3 animate-shimmer" />
+                    <div className="flex gap-2 pt-2 justify-end">
+                      <Skeleton className="h-8 w-16 animate-shimmer" />
+                      <Skeleton className="h-8 w-8 rounded-md animate-shimmer" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : jobVar?.jobsData?.length > 0 ? (
+            jobVar?.jobsData?.map((job) => (
             <Card key={job._id} className="overflow-hidden">
               <CardContent className="p-4 space-y-3">
                 {/* Header */}
@@ -222,23 +215,17 @@ const MobileMyPosts = () => {
                 <h4 className="font-semibold text-base leading-tight capitalize">
                   {job?.title}
                 </h4>
-
-                {/* Job Details */}
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="flex items-center gap-1 text-muted-foreground">
-                    {/* <Calendar className="h-3 w-3" /> */}
                     Due: {format(parseISO(job.deadline), "dd MMM yyyy")}
                   </div>
                   <div className="flex items-center gap-1 text-muted-foreground">
-                    {/* <Calendar className="h-3 w-3" /> */}
                     Event: {format(parseISO(job?.prefferedDate), "dd MMM yyyy")}
                   </div>
                   <div className="flex items-center gap-1 text-muted-foreground">
-                    {/* <Users className="h-3 w-3" /> */}
                     {job?.totalApplications} Applicants
                   </div>
                   <div className="flex items-center gap-1 text-muted-foreground">
-                    {/* <Clock10 className="h-3 w-3" /> */}
                     Time: {formatTime(job?.timeFrom)} -{" "}
                     {formatTime(job?.timeTo)}
                   </div>
@@ -319,23 +306,20 @@ const MobileMyPosts = () => {
                   </div>
                 )}
               </CardContent>
-              {/* <AlertDialog open={deletepop} onOpenChange={() => setDeletepop(false)}>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete your
-                      account and remove your data from our servers.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => handleDelete(job?._id)}>Delete</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog> */}
             </Card>
-          ))}
+          ))
+        ):(
+          <Card className="w-full border-dashed shadow-none">
+              <CardContent className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
+                <Plus className="h-10 w-10 mb-3 text-muted-foreground opacity-20" />
+                <h3 className="text-lg font-medium">No job added</h3>
+                <p className="text-sm mt-1 mb-4">
+                  You haven't posted any jobs yet. Post a job to find
+                  freelancers.
+                </p>
+              </CardContent>
+            </Card>
+        )}
         </div>
       </div>
 
@@ -369,15 +353,6 @@ const MobileMyPosts = () => {
                 </small>
               </Button>
             </div>
-
-            <DrawerFooter>
-              {/* <div className="flex items-center gap-4 justify-center">
-              <Button>Submit</Button>
-              <DrawerClose asChild>
-                <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-              </DrawerClose>
-            </div> */}
-            </DrawerFooter>
           </div>
         </DrawerContent>
       </Drawer>

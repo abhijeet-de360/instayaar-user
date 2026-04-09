@@ -5,11 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, Users } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getRecentJobs } from "@/store/jobSlice";
+import { getRecentJobs,STATUSES } from "@/store/jobSlice";
 import { AppDispatch, RootState } from "@/store/store";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { LoginModal } from "../auth/LoginModal";
+import { Skeleton } from "../ui/skeleton";
 
 export const RecentJobs = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,6 +37,30 @@ export const RecentJobs = () => {
   const hour12 = hours % 12 || 12; // converts 0 → 12
   return `${hour12}:${minutes.toString().padStart(2, "0")} ${suffix}`;
 }
+  const isLoading = jobsVar.status === STATUSES.LOADING;
+  const JobCardSkeleton = () => (
+    <Card className="border-none shadow-none bg-white rounded-xl h-full">
+      <CardContent className="p-5">
+        <div className="flex justify-between items-center mb-6">
+          <Skeleton className="h-6 w-24 rounded-lg animate-shimmer" />
+          <Skeleton className="h-4 w-32 rounded-md animate-shimmer" />
+        </div>
+        <div className="space-y-3 mb-8">
+          <Skeleton className="h-5 w-full rounded-md animate-shimmer" />
+          <Skeleton className="h-5 w-full rounded-md animate-shimmer" />
+          <Skeleton className="h-5 w-3/4 rounded-md animate-shimmer" />
+        </div>
+        <div className="space-y-2 mb-10">
+          <Skeleton className="h-4 w-full rounded-md animate-shimmer" />
+          <Skeleton className="h-4 w-11/12 rounded-md animate-shimmer" />
+        </div>
+        <div className="flex justify-between items-center mt-auto pt-2">
+          <Skeleton className="h-10 w-20 rounded-lg animate-shimmer" />
+          <Skeleton className="h-10 w-32 rounded-lg animate-shimmer" />
+        </div>
+      </CardContent>
+    </Card>
+  );
 
 
   return (
@@ -61,7 +86,9 @@ export const RecentJobs = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {jobsVar.recentJobs.map((job, index) => (
+          {isLoading 
+            ? Array(4).fill(0).map((_, i) => <JobCardSkeleton key={i} />)
+            : jobsVar.recentJobs.map((job, index) => (
             <Card key={index} className="hover:shadow-lg transition-shadow">
               <CardContent className="p-4">
                 <div className="flex justify-between items-start mb-2">

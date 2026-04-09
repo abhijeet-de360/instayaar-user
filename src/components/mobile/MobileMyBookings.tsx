@@ -2,31 +2,61 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
-import { useUserRole } from "@/contexts/UserRoleContext";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, MessageCircle, Phone, Star, Play, Square, Clock, IndianRupee, ArrowLeft, X, ClockIcon, Info, Clock1 } from "lucide-react";
+import { Calendar, Star, Play, Square, ArrowLeft, Info, Clock1 } from "lucide-react";
 import { BookingData } from "@/types/bookingTypes";
 import { JobOTPBottomSheet } from "@/components/job/JobOTPBottomSheet";
 import { useToast } from "@/hooks/use-toast";
-import { getAllBooking } from "@/store/bookingSlice";
+import { getAllBooking, STATUSES } from "@/store/bookingSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { localService } from "@/shared/_session/local";
 import dayjs from "dayjs";
 import { getConversationId } from "@/store/chatSlice";
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger, } from "@/components/ui/drawer"
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Textarea } from "../ui/textarea";
 import ReactStars from "react-rating-stars-component";
 import { createJobReview, createReview } from "@/store/reviewSlice";
+import { Skeleton } from "../ui/skeleton";
 
+const BookingCardSkeleton = () => (
+  <Card className="overflow-hidden mb-4">
+    <CardContent className="p-3 space-y-3">
+      {/* Header Skeleton */}
+      <div className="flex items-start justify-between">
+        <div className="flex-1 space-y-2">
+          <Skeleton className="h-5 w-3/4 animate-shimmer" />
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-3 w-1/2 animate-shimmer" />
+          </div>
+        </div>
+      </div>
+
+      {/* Booking Details Skeleton */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-3 w-20 animate-shimmer" />
+          <Skeleton className="h-3 w-20 animate-shimmer" />
+        </div>
+        <Skeleton className="h-3 w-full animate-shimmer" />
+      </div>
+
+      {/* Action Buttons Skeleton */}
+      <div className="flex justify-end gap-2 pt-1">
+        <Skeleton className="h-8 w-8 rounded-md animate-shimmer" />
+        <Skeleton className="h-8 w-20 rounded-md animate-shimmer" />
+        <Skeleton className="h-8 w-20 rounded-md animate-shimmer" />
+      </div>
+    </CardContent>
+  </Card>
+);
 
 
 const MobileMyBookings = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [bookings, setBookings] = useState<BookingData[]>([]);
   const [showOTP, setShowOTP] = useState(false);
   const [otpAction, setOtpAction] = useState<'start' | 'complete'>('start');
   const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(null);
@@ -37,6 +67,7 @@ const MobileMyBookings = () => {
   const [selectedService, setSelectedService] = useState<any>(null)
   const [selectedJob, setSelectedJob] = useState<any>(null)
   const [jobType, setJobType] = useState('')
+  const isLoading = bookingVar.status === STATUSES.LOADING;
   const [rateData, setRateData] = useState({
     bookingId: '',
     rating: 0,
@@ -45,7 +76,6 @@ const MobileMyBookings = () => {
 
 
   const handleServiceReview = () => {
-    console.log(jobType)
     if (jobType === 'job') {
       dispatch(createJobReview(rateData))
       setRateData({
@@ -66,155 +96,10 @@ const MobileMyBookings = () => {
   }
 
 
-
-
-  // const safeUserRole = userRole ?? null;
-  // const safeIsLoggedIn = isLoggedIn ?? false;
-
-  const handleLogin = (role: string) => {
-    // setIsLoggedIn(true);
-    // setUserRole(role as 'employer' | 'freelancer');
-  };
-
-
   useEffect(() => {
     dispatch(getAllBooking())
   }, [])
 
-
-  // Enhanced mock booking data
-  useEffect(() => {
-    const mockBookings: BookingData[] = [
-      {
-        id: "book_001",
-        serviceId: "svc_001",
-        serviceName: "Wedding Chef Service",
-        serviceCategory: "Chef",
-        freelancerId: "fl_001",
-        freelancerName: "Rajesh Kumar",
-        employerId: "emp_001",
-        employerName: "Priya Sharma",
-        bookingDate: "2024-02-15",
-        bookingTime: "6:00 PM",
-        location: "Mumbai, Maharashtra",
-        status: "confirmed",
-        description: "Traditional Indian wedding cuisine",
-        payment: {
-          totalAmount: 5000,
-          paymentMethod: "platform",
-          paymentStatus: "fully_paid",
-          platformFee: 500,
-          freelancerEarning: 4500
-        },
-        otp: { otpGenerated: true, startOTP: "1234", endOTP: "5678" },
-        createdAt: "2024-02-10T10:00:00Z",
-        updatedAt: "2024-02-12T15:30:00Z"
-      },
-      {
-        id: "book_002",
-        serviceId: "svc_002",
-        serviceName: "Corporate Event DJ",
-        serviceCategory: "DJ",
-        freelancerId: "fl_002",
-        freelancerName: "Kavya Iyer",
-        employerId: "emp_001",
-        employerName: "Priya Sharma",
-        bookingDate: "2024-02-20",
-        bookingTime: "8:00 PM",
-        location: "Chennai, Tamil Nadu",
-        status: "in_progress",
-        description: "Corporate annual party",
-        payment: {
-          totalAmount: 12000,
-          advanceAmount: 5000,
-          remainingAmount: 7000,
-          paymentMethod: "advance",
-          paymentStatus: "advance_paid",
-          freelancerEarning: 11400
-        },
-        otp: { otpGenerated: true, startOTP: "9876", endOTP: "5432" },
-        createdAt: "2024-02-08T14:20:00Z",
-        updatedAt: "2024-02-10T09:15:00Z"
-      },
-      {
-        id: "book_003",
-        serviceId: "svc_003",
-        serviceName: "Home Cleaning",
-        serviceCategory: "Cleaning",
-        freelancerId: "fl_003",
-        freelancerName: "Sunita Devi",
-        employerId: "emp_001",
-        employerName: "Priya Sharma",
-        bookingDate: "2024-02-05",
-        bookingTime: "10:00 AM",
-        location: "Bangalore, Karnataka",
-        status: "completed",
-        payment: {
-          totalAmount: 2500,
-          paymentMethod: "platform",
-          paymentStatus: "fully_paid",
-          freelancerEarning: 2250
-        },
-        otp: { otpGenerated: true },
-        createdAt: "2024-02-01T12:00:00Z",
-        updatedAt: "2024-02-05T16:30:00Z",
-        completedAt: "2024-02-05T14:30:00Z",
-        rating: {
-          score: 5,
-          review: "Excellent service!",
-          ratedAt: "2024-02-05T18:00:00Z"
-        }
-      },
-      {
-        id: "book_004",
-        serviceId: "svc_004",
-        serviceName: "Event Photography",
-        serviceCategory: "Photography",
-        freelancerId: "fl_004",
-        freelancerName: "Amit Sharma",
-        employerId: "emp_001",
-        employerName: "Priya Sharma",
-        bookingDate: "2024-02-18",
-        bookingTime: "2:00 PM",
-        location: "Delhi, India",
-        status: "completed",
-        description: "Birthday party photography",
-        payment: {
-          totalAmount: 8000,
-          paymentMethod: "platform",
-          paymentStatus: "fully_paid",
-          freelancerEarning: 7200
-        },
-        otp: { otpGenerated: true },
-        createdAt: "2024-02-15T09:00:00Z",
-        updatedAt: "2024-02-18T18:30:00Z",
-        completedAt: "2024-02-18T17:00:00Z"
-        // No rating - review pending
-      }
-    ];
-    setBookings(mockBookings);
-  }, []);
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'confirmed': return 'default';
-      case 'pending': return 'secondary';
-      case 'onGoing': return 'destructive';
-      case 'completed': return 'outline';
-      case 'cancelled': return 'destructive';
-      default: return 'outline';
-    }
-  };
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'pending': return 'Pending';
-      case 'booked': return 'Booked';
-      case 'onGoing': return 'In Progress';
-      case 'completed': return 'Completed';
-      case 'cancelled': return 'Cancelled';
-      default: return status;
-    }
-  };
 
   function formatTime(time) {
     if (!time) return "-";
@@ -241,13 +126,6 @@ const MobileMyBookings = () => {
   const handleOTPSuccess = () => {
     if (!selectedBooking) return;
 
-    const newStatus = otpAction === 'start' ? 'onGoing' : 'completed';
-    setBookings(prev => prev.map(booking =>
-      booking.id === selectedBooking.id
-        ? { ...booking, status: newStatus as any, updatedAt: new Date().toISOString() }
-        : booking
-    ));
-
     if (otpAction === 'complete' && selectedBooking.payment.paymentMethod === 'platform') {
       toast({
         title: "Payment Received!",
@@ -256,23 +134,9 @@ const MobileMyBookings = () => {
     }
   };
 
-  const canShowRating = (booking: BookingData) => {
-    return localService.get('role') === 'user' &&
-      booking.status === 'completed' &&
-      !booking.rating;
-  };
 
   const shouldShowChatCall = (booking: BookingData) => {
     return booking.status !== 'completed';
-  };
-
-  const getOTPButtonText = (booking: BookingData) => {
-    if (booking.status === 'confirmed') {
-      return 'Start OTP';
-    } else if (booking.status === 'onGoing') {
-      return 'Complete OTP';
-    }
-    return 'OTP';
   };
 
 
@@ -287,7 +151,7 @@ const MobileMyBookings = () => {
 
   return <div className="min-h-screen bg-background pb-20">
     {/* Hide header when logged in on mobile */}
-    {!authVar.isAuthenticated && <Header onLogin={handleLogin} />}
+    {!authVar.isAuthenticated && <Header onLogin={null} />}
 
     <div className="sticky top-0 z-20 bg-background border-b">
       <div className="flex items-center justify-between p-4">
@@ -303,7 +167,13 @@ const MobileMyBookings = () => {
 
       {/* Booking Cards */}
       <div className="space-y-4">
-        {bookingVar.bookingData.length > 0 && bookingVar.bookingData.map(booking => (
+         {isLoading ? (
+          <>
+            <BookingCardSkeleton />
+            <BookingCardSkeleton />
+            <BookingCardSkeleton />
+          </>
+        ) : (bookingVar.bookingData.length > 0 && bookingVar.bookingData.map(booking => (
           booking.bookingType === "service" ? (
             // -------------------------
             // SERVICE BOOKING CARD
@@ -559,12 +429,12 @@ const MobileMyBookings = () => {
               </CardContent>
             </Card>
           )
-        ))}
+        )))}
 
       </div>
 
       {/* Empty State */}
-      {bookingVar.bookingData.length === 0 && (
+      {!isLoading && bookingVar.bookingData.length === 0 && (
         <Card className="p-8 text-center">
           <div className="space-y-4">
             <Calendar className="h-12 w-12 mx-auto text-muted-foreground" />

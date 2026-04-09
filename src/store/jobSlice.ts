@@ -4,14 +4,26 @@ import { errorHandler, successHandler } from "@/shared/_helper/responseHelper";
 import { service } from "@/shared/_services/api_service";
 import { getAllFreelancerBookings } from "./bookingSlice";
 
-const STATUSES = Object.freeze({
+export const STATUSES = Object.freeze({
     IDLE: "idle",
     ERROR: "error",
     LOADING: "loading",
 });
 
+interface JobsState {
+    jobsData: any[];
+    allJobs: any[];
+    status: string;
+    active: number;
+    pending: number;
+    completed: number;
+    total: number;
+    JobDetails: string;
+    recentJobs: any[];
+    jobModalOpen: boolean;
+}
 
-const initialState = {
+const initialState: JobsState = {
     jobsData: [],
     allJobs: [],
     status: STATUSES.IDLE,

@@ -3,7 +3,7 @@ import { setLoading } from "./loader";
 import { errorHandler, successHandler } from "@/shared/_helper/responseHelper";
 import { service } from "@/shared/_services/api_service";
 
-const STATUSES = Object.freeze({
+export const STATUSES = Object.freeze({
   IDLE: "idle",
   ERROR: "error",
   LOADING: "loading",

@@ -76,6 +76,7 @@ import ClientAgreement from "./pages/ClientAgreement";
 import MobileMyCategories from "./pages/MobileMyCategories";
 import { BlockedFreelancers } from "./pages/BlockedFreelancers";
 import { BlockedUsers } from "./pages/BlockedUsers";
+import { getFreelancerProfile, getUserProfile } from "./store/authSlice";
 
 
 
@@ -108,7 +109,14 @@ const App = () => {
     }
   }, [authvar?.isAuthenticated]);
 
-
+  useEffect(() => {
+    if (authvar?.isAuthenticated && localService.get("role") === "user") {
+      dispatch(getUserProfile());
+    } else if (authvar?.isAuthenticated && localService.get("role") === "freelancer") {
+      dispatch(getFreelancerProfile());
+    }
+  }, [authvar?.isAuthenticated]);
+  
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
 
@@ -487,12 +495,12 @@ const App = () => {
         </UserRoleProvider>
       </QueryClientProvider>
 
-      {loaderVar?.loading && (
+      {/* {loaderVar?.loading && (
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-white pointer-events-none h-screen">
           <div className="loader pointer-events-auto">
           </div>
         </div>
-      )}
+      )} */}
 
     </>
   );
