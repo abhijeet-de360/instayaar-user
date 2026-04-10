@@ -149,7 +149,6 @@ const FreelancerInstantBooking = () => {
                   className="flex-1 h-8 w-full mt-2"
                   onClick={() => dispatch(getConversationId(item?.userId?._id, navigate, undefined, item?.appliedJobId))}
                 >Chat</Button>
-                <Button variant="outline" className="flex-1 h-8 w-full mt-2">Call</Button>
                 <Button className="flex-1 h-8 w-full mt-2" onClick={() => {
                   setOtpModal(true);
                   setAction('start');

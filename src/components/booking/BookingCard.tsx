@@ -210,11 +210,6 @@ export const BookingCard: React.FC<BookingCardProps> = ({
                     <MessageCircle className="h-4 w-4 mr-2" />
                     Chat
                   </Button>
-
-                  <Button variant="outline" size="sm">
-                    <Phone className="h-4 w-4 mr-2" />
-                    Call
-                  </Button>
                 </>
               )}
 

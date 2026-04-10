@@ -429,19 +429,6 @@ const MyJobs = () => {
                       )}
                       {job.status === "confirmed" && (
                         <>
-                          <a
-                            href={`tel:${job?.userId?.phoneNumber}`}
-                            className="flex-1"
-                          >
-                            <Button
-                              size="sm"
-                              className="h-8 text-xs w-full"
-                              variant="outline"
-                            >
-                              <Phone />
-                              Call
-                            </Button>
-                          </a>
                           <Button
                             size="sm"
                             className="flex-1 h-8 text-xs"
@@ -730,17 +717,6 @@ const MyJobs = () => {
                           )}
                           {job?.data?.status === "hired" && (
                             <>
-                              <a
-                                href={`tel:${job?.data?.jobId?.userId?.phoneNumber}`}
-                                className="flex-1"
-                              >
-                                <Button
-                                  className="h-8 text-xs w-full"
-                                  variant="outline"
-                                >
-                                  Call
-                                </Button>
-                              </a>
                               <Button
                                 className="flex-1 h-8 text-xs"
                                 onClick={() => {

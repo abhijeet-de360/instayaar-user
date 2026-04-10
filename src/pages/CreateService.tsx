@@ -1,15 +1,12 @@
-import { Header } from "@/components/layout/Header";
 import { MobileBottomNav } from "@/components/layout/MobileBottomNav";
-import { useUserRole } from "@/contexts/UserRoleContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Camera, MapPin, Star, Plus, Upload, ArrowLeft, X } from "lucide-react";
-import { serviceCategories } from "@/data/staticData";
+import { X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useRef, useState } from "react";
@@ -42,7 +39,6 @@ const predefinedSlots = [
 
 
 const CreateService = () => {
-  const { setUserRole, setIsLoggedIn } = useUserRole();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const categoryVar = useSelector((state: RootState) => state?.category)
@@ -60,7 +56,9 @@ const CreateService = () => {
     images: [],
     schedules: [],
     lat: null,
-    lng: null
+    lng: null,
+    cancellationPolicy: "",
+    duration:"",
   })
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -106,34 +104,35 @@ const CreateService = () => {
     !formData.location.trim() ||
     !formData.experience.trim() ||
     !formData.equipments.trim() ||
-    !formData.requirements.trim()
+    !formData.requirements.trim() ||
+    !formData.cancellationPolicy.trim() ||
+    !formData.duration.trim()
 
-  const payload = {
-    title: formData?.title,
-    description: formData?.description,
-    price: formData?.price,
-    categoryId: formData?.categoryId,
-    skills: formData?.skills,
-    location: formData?.location,
-    experience: formData?.experience,
-    equipments: formData?.equipments,
-    requirements: formData?.requirements,
-    schedules: formData?.schedules,
-    lat: formData?.lat,
-    lon: formData?.lng
 
-  }
-
-  useEffect(() => {
-    dispatch(getCategories())
-  }, [])
-
-  const handleLogin = (role: string) => {
-    setIsLoggedIn(true);
-    setUserRole(role as 'employer' | 'freelancer');
-  };
-
-  const handleService = () => {
+    
+    useEffect(() => {
+      dispatch(getCategories())
+    }, [])
+    
+    
+    
+    const handleService = () => {
+    const payload = {
+      title: formData?.title,
+      description: formData?.description,
+      price: formData?.price,
+      categoryId: formData?.categoryId,
+      skills: formData?.skills,
+      location: formData?.location,
+      experience: formData?.experience,
+      equipments: formData?.equipments,
+      requirements: formData?.requirements,
+      schedules: formData?.schedules,
+      lat: formData?.lat,
+      lon: formData?.lng,
+      cancellationPolicy: formData.cancellationPolicy,
+      duration: formData.duration
+    }
     dispatch(ceateService(payload, formData?.images, navigate));
   }
 
@@ -171,12 +170,7 @@ const CreateService = () => {
     }))
   }
 
-  const handleReset = () => {
-    formData.title = ''
-  };
-
   useEffect(() => {
-    // Wait until Google Maps script is ready
     const initAutocomplete = () => {
       if (window.google && window.google.maps && window.google.maps.places) {
         autocompleteService.current =
@@ -208,7 +202,6 @@ const CreateService = () => {
     );
   };
 
-  // When a suggestion is selected, get lat/lng using Geocoder
   const handleSuggestionSelect = (description: string) => {
     const geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({ address: description }, (results, status) => {
@@ -278,43 +271,8 @@ const CreateService = () => {
       <div className="container mx-auto px-6 py-8">
         <div className="max-w-2xl mb-10 p-0">
           <Card className="border-none md:border shadow-none md:shadow">
-            {/* <CardHeader className="px-0 md:px-6">
-              <CardTitle className="text-2xl">
-                <Button size="icon" variant="ghost" className="hidden md:flex items-center justify-center" onClick={() => navigate(-1)}><ArrowLeft /></Button>
-                Create New Service</CardTitle>
-              <p className="text-muted-foreground">
-                Create a service listing to showcase your skills and attract clients
-              </p>
-            </CardHeader> */}
             <CardContent className="space-y-6 px-0 md:px-6">
-              {/* Service Photos */}
-              <div className="space-y-4">
-                <Label>Service Photos</Label>
-                <DropzoneMulti
-                  images={formData.images}
-                  setImages={handleSetImages}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Add up to 5 photos showcasing your work. First photo will be your main image.
-                </p>
-              </div>
-
-              {/* Service Details */}
               <div className="space-y-2">
-                {/* <Label htmlFor="title">Service Title *</Label> */}
-                <Input
-                  id="title"
-                  onInput={(e) => {
-                    e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9 .]/g, "");
-                  }}
-                  placeholder="e.g, Explore top 5 eatery with me, I have a car"
-                  onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-
-                />
-              </div>
-
-              <div className="space-y-2">
-                {/* <Label htmlFor="category">Service Category *</Label> */}
                 <Select value={formData.categoryId} onValueChange={(value) => setFormData((prev) => ({ ...prev, categoryId: value }))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your service category" />
@@ -328,36 +286,81 @@ const CreateService = () => {
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="space-y-2">
-                {/* <Label htmlFor="description">Service Description *</Label> */}
+                <Label htmlFor="title">Headline*</Label>
+                <Input
+                  id="title"
+                  placeholder="e.g., Professional Chef for Events & Parties"
+                  onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
+                  className="placeholder:text-gray-400"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Detailed Description of this service*</Label>
                 <Textarea
                   id="description"
                   placeholder="Describe your service, experience, specialties, and what makes you unique..."
-                  className="min-h-[120px]"
+                  className="min-h-[120px] placeholder:text-gray-400"
                   onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
                 />
-                <small className="text-neutral-500">*Please mention your cancellation policy explicitly</small>
               </div>
-
-              {/* Pricing */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="duration">Sevice Duration(No of Hours) *</Label>
+                  <div className="relative flex items-center">
+                    <Input id="duration" placeholder="00"
+                      onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, ''); }}
+                      className=" placeholder:text-gray-400"
+                      onChange={(e) => setFormData((prev) => ({ ...prev, duration: e.target.value }))} />
+                  </div>
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="price">Price *</Label>
                   <div className="relative flex items-center">
                     <span className="absolute left-3 text-muted-foreground">₹</span>
-                    <Input id="price" placeholder="00" onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
-                    }} className="pl-8" onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))} />
+                    <Input id="price" placeholder="00"
+                      onInput={(e) => { e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, ''); }}
+                      className="pl-8 placeholder:text-gray-400"
+                      onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))} />
                   </div>
                 </div>
               </div>
-
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="cancellationPolicy">Cancellation Policy*</Label>
+                  <div className="relative flex items-center">
+                    <Input id="cancellationPolicy" 
+                    placeholder="eg: Free cancellation 48 hours before start time"
+                      className="placeholder:text-gray-400"
+                      onChange={(e) => setFormData((prev) => ({ ...prev, cancellationPolicy: e.target.value }))} />
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="equipment">Equipment/Tools Provided</Label>
+                <Textarea
+                  id="equipment"
+                  placeholder="List any equipment, tools, or materials you will use..."
+                  className="min-h-[80px]"
+                  onChange={(e) => setFormData((prev) => ({ ...prev, equipments: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="requirements">Requirements from client</Label>
+                <Textarea
+                  id="requirements"
+                  placeholder="Any special requirements from clients (parking, any equipment/tool etc)..."
+                  className="min-h-[80px]"
+                  onChange={(e) => setFormData((prev) => ({ ...prev, requirements: e.target.value }))}
+                />
+              </div>
               {/* Location & Availability */}
               <div className="space-y-1 flex flex-col relative">
-                <Label htmlFor="location">Location</Label>
+                <Label htmlFor="location"> Service Location</Label>
                 <Input
-                  placeholder="Type your location..."
+                  placeholder="Type your Service location..."
                   value={formData.location}
                   onChange={(e) => {
                     setFormData({ ...formData, location: e.target.value });
@@ -388,12 +391,22 @@ const CreateService = () => {
                 </button>
               </div>
 
+              {/* Service Photos */}
+              <div className="space-y-4">
+                <Label>Service Photos</Label>
+                <DropzoneMulti
+                  images={formData.images}
+                  setImages={handleSetImages}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Add up to 5 photos showcasing your work. First photo will be your main image.
+                </p>
+              </div>
+              {/* Pricing */}
               <ScheduleManagement setFormData={setFormData} initialSchedules={predefinedSlots} />
-
-
               {/* Skills & Specialties */}
               <div className="space-y-2">
-                <Label>Skills & Specialities</Label>
+                <Label>Skills & Specialties</Label>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {formData.skills.map((skill, index) => (
                     <Badge
@@ -411,7 +424,7 @@ const CreateService = () => {
                 </div>
                 <div className="tab flex items-center gap-2">
                   <Input
-                    placeholder="Add a skill or specialities"
+                    placeholder="Add a skill or specialty"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
@@ -437,32 +450,11 @@ const CreateService = () => {
                 </Select>
               </div>
 
-              {/* Additional Info */}
-              <div className="space-y-2">
-                <Label htmlFor="equipment">Equipment/Tools Provided</Label>
-                <Textarea
-                  id="equipment"
-                  placeholder="List any equipment, tools, or materials you provide..."
-                  className="min-h-[80px]"
-                  onChange={(e) => setFormData((prev) => ({ ...prev, equipments: e.target.value }))}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="requirements">Special Requirements</Label>
-                <Textarea
-                  id="requirements"
-                  placeholder="Any special requirement you need from client (Parking, any equipment/tool, etc).."
-                  className="min-h-[80px]"
-                  onChange={(e) => setFormData((prev) => ({ ...prev, requirements: e.target.value }))}
-                />
-              </div>
-
               {/* Action Buttons */}
               <div className="flex justify-center items-center gap-4 pt-6">
-                {/* <Button variant="outline" className="flex-1" onClick={handleReset}>
-                  Reset Service
-                </Button> */}
+                <Button variant="outline" className="flex-1">
+                  Save as Draft
+                </Button>
                 <Button className="flex-1" onClick={handleService} disabled={isFormIncomplete}>
                   {serviceVar?.status === "loading" ? 'Publishing...' : 'Publish Service'}
                 </Button>

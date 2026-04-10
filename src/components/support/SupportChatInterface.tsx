@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Send, MessageCircle, Bot, User, Shield, Paperclip, FileText, Play, ExternalLink, Loader2 } from "lucide-react";
+import { ArrowLeft, Send, MessageCircle, Bot, User, Shield, Paperclip, FileText, Play, ExternalLink, Loader2, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { service } from "@/shared/_services/api_service";
 import { chatSocket } from "@/lib/socket";
@@ -58,8 +58,15 @@ const SupportChatInterface = () => {
       chatSocket.on(`support-chat-${chat._id}`, (message: Message) => {
         setMessages((prev) => [...prev, message]);
       });
+      chatSocket.on(`support-chat-status-${chat._id}`, ({ status }: { status: string }) => {
+        setChat((prev: any) => ({ ...prev, status }));
+        if (status === "resolved") {
+          toast.success("This conversation has been marked as resolved.");
+        }
+      });
       return () => {
         chatSocket.off(`support-chat-${chat._id}`);
+        chatSocket.off(`support-chat-status-${chat._id}`);
       };
     }
   }, [chat?._id]);
@@ -69,7 +76,7 @@ const SupportChatInterface = () => {
   }, [messages]);
 
   const handleSendMessage = async (content: string, attachments?: ISupportAttachment[]) => {
-    if ((!content.trim() && (!attachments || attachments.length === 0)) || !chat?._id) return;
+    if ((!content.trim() && (!attachments || attachments.length === 0)) || !chat?._id || chat?.status === "resolved") return;
     try {
       const resp = await service.sendSupportMessage({
         chatId: chat._id,
@@ -120,7 +127,7 @@ const SupportChatInterface = () => {
   const currentOptions = showOptions ? (lastMessage?.options || []) : [];
 
   return (
-    <div className="flex flex-col  min-h-screen w-full  mx-auto bg-background overflow-hidden">
+    <div className="flex flex-col h-screen w-full mx-auto bg-background overflow-hidden">
       {/* Header */}
       <div className="bg-primary p-4 text-primary-foreground flex items-center justify-between ">
         <div className="flex items-center gap-3">
@@ -128,15 +135,14 @@ const SupportChatInterface = () => {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <h3 className="font-bold flex items-center gap-2">
-              <Shield className="h-5 w-5" />
+            <h3 className="font-bold">
               InstaYaar Support
             </h3>
             <p className="text-xs opacity-80 flex items-center gap-1">
               {chat?.isWithAdmin ? (
                 <><span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" /> Admin Online</>
               ) : (
-                <><Bot className="h-3 w-3" /> AI Assistant</>
+                <>AI Assistant</>
               )}
             </p>
           </div>
@@ -155,15 +161,11 @@ const SupportChatInterface = () => {
 
           return (
             <div key={index} className={`flex ${isOwn ? "justify-end" : "justify-start animate-in fade-in slide-in-from-bottom-2"}`}>
-              <div className={`flex items-end gap-2 max-w-[80%] ${isOwn ? "flex-row-reverse" : ""}`}>
-                <Avatar className="h-8 w-8 mb-1 border shadow-sm">
-                  {isAi ? <Bot className="h-5 w-5 p-1" /> : (isAdmin ? <Shield className="h-5 w-5 p-1" /> : <User className="h-5 w-5 p-1" />)}
-                  <AvatarFallback>{isAi ? "AI" : (isAdmin ? "AD" : "U")}</AvatarFallback>
-                </Avatar>
+              <div className={`flex items-end gap-2 max-w-[85%] ${isOwn ? "flex-row-reverse" : ""}`}>
                 <div 
                   className={`p-3 rounded-2xl shadow-sm text-sm ${
                     isOwn ? "bg-primary text-primary-foreground rounded-br-none" 
-                    : (isAi ? "bg-white border rounded-bl-none" : "bg-blue-50 border-blue-100 border rounded-bl-none")
+                    : "bg-blue-50 border-blue-100 border rounded-bl-none"
                   }`}
                 >
                   {msg.content}
@@ -204,55 +206,66 @@ const SupportChatInterface = () => {
 
       {/* Footer / Input */}
       <div className="p-4 bg-white border-t space-y-3">
-        {showOptions && currentOptions.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-2">
-            {currentOptions.map((opt) => (
-              <Button 
-                key={opt} 
-                variant="outline" 
-                size="sm" 
-                className="rounded-full text-xs hover:bg-primary/5 hover:text-primary transition-all active:scale-95"
-                onClick={() => handleOptionClick(opt)}
-              >
-                {opt}
-              </Button>
-            ))}
+        {chat?.status === "resolved" ? (
+          <div className="bg-green-50 border border-green-100 p-3 rounded-xl text-center">
+            <p className="text-sm font-medium text-green-800 flex items-center justify-center gap-2">
+              This conversation has been marked as resolved.
+            </p>
+            <p className="text-[10px] text-green-600 mt-1">Thank you for contacting InstaYaar Support!</p>
           </div>
-        )}
+        ) : (
+          <>
+            {showOptions && currentOptions.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-2">
+                {currentOptions.map((opt) => (
+                  <Button 
+                    key={opt} 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full text-xs hover:bg-primary/5 hover:text-primary transition-all active:scale-95"
+                    onClick={() => handleOptionClick(opt)}
+                  >
+                    {opt}
+                  </Button>
+                ))}
+              </div>
+            )}
 
-        <div className="flex gap-2 items-center">
-          <input 
-            type="file" 
-            className="hidden" 
-            ref={fileInputRef} 
-            onChange={handleFileUpload}
-            accept="image/*,video/*,application/pdf"
-          />
-          <Button 
-            size="icon" 
-            variant="ghost" 
-            className="rounded-full h-10 w-10 shrink-0 text-muted-foreground hover:text-primary"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading}
-          >
-            {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Paperclip className="h-5 w-5" />}
-          </Button>
-          <Input 
-            placeholder={chat?.isWithAdmin ? "Describe your issue..." : "Select an option or ask a question..."}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && handleSendMessage(inputValue)}
-            className="rounded-full bg-muted/50 focus-visible:ring-primary h-10"
-          />
-          <Button 
-            size="icon" 
-            className="rounded-full h-10 w-10 shrink-0 shadow-md"
-            onClick={() => handleSendMessage(inputValue)}
-            disabled={!inputValue.trim() || uploading}
-          >
-            <Send className="h-4 w-4" />
-          </Button>
-        </div>
+            <div className="flex gap-2 items-center">
+              <input 
+                type="file" 
+                className="hidden" 
+                ref={fileInputRef} 
+                onChange={handleFileUpload}
+                accept="image/*,video/*,application/pdf"
+              />
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="rounded-full h-10 w-10 shrink-0 text-muted-foreground hover:text-primary"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
+                {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Paperclip className="h-5 w-5" />}
+              </Button>
+              <Input 
+                placeholder={chat?.isWithAdmin ? "Describe your issue..." : "Select an option or ask a question..."}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage(inputValue)}
+                className="rounded-full bg-muted/50 focus-visible:ring-primary h-10"
+              />
+              <Button 
+                size="icon" 
+                className="rounded-full h-10 w-10 shrink-0 shadow-md"
+                onClick={() => handleSendMessage(inputValue)}
+                disabled={!inputValue.trim() || uploading}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
