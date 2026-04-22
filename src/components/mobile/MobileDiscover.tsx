@@ -35,9 +35,8 @@ const MobileDiscover = () => {
   const authVar = useSelector((state: RootState) => state.auth);
   const [searchParams] = useSearchParams();
   const { userRole, isLoggedIn } = useUserRole();
-  const { handleLogin, isMobile } = useAuthCheck();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [showMobileAuth, setShowMobileAuth] = useState(false);
+  const { checkAuth, showLoginModal, setShowLoginModal, handleLogin, isMobile } = useAuthCheck();
   const [reportJobId, setReportJobId] = useState<string | null>(null);
   const categoryVar = useSelector((state: RootState) => state.category);
   const [open, setOpen] = useState(false)
@@ -151,16 +150,12 @@ const MobileDiscover = () => {
   }, [searchParams]);
 
   const handleMobileProfileClick = () => {
-    setShowMobileAuth(true);
+    checkAuth();
   };
 
   const handleReportJob = (e: React.MouseEvent, jobId: string) => {
     e.stopPropagation();
-    if (!authVar?.isAuthenticated) {
-      setShowMobileAuth(true);
-      return;
-    }
-    setReportJobId(jobId);
+    checkAuth(() => setReportJobId(jobId));
   };
 
   const submitJobReport = (reason: string, details?: string) => {
@@ -431,8 +426,8 @@ const MobileDiscover = () => {
 
       <MobileBottomNav onProfileClick={handleMobileProfileClick} />
       <LoginModal
-        isOpen={showMobileAuth}
-        onClose={() => setShowMobileAuth(false)}
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
         onLoginSuccess={handleLogin}
         isMobile={isMobile}
       />

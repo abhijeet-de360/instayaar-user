@@ -54,7 +54,7 @@ const MobileFreelancerProfile = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { setUserRole, setIsLoggedIn, userRole } = useUserRole();
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { checkAuth, showLoginModal, setShowLoginModal, isMobile } = useAuthCheck();
   const freelancerVar: any = useSelector(
     (state: RootState) => state.freelancer
   );
@@ -63,6 +63,7 @@ const MobileFreelancerProfile = () => {
   const [isBlocked, setIsBlocked] = useState(false);
   const [isBlocking, setIsBlocking] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [isBlockDialogOpen, setIsBlockDialogOpen] = useState(false);
 
   const handleLogin = (role: string) => {
     setIsLoggedIn(true);
@@ -81,29 +82,21 @@ const MobileFreelancerProfile = () => {
 
   const handleBlockToggle = async () => {
     if (!freelancerId) return;
-    if (authVar?.isAuthenticated) {
-      if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
-        navigate(`/user-account-settings`);
-        return;
+    try {
+      setIsBlocking(true);
+      if (isBlocked) {
+        await service.unblockFreelancer(freelancerId);
+        successHandler("Freelancer unblocked successfully");
+        setIsBlocked(false);
+      } else {
+        await service.blockFreelancer(freelancerId);
+        successHandler("Freelancer blocked successfully");
+        setIsBlocked(true);
       }
-      try {
-        setIsBlocking(true);
-        if (isBlocked) {
-          await service.unblockFreelancer(freelancerId);
-          successHandler("Freelancer unblocked successfully");
-          setIsBlocked(false);
-        } else {
-          await service.blockFreelancer(freelancerId);
-          successHandler("Freelancer blocked successfully");
-          setIsBlocked(true);
-        }
-      } catch (error: any) {
-        errorHandler(error?.response || { data: { message: "Failed to update block status" } });
-      } finally {
-        setIsBlocking(false);
-      }
-    } else {
-      setShowLoginModal(true);
+    } catch (error: any) {
+      errorHandler(error?.response || { data: { message: "Failed to update block status" } });
+    } finally {
+      setIsBlocking(false);
     }
   };
 
@@ -145,28 +138,24 @@ const MobileFreelancerProfile = () => {
   };
 
 
-  const handleHire = (id) => {
-    if (authVar?.isAuthenticated) {
-      navigate(`/freelancer-services/${id}`);
-    } else {
-      setShowLoginModal(true);
-    }
-
-    if (authVar?.isAuthenticated) {
+  const handleHire = (id: string) => {
+    checkAuth(() => {
       if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
         navigate(`/user-account-settings`);
+      } else {
+        navigate(`/freelancer-services/${id}`);
       }
-    }
+    });
   };
 
   const handleBookService = (id: string) => {
-    if(authVar?.isAuthenticated) {
+    checkAuth(() => {
       if (authVar?.user?.status !== 'active' || authVar?.user?.isEmailVerified === false) {
         navigate(`/user-account-settings`);
         return;
       }
-    }
-    navigate(`/multi-service-booking/${id}`)
+      navigate(`/multi-service-booking/${id}`)
+    });
   }
 
   const submitReport = (reason: string, details?: string) => {
@@ -207,24 +196,23 @@ const MobileFreelancerProfile = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setShowReportModal(true)}
+                  onClick={() => checkAuth(() => setShowReportModal(true))}
                   className="h-8 w-8 text-muted-foreground hover:text-red-500"
                 >
                   <Flag className="h-4 w-4" />
                 </Button>
                 {freelancerVar?.freelancerDetails?._id && (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`text-xs px-2 h-8 ${isBlocked ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
-                        disabled={isBlocking}
-                      >
-                        <Ban className="h-3.5 w-3.5 mr-1" />
-                        {isBlocked ? "Blocked" : "Block"}
-                      </Button>
-                    </AlertDialogTrigger>
+                  <AlertDialog open={isBlockDialogOpen} onOpenChange={setIsBlockDialogOpen}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={`text-xs px-2 h-8 ${isBlocked ? 'text-destructive font-medium' : 'text-muted-foreground'}`}
+                      disabled={isBlocking}
+                      onClick={() => checkAuth(() => setIsBlockDialogOpen(true))}
+                    >
+                      <Ban className="h-3.5 w-3.5 mr-1" />
+                      {isBlocked ? "Blocked" : "Block"}
+                    </Button>
                     <AlertDialogContent className="w-[90%] rounded-xl">
                       <AlertDialogHeader>
                         <AlertDialogTitle>
@@ -263,7 +251,7 @@ const MobileFreelancerProfile = () => {
                     <AvatarImage
                       src={freelancerVar?.freelancerDetails?.profile}
                       alt={freelancerVar?.freelancerDetails?.firstName}
-                      className="object-cover object-top"
+                      className="object-cover object-center"
                     />
                     <AvatarFallback className="text-xl">
                       {freelancerVar?.freelancerDetails?.firstName.charAt(0)}

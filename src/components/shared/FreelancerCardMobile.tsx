@@ -29,7 +29,6 @@ export const FreelancerCardMobile = ({
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const { isShortlisted, toggleShortlist } = useShortlist();
-  const { checkAuth } = useAuthCheck();
   const { userRole, isLoggedIn } = useUserRole();
   const authVar = useSelector((state: RootState) => state.auth);
 
@@ -41,7 +40,7 @@ export const FreelancerCardMobile = ({
     handleShortlistAfterAuth();
   };
 
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { checkAuth, isMobile, showLoginModal, setShowLoginModal } = useAuthCheck();
   const [showReportModal, setShowReportModal] = useState(false);
 
   const handleShortlistAfterAuth = () => {
@@ -86,11 +85,7 @@ export const FreelancerCardMobile = ({
 
   const handleReport = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!authVar?.isAuthenticated) {
-      setShowLoginModal(true);
-      return;
-    }
-    setShowReportModal(true);
+    checkAuth(() => setShowReportModal(true));
   };
 
   const submitReport = (reason: string, details?: string) => {

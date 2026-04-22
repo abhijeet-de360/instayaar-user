@@ -469,7 +469,7 @@ export function userAadharVerify(data, navigate) {
                         const url = event.url;
                         console.log("🔗 InAppBrowser URL:", url);
 
-                        if (url.startsWith("https://app.kaamdham.com/user-account-settings") && url.includes("modal=true")) {
+                        if (url.startsWith("https://app.instayaar.com/user-account-settings") && url.includes("modal=true")) {
                             await InAppBrowser.close();
                             return;
                         }
