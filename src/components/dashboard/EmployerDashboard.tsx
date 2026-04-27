@@ -1,20 +1,11 @@
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  CardContent, CardHeader,
+  CardTitle
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  Plus,
-  Heart,
-  Calendar,
-  CreditCard,
-  Star,
-  TrendingUp,
-  ChevronRight,
-  User,
+  Calendar, Star
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";

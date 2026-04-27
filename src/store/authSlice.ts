@@ -460,7 +460,7 @@ export function userAadharVerify(data, navigate) {
                 dispatch(setStatus(STATUSES.ERROR));
                 return;
             }
-            navigate("/employer-dashboard");
+            navigate("/user-dashboard");
             if (Capacitor.isNativePlatform()) {
                 await InAppBrowser.removeAllListeners();
                 const urlListener = await InAppBrowser.addListener(
