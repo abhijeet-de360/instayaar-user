@@ -44,9 +44,6 @@ const FreelancerInstantBooking = () => {
   const [otp, setOtp] = useState('');
   const navigate = useNavigate();
 
-  console.log(otp)
-
-
   const [formData, setFormData] = useState({
     limit: 50,
     offset: 0,

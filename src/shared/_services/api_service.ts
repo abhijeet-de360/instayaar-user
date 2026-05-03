@@ -415,7 +415,6 @@ async function confirmBooking(id: string) {
 }
 
 async function startBooking(id: string, otp: string) {
-  console.log(id)
   return await axios.post(bookingUrl + `/freelancer/verifyStartOtp/${id}`, { otp }, {
     headers: await authHeader('')
   });
@@ -485,7 +484,6 @@ async function cancelJobApplication(id) {
 
 // ========================== Shortlist ================================
 async function shortListFreelancer(data) {
-  console.log(data, "datatrta")
   return await axios.post(jobApplicationUrl + `/shortlist`, data, {
     headers: await authHeader('')
   });

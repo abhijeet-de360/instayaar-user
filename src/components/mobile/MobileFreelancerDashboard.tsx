@@ -37,8 +37,6 @@ const MobileFreelancerDashboard = () => {
   const authVar = useSelector((state: RootState) => state?.auth);
   const transactionVar = useSelector((state: RootState) => state.widthrawal)
   const dashboardVar = useSelector((state: RootState) => state.dashboard);
-
-  console.log(authVar)
   const handleLogin = (role: string) => {
     setIsLoggedIn(true);
     setUserRole(role as "employer" | "freelancer");
